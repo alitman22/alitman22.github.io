@@ -304,6 +304,15 @@
             <a href="https://www.linkedin.com/in/alit-fattahi/" target="_blank" rel="noopener noreferrer" class="text-slate hover:text-green transition-colors duration-300 font-mono text-sm">
                 Designed & Built by Ali Fattahi
             </a>
+<div id="visits" class="text-slate font-mono text-sm mt-2"></div>
+
+<script>
+  fetch('https://api.countapi.xyz/hit/alifattahi.github.io/visits')
+    .then(res => res.json())
+    .then(res => {
+      document.getElementById('visits').innerText = `👀 Visits: ${res.value}`;
+    });
+</script>
         </footer>
 
     </div>
