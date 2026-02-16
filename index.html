@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -65,10 +64,15 @@
             flex-shrink: 0;
         }
         
+        .timeline-item {
+            position: relative;
+            padding-bottom: 3rem;
+        }
+
         .timeline-item::before {
             content: '';
             position: absolute;
-            left: 4px;
+            left: -37px;
             top: 4px;
             width: 1rem;
             height: 1rem;
@@ -105,7 +109,6 @@
             transform: translate(0.5rem, 0.5rem);
         }
 
-        /* Scroll reveal animation */
         .reveal {
             opacity: 0;
             transform: translateY(50px);
@@ -139,7 +142,7 @@
                 <div class="flex justify-center md:justify-end">
                     <div class="profile-picture-wrapper">
                         <div class="rounded overflow-hidden shadow-2xl">
-                            <img src="assets/profile.jpg" alt="This is Me!" class="w-full h-full object-cover">
+                            <img src="assets/profile.jpg" alt="Ali Fattahi" class="w-full h-full object-cover">
                             <div class="overlay"></div>
                         </div>
                         <div class="border-element"></div>
@@ -158,7 +161,7 @@
                            Hello! I'm Ali. For over a decade, I've lived and breathed IT infrastructure. My passion isn't just about keeping the lights on; it's about engineering systems that are resilient, efficient, and secure by design. I approach every challenge with a simple philosophy: understand the core problem, build a robust solution, and automate everything possible.
                         </p>
                          <p>
-                           My journey has taken me from a premier national datacenter to the dynamic, high-stakes world of financial trading technology. This diverse experience has equipped me with a unique blend of skills in <span class="text-green">system administration, DevOps practices, and network engineering</span>. My BSc in Network Engineering grounds my practical experience in solid theoretical knowledge, allowing me to design and troubleshoot systems with a deeper understanding of the underlying principles.
+                           My journey has taken me from a premier national datacenter to the dynamic, high-stakes world of financial trading technology. This diverse experience has equipped me with a unique blend of skills in <span class="text-green">system administration, DevOps practices, and network engineering</span>. My BSc in Network Engineering grounds my practical experience in solid theoretical knowledge.
                         </p>
                          <p>
                            I believe that the best infrastructure is one you rarely have to think about—it just works. This is the standard of excellence I bring to every project. I am now eager to apply my experience and passion to a new and exciting challenge in the Netherlands.
@@ -167,19 +170,15 @@
                     <div class="space-y-4">
                         <div class="bg-light-navy p-6 rounded-lg shadow-lg">
                            <h3 class="text-xl font-bold text-white mb-3">Education</h3>
-                           <p class="font-semibold text-light-slate">BSc&nbsp; , Network Engineering</p>
+                           <p class="font-semibold text-light-slate">BSc, Network Engineering</p>
                           <p class="text-slate text-sm">University of Applied Science and Technology (Tehran)<br>
                           </p>
-                           <p class="text-slate text-sm">GPA : 18/20&nbsp;&nbsp;</p>
+                           <p class="text-slate text-sm">GPA: 18/20</p>
                         </div>
                         <div class="bg-light-navy p-6 rounded-lg shadow-lg">
                            <h3 class="text-xl font-bold text-white mb-3">Languages</h3>
-                           <p class="font-semibold text-light-slate">Farsi, Azeri (Native), English (professional proficiency), Turkish (Proficient Comprehension) </p>
-                           <p class="text-slate mt-1">Currently learning <span class="text-green font-semibold">Dutch (A2)</span> out of a genuine passion for languages and cultural integration.</p>
-                        </div>
-                         <div class="bg-light-navy p-6 rounded-lg shadow-lg">
-                           <h3 class="text-xl font-bold text-white mb-3">Hobbies</h3>
-                           <p class="text-light-slate">Beyond the terminal, I enjoy exploring new cultures through travel, challenging my mind with strategy games, and staying active with gym and hiking.</p>
+                           <p class="font-semibold text-light-slate">Farsi, Azeri (Native), English (Professional), Turkish (Proficient)</p>
+                           <p class="text-slate mt-1">Currently learning <span class="text-green font-semibold">Dutch (A2)</span>.</p>
                         </div>
                     </div>
                 </div>
@@ -190,33 +189,44 @@
                 <div class="relative pl-8 border-l-2 border-slate/20 max-w-4xl">
                     <div class="space-y-16">
                         <div class="timeline-item">
-                            <h3 class="text-xl font-bold text-white">Linux System Administrator</h3>
-                            <p class="font-mono text-green mb-2">Hermes Capital | Feb 2021 - Present</p>
+                            <h3 class="text-xl font-bold text-white">DevOps & Linux System Administrator</h3>
+                            <p class="font-mono text-green mb-2">Dannie.cc | Nov 2025 - Present (Antalya, Turkey)</p>
                             <ul class="text-light-slate list-disc pl-5 space-y-2">
-                                <li>Managed a complex network of Linux machines and storage systems, ensuring high reliability and performance for high-frequency trading operations.</li>
-                                <li>Enhanced service delivery and optimized resources using virtualization technologies, adapting to evolving project demands through close team collaboration.</li>
-                                <li>Automated the deployment of microservices and dependency management using Ansible playbooks and Bash/Python scripts, significantly improving efficiency.</li>
-                                <li>Led a strategic migration to a co-location setup, meticulously planning and executing the move to dramatically reduce service latency and increase throughput.</li>
-                                <li>Implemented advanced logging and alerting mechanisms (Prometheus, Grafana, ELK) to proactively troubleshoot systems, minimizing downtime.</li>
+                                <li>Cut CI/CD pipeline runtime across dev, staging, and production by <span class="text-green font-bold">40%</span>, accelerating development and deployment cycles.</li>
+                                <li>Built a monitoring stack for ERP systems and virtual machines to identify performance issues and reduce troubleshooting time.</li>
+                                <li>Designed the network to connect branches in Russia, Lithuania, and Turkey, ensuring reliable data transfer between regions.</li>
+                                <li>Standardized technical manuals and network maps for the hybrid infrastructure to help the team troubleshoot more effectively.</li>
+                                <li>Upgraded the Turkey branch network to meet <span class="text-green">IATF standards</span>, ensuring a successful pass in both stages of the certification audit.</li>
                             </ul>
                         </div>
+
                         <div class="timeline-item">
-                            <h3 class="text-xl font-bold text-white">Offshore (Persian Gulf) IT Systems Engineer (Hybrid)</h3>
+                            <h3 class="text-xl font-bold text-white">Linux System Administrator</h3>
+                            <p class="font-mono text-green mb-2">Hermes Capital | Feb 2021 - Oct 2025</p>
+                            <ul class="text-light-slate list-disc pl-5 space-y-2">
+                                <li>Managed a complex network of Linux machines and storage systems, ensuring high reliability for high-frequency trading operations.</li>
+                                <li>Automated microservices deployment using Ansible playbooks and Bash/Python scripts, significantly improving efficiency.</li>
+                                <li>Led a strategic migration to a co-location setup, reducing service latency and increasing throughput.</li>
+                                <li>Implemented advanced logging and alerting mechanisms (Prometheus, Grafana, ELK) to proactively troubleshoot systems.</li>
+                            </ul>
+                        </div>
+
+                        <div class="timeline-item">
+                            <h3 class="text-xl font-bold text-white">Offshore IT Systems Engineer (Hybrid)</h3>
                             <p class="font-mono text-green mb-2">Persia Telecom Co. | Jan 2017 - Apr 2023</p>
                             <ul class="text-light-slate list-disc pl-5 space-y-2">
-                                <li>Engineered and maintained critical IT infrastructure for a maritime fleet, designing robust solutions to ensure seamless offshore operations.</li>
-                                <li>Improved connectivity and communication between vessels and onshore headquarters by refining IT methods and automating monitoring workflows.</li>
-                                <li>Collaborated with cross-functional teams to deliver tailored technology solutions that met the unique operational requirements of each vessel.</li>
-                                <li>Fostered a collaborative environment within a diverse, international workforce, emphasizing effective communication and team engagement.</li>
+                                <li>Engineered and maintained critical IT infrastructure for a maritime fleet in the Persian Gulf.</li>
+                                <li>Improved connectivity between vessels and onshore headquarters by refining IT methods and automating workflows.</li>
+                                <li>Fostered a collaborative environment within a diverse, international workforce.</li>
                             </ul>
                         </div>
+
                         <div class="timeline-item">
                             <h3 class="text-xl font-bold text-white">Datacenter Operations Specialist</h3>
                             <p class="font-mono text-green mb-2">AFRANET | Feb 2014 - May 2015</p>
                             <ul class="text-light-slate list-disc pl-5 space-y-2">
-                                <li>Provided prompt and effective technical support, enhancing the efficiency and performance of the customer support team.</li>
-                                <li>Developed comprehensive documentation on datacenter standards like TIA-942, BICSI, and ISO 27001, ensuring compliance and improving knowledge sharing.</li>
-                                <li>Analyzed and presented strategic insights to management, driving initiatives that enhanced datacenter operations and strengthened relationships with key tech clients.</li>
+                                <li>Provided technical support and documentation on datacenter standards like TIA-942 and ISO 27001.</li>
+                                <li>Analyzed strategic insights to drive initiatives that enhanced datacenter operations.</li>
                             </ul>
                         </div>
                     </div>
@@ -234,54 +244,35 @@
                         </div>
                         <div>
                             <h4 class="font-bold text-xl text-white mb-2">Virtualization & Cloud</h4>
-                            <p class="text-light-slate">VMware, Kubernetes (K8s), Docker, Amazon Web Services (AWS).</p>
+                            <p class="text-light-slate">VMware, Kubernetes (K8s), Docker, AWS.</p>
                         </div>
                         <div>
-                            <h4 class="font-bold text-xl text-white mb-2">Databases & High Availability</h4>
-                          <p class="text-light-slate">PostgreSQL, MongoDB, ClickHouse</p>
-                            <p class="text-light-slate">Patroni, Pacemaker, HAProxy.</p>
+                            <h4 class="font-bold text-xl text-white mb-2">HA & Databases</h4>
+                            <p class="text-light-slate">PostgreSQL, MongoDB, ClickHouse, Patroni, HAProxy.</p>
                         </div>
                         <div>
-                            <h4 class="font-bold text-xl text-white mb-2">Monitoring & Observability</h4>
-                            <p class="text-light-slate">Grafana, Prometheus, Zabbix, ELK Stack, Percona Monitoring.</p>
+                            <h4 class="font-bold text-xl text-white mb-2">Observability</h4>
+                            <p class="text-light-slate">Grafana, Prometheus, Zabbix, ELK Stack.</p>
                         </div>
                          <div>
-                            <h4 class="font-bold text-xl text-white mb-2">CI/CD & DevOps</h4>
+                            <h4 class="font-bold text-xl text-white mb-2">CI/CD</h4>
                             <p class="text-light-slate">Gitlab CI, GitHub Actions.</p>
                         </div>
                         <div>
-                            <h4 class="font-bold text-xl text-white mb-2">Networking & Security</h4>
-                            <p class="text-light-slate">TCP/IP, Routing, Switching, Pfsense, Fortinet, HashiCorp Vault, OpenLDAP.</p>
+                            <h4 class="font-bold text-xl text-white mb-2">Networking</h4>
+                            <p class="text-light-slate">TCP/IP, Routing, Pfsense, Fortinet, HashiCorp Vault.</p>
                         </div>
-                    </div>
-                    <h3 class="text-2xl font-bold text-white mt-12 mb-6">Soft Skills</h3>
-                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 text-light-slate">
-                        <div class="flex items-center"><svg class="tech-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg> Team Leadership</div>
-                        <div class="flex items-center"><svg class="tech-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" /></svg> Effective Communication</div>
-                        <div class="flex items-center"><svg class="tech-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg> Problem-Solving</div>
-                        <div class="flex items-center"><svg class="tech-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg> Strategic Planning</div>
-                        <div class="flex items-center"><svg class="tech-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> Time Management</div>
-                        <div class="flex items-center"><svg class="tech-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg> Adaptability</div>
                     </div>
                 </div>
             </section>
 
             <section id="projects" class="my-24 reveal">
                 <h2 class="section-title">04. Featured Projects</h2>
-                <p class="text-light-slate text-lg max-w-4xl mb-8">
-                    Here are a few examples of my work and technical explorations. These repositories showcase my skills in automation, infrastructure as code, and system configuration. I will be updating them with more detailed documentation and new projects soon.
-                </p>
                 <div class="grid md:grid-cols-2 gap-4 font-mono text-light-slate">
-                    <a href="https://github.com/alitman22/network-architecture-for-HFT" target="_blank" rel="noopener noreferrer" class="block p-4 bg-light-navy hover:bg-green hover:text-navy rounded transition-colors duration-300">⭐Networking: Design multi layer secure network&nbsp; &nbsp; &nbsp; &nbsp;</a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="block p-4 bg-light-navy hover:bg-green hover:text-navy rounded transition-colors duration-300">Ansible: Installing Kafka Cluster&nbsp;</a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="block p-4 bg-light-navy hover:bg-green hover:text-navy rounded transition-colors duration-300">VMware: Design and Deployment of vSAN Cluster</a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="block p-4 bg-light-navy hover:bg-green hover:text-navy rounded transition-colors duration-300">Docker: Ray Cluster Deployment&nbsp;&nbsp;</a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="block p-4 bg-light-navy hover:bg-green hover:text-navy rounded transition-colors duration-300">Database : HA PostgreSQL with Patroni</a>
+                    <a href="https://github.com/alitman22/network-architecture-for-HFT" target="_blank" rel="noopener noreferrer" class="block p-4 bg-light-navy hover:bg-green hover:text-navy rounded transition-colors duration-300">⭐Networking: Design multi layer secure network</a>
                     <a href="https://github.com/alitman22/Systemd-Monitoring-DBUS" target="_blank" rel="noopener noreferrer" class="block p-4 bg-light-navy hover:bg-green hover:text-navy rounded transition-colors duration-300">⭐Python: Systemd Services Health Monitoring</a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="block p-4 bg-light-navy hover:bg-green hover:text-navy rounded transition-colors duration-300">Bash: Set of frequent tools</a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="block p-4 bg-light-navy hover:bg-green hover:text-navy rounded transition-colors duration-300">Monitoring: Prometheus & Grafana Stack</a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="block p-4 bg-light-navy hover:bg-green hover:text-navy rounded transition-colors duration-300">CI/CD: GitLab Pipeline for Python App</a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="block p-4 bg-light-navy hover:bg-green hover:text-navy rounded transition-colors duration-300">Security: implementation of pfsenes cluster</a>
+                    <a href="#" class="block p-4 bg-light-navy hover:bg-green hover:text-navy rounded transition-colors duration-300">Ansible: Kafka Cluster Deployment</a>
+                    <a href="#" class="block p-4 bg-light-navy hover:bg-green hover:text-navy rounded transition-colors duration-300">Database: HA PostgreSQL with Patroni</a>
                 </div>
             </section>
 
@@ -289,7 +280,7 @@
                 <h2 class="font-mono text-2xl text-green">05. What's Next?</h2>
                 <h3 class="text-5xl font-bold text-white mt-4">Get In Touch</h3>
                 <p class="text-light-slate text-lg mt-6 max-w-xl mx-auto">
-                    I'm currently seeking new opportunities and am open to relocation to the EU, If you have a role where my skills in Linux administration, DevOps, or infrastructure engineering would be a good fit, I'd love to hear from you.
+                    I'm currently seeking new opportunities and am open to relocation to the EU. If you have a role where my skills in Linux, DevOps, or Infrastructure would fit, I'd love to hear from you.
                 </p>
                 <div class="mt-10">
                     <a href="mailto:alit.fattahi@gmail.com" class="inline-block bg-transparent hover:bg-green text-green hover:text-navy font-bold py-4 px-8 border-2 border-green rounded-md transition-all duration-300 font-mono text-lg">
@@ -300,20 +291,19 @@
 
         </main>
 
-<footer class="text-center py-8">
-  <div class="flex flex-col items-center space-y-2">
-    <a href="https://www.linkedin.com/in/alit-fattahi/" target="_blank" rel="noopener noreferrer"
-       class="text-slate hover:text-green transition-colors duration-300 font-mono text-sm">
-       Designed & Built by Ali Fattahi
-    </a>
-    <img src="https://visitor-badge.laobi.icu/badge?page_id=alitman22.alitman22" alt="visitor badge" class="mx-auto"/>
-  </div>
-</footer>
+        <footer class="text-center py-8">
+          <div class="flex flex-col items-center space-y-2">
+            <a href="https://www.linkedin.com/in/alit-fattahi/" target="_blank" rel="noopener noreferrer"
+               class="text-slate hover:text-green transition-colors duration-300 font-mono text-sm">
+                Designed & Built by Ali Fattahi
+            </a>
+            <img src="https://visitor-badge.laobi.icu/badge?page_id=alitman22.alitman22" alt="visitor badge" class="mx-auto"/>
+          </div>
+        </footer>
 
     </div>
 
     <script>
-        // This script handles the scroll-reveal animation for sections.
         const reveal = () => {
             const reveals = document.querySelectorAll('.reveal');
             for (let i = 0; i < reveals.length; i++) {
@@ -326,7 +316,7 @@
             }
         };
         window.addEventListener('scroll', reveal);
-        reveal(); // Trigger on initial load
+        reveal();
     </script>
 
 </body>
