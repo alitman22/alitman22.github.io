@@ -1011,65 +1011,74 @@
             </footer>
         </div>
 
-<div class="flex gap-8 justify-center my-12 reveal active">
-    <div class="flex items-center gap-3 glass-card p-3 px-5" style="min-width: 100px; justify-content: center;">
-        <span class="text-2xl" title="Turkey">🇹🇷</span>
-        <img id="badge-turkey" 
-             src="https://visitor-badge.laobi.icu/badge?page_id=alitman22.portfolio.2024.tr&color=00f2ea&left_text=%20" 
-             alt="TR" 
-             style="height: 20px;">
+<footer class="my-24 reveal">
+    <div class="max-w-5xl mx-auto px-4 text-center">
+        <p class="text-sm opacity-50 mb-6 font-mono">Designed & Built by Ali Fattahi</p>
+        
+        <div class="mb-6 flex justify-center">
+            <img src="https://visitor-badge.laobi.icu/badge?page_id=alitman22.portfolio.total&color=007ec6" alt="Total Visitors">
+        </div>
+
+        <div class="flex flex-row justify-center items-center gap-6">
+            
+            <div class="flex items-center gap-3 glass-card p-2 px-4 border border-white/5 shadow-xl">
+                <span class="text-sm font-bold opacity-80" style="color: var(--text-primary)">TR</span>
+                <img id="badge-turkey" 
+                     src="https://visitor-badge.laobi.icu/badge?page_id=alitman22.portfolio.2024.tr&color=00f2ea&left_text=%20" 
+                     alt="TR" 
+                     class="h-5">
+            </div>
+
+            <div class="flex items-center gap-3 glass-card p-2 px-4 border border-white/5 shadow-xl">
+                <span class="text-lg">🌐</span>
+                <img id="badge-global" 
+                     src="https://visitor-badge.laobi.icu/badge?page_id=alitman22.portfolio.2024.global&color=444&left_text=%20" 
+                     alt="Global" 
+                     class="h-5">
+            </div>
+            
+        </div>
     </div>
-    
-    <div class="flex items-center gap-3 glass-card p-3 px-5" style="min-width: 100px; justify-content: center;">
-        <span class="text-2xl" title="Global">🌐</span>
-        <img id="badge-global" 
-             src="https://visitor-badge.laobi.icu/badge?page_id=alitman22.portfolio.2024.global&color=444&left_text=%20" 
-             alt="Global" 
-             style="height: 20px;">
-    </div>
-</div>
+</footer>
 
 <script>
     /**
-     * IP-Based Counter Logic
-     * Uses ipapi.co to detect the visitor's country and update only the relevant badge.
+     * IP-Based Visitor Logic
+     * Uses ipapi.co to detect country code and update the specific source.
      */
-    const updateVisitorBadge = async () => {
+    const updateVisitorStats = async () => {
         const badgeTR = document.getElementById('badge-turkey');
         const badgeGlobal = document.getElementById('badge-global');
-        
-        // baseId must have unique suffixes (.tr and .global) to track separate counts
         const baseId = 'alitman22.portfolio.2024';
 
         try {
+            // Automatically detects the visitor's public IP
             const response = await fetch('https://ipapi.co/json/');
             const data = await response.json();
             
+            // Logic to split the traffic
             if (data.country_code === 'TR') {
-                // If the IP is from Turkey, increment only the Turkey-specific page_id
                 if (badgeTR) {
                     badgeTR.src = `https://visitor-badge.laobi.icu/badge?page_id=${baseId}.tr&color=00f2ea&left_text=%20`;
                 }
             } else {
-                // If the IP is from any other country, increment only the Global page_id
                 if (badgeGlobal) {
                     badgeGlobal.src = `https://visitor-badge.laobi.icu/badge?page_id=${baseId}.global&color=444&left_text=%20`;
                 }
             }
         } catch (error) {
-            console.error('GeoIP detection failed. Showing current cached counts.');
+            console.error('Geo-lookup failed. Defaulting to cached counts.');
         }
     };
 
-    // Ensure scripts run after DOM is fully loaded
+    // Initialize scripts on page load
     document.addEventListener('DOMContentLoaded', () => {
-        // Run existing reveal and nav functions if they exist in your file
-        if (typeof reveal === 'function') reveal();
-        if (typeof updateNav === 'function') updateNav();
+        // Run location logic
+        updateVisitorStats();
         
-        // Execute the counter logic
-        updateVisitorBadge();
+        // Ensure other UI functions (like scroll reveal) run as well
+        if (typeof reveal === 'function') reveal();
     });
-</script>    
+</script>   
     </body>
 </html>
