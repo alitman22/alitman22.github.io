@@ -1011,23 +1011,26 @@
             </footer>
         </div>
 
-<div class="flex gap-6 justify-center my-12 reveal">
-    <div class="flex items-center gap-2">
-        <span class="text-xl">🇹🇷</span>
+<div class="flex gap-8 justify-center my-12 reveal">
+    <div class="flex items-center gap-3 glass-card p-3 px-5">
+        <span class="text-2xl">🇹🇷</span>
         <img id="badge-turkey" 
-             src="https://visitor-badge.laobi.icu/badge?page_id=alitman22.portfolio.2024.tr&color=00f2ea&left_text= " 
-             alt="TR">
+             src="https://visitor-badge.laobi.icu/badge?page_id=alitman22.portfolio.2024.tr&color=00f2ea&left_text=%20" 
+             alt="TR" 
+             style="height: 20px;">
     </div>
     
-    <div class="flex items-center gap-2">
-        <span class="text-xl">🌐</span>
+    <div class="flex items-center gap-3 glass-card p-3 px-5">
+        <span class="text-2xl">🌐</span>
         <img id="badge-global" 
-             src="https://visitor-badge.laobi.icu/badge?page_id=alitman22.portfolio.2024.global&color=444&left_text= " 
-             alt="Global">
+             src="https://visitor-badge.laobi.icu/badge?page_id=alitman22.portfolio.2024.global&color=444&left_text=%20" 
+             alt="Global" 
+             style="height: 20px;">
     </div>
 </div>
-        <script>
-    // Scroll-reveal animation
+
+<script>
+    // Scroll-reveal animation logic
     const reveal = () => {
         const reveals = document.querySelectorAll('.reveal');
         for (let i = 0; i < reveals.length; i++) {
@@ -1068,45 +1071,51 @@
         });
     };
 
-    // IP-Based Counter Logic (No Text, Just Numbers)
+    /**
+     * IP-Based Counter Logic
+     * Automatically detects visitor IP via ipapi.co
+     * Increments separate badges for Turkey (TR) vs the rest of the world
+     */
     const updateVisitorBadge = async () => {
         const badgeTR = document.getElementById('badge-turkey');
         const badgeGlobal = document.getElementById('badge-global');
+        
+        // Unique ID for your portfolio counters
         const baseId = 'alitman22.portfolio.2024';
 
         try {
-            // Service detects visitor IP and returns location data
+            // Fetch location data based on the visitor's public IP
             const response = await fetch('https://ipapi.co/json/');
             const data = await response.json();
             
-            // If visitor IP is from Turkey (TR), increment the TR ID
             if (data.country_code === 'TR') {
+                // If IP is from Turkey, refresh the Turkey-specific badge to increment it
                 if (badgeTR) {
                     badgeTR.src = `https://visitor-badge.laobi.icu/badge?page_id=${baseId}.tr&color=00f2ea&left_text=%20`;
                 }
             } else {
-                // If visitor IP is outside Turkey, increment the Global ID
+                // If IP is from any other country, refresh the Global badge to increment it
                 if (badgeGlobal) {
                     badgeGlobal.src = `https://visitor-badge.laobi.icu/badge?page_id=${baseId}.global&color=444&left_text=%20`;
                 }
             }
         } catch (error) {
-            console.error('GeoIP check failed');
+            console.error('GeoIP detection failed. Using default global counters.');
         }
     };
 
-    // Event listeners
+    // Global scroll listener
     window.addEventListener('scroll', () => {
         reveal();
         updateNav();
     });
 
-    // Initial calls
+    // Execute on page load
     document.addEventListener('DOMContentLoaded', () => {
         reveal();
         updateNav();
         updateVisitorBadge();
     });
-</script>
+</script>    
     </body>
 </html>
