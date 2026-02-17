@@ -997,19 +997,32 @@
             </main>
         </div>
 
-<footer class="my-24 reveal">
-    <div class="max-w-5xl mx-auto px-4 text-center">
-        <p class="text-sm opacity-50 mb-6 font-mono">Designed & Built by Ali Fattahi</p>
-        
-<div class="flex gap-4 justify-center">
-                        <div class="flex items-center gap-3 glass-card p-2 px-4" style="border-radius: 8px;">
-                            <span class="text-xl">🇹🇷</span>
-                            <img id="badge-turkey" src="https://visitor-badge.laobi.icu/badge?page_id=alitman22.portfolio.2024.tr&color=00f2ea&left_text=%20" style="height: 20px;">
+<footer class="text-center py-12 border-t border-white/10">
+                <div class="flex flex-col items-center space-y-8">
+                    <a href="https://www.linkedin.com/in/alit-fattahi/" 
+                       class="font-mono text-sm transition-colors duration-300 hover:text-[#00d9ff]" 
+                       style="color: var(--text-muted)">
+                        Designed & Built by Ali Fattahi
+                    </a>
+                    
+                    <div class="flex justify-center">
+                         <img src="https://visitor-badge.laobi.icu/badge?page_id=alitman22.portfolio.total&color=007ec6&left_text=Total%20Visits" 
+                              alt="Total Visitors" 
+                              class="opacity-80 hover:opacity-100 transition-opacity">
+                    </div>
+
+                    <div class="flex gap-4 justify-center" style="min-height: 50px">
+                        
+                        <div id="box-turkey" class="flex items-center gap-3 glass-card p-2 px-4" style="display: none; border-radius: 8px;">
+                            <span class="text-2xl" title="Welcome from Turkey">🇹🇷</span>
+                            <img id="badge-turkey" alt="TR Count" style="height: 20px;">
                         </div>
-                        <div class="flex items-center gap-3 glass-card p-2 px-4" style="border-radius: 8px;">
-                            <span class="text-xl">🌐</span>
-                            <img id="badge-global" src="https://visitor-badge.laobi.icu/badge?page_id=alitman22.portfolio.2024.global&color=444&left_text=%20" style="height: 20px;">
+
+                        <div id="box-global" class="flex items-center gap-3 glass-card p-2 px-4" style="display: none; border-radius: 8px;">
+                            <span class="text-2xl" title="International Visitor">🌍</span>
+                            <img id="badge-global" alt="Global Count" style="height: 20px;">
                         </div>
+
                     </div>
                 </div>
             </footer>
@@ -1051,21 +1064,36 @@
                 });
             };
 
-            // 3. Visitor Badge Logic
+            // 3. Smart Visitor Counter (Prevents Double Counting)
             const updateVisitorBadge = async () => {
+                const boxTR = document.getElementById('box-turkey');
                 const badgeTR = document.getElementById('badge-turkey');
+                
+                const boxGlobal = document.getElementById('box-global');
                 const badgeGlobal = document.getElementById('badge-global');
+                
+                // Unique IDs for separate tracking
                 const baseId = 'alitman22.portfolio.2024';
 
                 try {
                     const response = await fetch('https://ipapi.co/json/');
                     const data = await response.json();
+                    
                     if (data.country_code === 'TR') {
+                        // Visitor is in Turkey: Unhide TR box and Load TR Badge
+                        if (boxTR) boxTR.style.display = 'flex';
                         if (badgeTR) badgeTR.src = `https://visitor-badge.laobi.icu/badge?page_id=${baseId}.tr&color=00f2ea&left_text=%20`;
                     } else {
+                        // Visitor is Outside Turkey: Unhide Global box and Load Global Badge
+                        if (boxGlobal) boxGlobal.style.display = 'flex';
                         if (badgeGlobal) badgeGlobal.src = `https://visitor-badge.laobi.icu/badge?page_id=${baseId}.global&color=444&left_text=%20`;
                     }
-                } catch (e) { console.error('GeoIP Error'); }
+                } catch (error) {
+                    console.error('Location check failed');
+                    // Fallback to Global if API fails
+                    if (boxGlobal) boxGlobal.style.display = 'flex';
+                    if (badgeGlobal) badgeGlobal.src = `https://visitor-badge.laobi.icu/badge?page_id=${baseId}.global&color=444&left_text=%20`;
+                }
             };
 
             // Event Listeners
@@ -1075,6 +1103,6 @@
                 updateNav();
                 updateVisitorBadge();
             });
-        </script>   
+        </script>    
     </body>
 </html>
