@@ -1011,17 +1011,17 @@
             </footer>
         </div>
 
-<div class="flex gap-8 justify-center my-12 reveal active">
-    <div class="flex items-center gap-3 glass-card p-3 px-5" style="min-width: 100px; justify-content: center;">
-        <span class="text-2xl" title="Turkey">🇹🇷</span>
+<div class="flex gap-8 justify-center my-12 reveal">
+    <div class="flex items-center gap-3 glass-card p-3 px-5">
+        <span class="text-2xl">🇹🇷</span>
         <img id="badge-turkey" 
              src="https://visitor-badge.laobi.icu/badge?page_id=alitman22.portfolio.2024.tr&color=00f2ea&left_text=%20" 
              alt="TR" 
              style="height: 20px;">
     </div>
     
-    <div class="flex items-center gap-3 glass-card p-3 px-5" style="min-width: 100px; justify-content: center;">
-        <span class="text-2xl" title="Global">🌐</span>
+    <div class="flex items-center gap-3 glass-card p-3 px-5">
+        <span class="text-2xl">🌐</span>
         <img id="badge-global" 
              src="https://visitor-badge.laobi.icu/badge?page_id=alitman22.portfolio.2024.global&color=444&left_text=%20" 
              alt="Global" 
@@ -1030,44 +1030,90 @@
 </div>
 
 <script>
+    // Scroll-reveal animation logic
+    const reveal = () => {
+        const reveals = document.querySelectorAll('.reveal');
+        for (let i = 0; i < reveals.length; i++) {
+            const windowHeight = window.innerHeight;
+            const elementTop = reveals[i].getBoundingClientRect().top;
+            const elementVisible = 100;
+            if (elementTop < windowHeight - elementVisible) {
+                reveals[i].classList.add('active');
+            }
+        }
+    };
+
+    // Navigation active state and scroll effects
+    const updateNav = () => {
+        const navbar = document.getElementById('navbar');
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+
+        let current = '';
+        sections.forEach((section) => {
+            const sectionTop = section.offsetTop;
+            if (window.scrollY >= sectionTop - 120) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach((link) => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${current}`) {
+                link.classList.add('active');
+            }
+        });
+    };
+
     /**
      * IP-Based Counter Logic
-     * Uses ipapi.co to detect the visitor's country and update only the relevant badge.
+     * Automatically detects visitor IP via ipapi.co
+     * Increments separate badges for Turkey (TR) vs the rest of the world
      */
     const updateVisitorBadge = async () => {
         const badgeTR = document.getElementById('badge-turkey');
         const badgeGlobal = document.getElementById('badge-global');
         
-        // baseId must have unique suffixes (.tr and .global) to track separate counts
+        // Unique ID for your portfolio counters
         const baseId = 'alitman22.portfolio.2024';
 
         try {
+            // Fetch location data based on the visitor's public IP
             const response = await fetch('https://ipapi.co/json/');
             const data = await response.json();
             
             if (data.country_code === 'TR') {
-                // If the IP is from Turkey, increment only the Turkey-specific page_id
+                // If IP is from Turkey, refresh the Turkey-specific badge to increment it
                 if (badgeTR) {
                     badgeTR.src = `https://visitor-badge.laobi.icu/badge?page_id=${baseId}.tr&color=00f2ea&left_text=%20`;
                 }
             } else {
-                // If the IP is from any other country, increment only the Global page_id
+                // If IP is from any other country, refresh the Global badge to increment it
                 if (badgeGlobal) {
                     badgeGlobal.src = `https://visitor-badge.laobi.icu/badge?page_id=${baseId}.global&color=444&left_text=%20`;
                 }
             }
         } catch (error) {
-            console.error('GeoIP detection failed. Showing current cached counts.');
+            console.error('GeoIP detection failed. Using default global counters.');
         }
     };
 
-    // Ensure scripts run after DOM is fully loaded
+    // Global scroll listener
+    window.addEventListener('scroll', () => {
+        reveal();
+        updateNav();
+    });
+
+    // Execute on page load
     document.addEventListener('DOMContentLoaded', () => {
-        // Run existing reveal and nav functions if they exist in your file
-        if (typeof reveal === 'function') reveal();
-        if (typeof updateNav === 'function') updateNav();
-        
-        // Execute the counter logic
+        reveal();
+        updateNav();
         updateVisitorBadge();
     });
 </script>    
