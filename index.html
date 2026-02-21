@@ -1,1209 +1,1474 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Ali Fattahi | DevOps & Infrastructure Engineer</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        <link rel="icon" type="image/x-icon" href="/favicon.ico">
-        <style>
-            :root {
-                --bg-primary: #0a0e27;
-                --bg-secondary: #151932;
-                --bg-card: rgba(21, 25, 50, 0.7);
-                --accent-primary: #00d9ff;
-                --accent-secondary: #7000ff;
-                --accent-glow: #00ffaa;
-                --text-primary: #e4e9f7;
-                --text-secondary: #a8b2d1;
-                --text-muted: #6b7280;
-                --border-color: rgba(100, 255, 218, 0.1);
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ali Fattahi | DevOps & Infrastructure Engineer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <style>
+        :root {
+            --bg-primary: #0a0e27;
+            --bg-secondary: #151932;
+            --bg-card: rgba(21, 25, 50, 0.7);
+            --accent-primary: #00d9ff;
+            --accent-secondary: #7000ff;
+            --accent-glow: #00ffaa;
+            --text-primary: #e4e9f7;
+            --text-secondary: #a8b2d1;
+            --text-muted: #6b7280;
+            --border-color: rgba(100, 255, 218, 0.1);
+        }
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #151932 50%, #1a1f3a 100%);
+            background-attachment: fixed;
+            color: var(--text-secondary);
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated background particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(0, 217, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(112, 0, 255, 0.05) 0%, transparent 50%), radial-gradient(circle at 40% 20%, rgba(0, 255, 170, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) translateX(0);
             }
 
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
+            33% {
+                transform: translateY(-20px) translateX(10px);
+            }
+
+            66% {
+                transform: translateY(10px) translateX(-10px);
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-glow);
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Section title with gradient */
+        .section-title {
+            display: flex;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 3rem;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .section-number {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-primary);
+            margin-right: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            position: relative;
+            width: 100%;
+            height: 2px;
+            margin-left: 20px;
+            background: linear-gradient(90deg, var(--accent-primary) 0%, transparent 100%);
+        }
+
+        /* Glassmorphic cards */
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-primary);
+            box-shadow:
+                0 20px 60px -15px rgba(0, 217, 255, 0.3),
+                0 0 40px rgba(0, 217, 255, 0.1);
+        }
+
+        .glass-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Terminal-style elements */
+        .terminal-prompt {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-glow);
+            font-size: 1.125rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .terminal-prompt::before {
+            content: '>';
+            color: var(--accent-primary);
+            animation: blink 1.5s step-end infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            50% {
+                opacity: 1;
+            }
+
+            51%,
+            100% {
+                opacity: 0;
+            }
+        }
+
+        /* CTA Button with glow effect */
+        .cta-button {
+            position: relative;
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: 1.125rem;
+            color: var(--accent-primary);
+            text-decoration: none;
+            border: 2px solid var(--accent-primary);
+            border-radius: 8px;
+            background: transparent;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            z-index: 1;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+            transition: left 0.5s ease;
+            z-index: -1;
+        }
+
+        .cta-button:hover {
+            color: var(--bg-primary);
+            box-shadow: 0 0 30px rgba(0, 217, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--accent-primary);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+        }
+
+        .cta-button:hover::after {
+            opacity: 1;
+        }
+
+        /* Profile picture with modern effects */
+        .profile-wrapper {
+            position: relative;
+            max-width: 400px;
+            filter: drop-shadow(0 10px 30px rgba(0, 217, 255, 0.2));
+        }
+
+        .profile-wrapper img {
+            border-radius: 16px;
+            border: 3px solid transparent;
+            background:
+                linear-gradient(var(--bg-secondary), var(--bg-secondary)) padding-box,
+                linear-gradient(135deg, var(--accent-primary), var(--accent-glow)) border-box;
+            transition: all 0.4s ease;
+        }
+
+        .profile-wrapper:hover img {
+            transform: scale(1.02);
+            box-shadow: 0 20px 60px rgba(0, 217, 255, 0.3);
+        }
+
+        /* Timeline styles */
+        .timeline-connector {
+            position: relative;
+            padding-left: 2.5rem;
+        }
+
+        .timeline-connector::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+            opacity: 0.3;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 3rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.375rem;
+            top: 0.5rem;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent-glow);
+            box-shadow: 0 0 20px var(--accent-glow);
+            z-index: 2;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 20px var(--accent-glow);
+            }
+
+            50% {
+                box-shadow: 0 0 40px var(--accent-glow);
+            }
+        }
+
+        /* Skill badges */
+        .skill-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: rgba(0, 217, 255, 0.1);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            color: var(--accent-primary);
+            transition: all 0.3s ease;
+        }
+
+        .skill-badge:hover {
+            background: rgba(0, 217, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 217, 255, 0.2);
+        }
+
+        /* Project card hover effects */
+        .project-card {
+            position: relative;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: block;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-glow));
+            opacity: 0;
+            border-radius: 12px;
+            z-index: -1;
+            transition: opacity 0.4s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            color: var(--text-primary);
+            box-shadow: 0 20px 40px rgba(0, 217, 255, 0.2);
+        }
+
+        .project-card:hover::before {
+            opacity: 0.2;
+        }
+
+        /* Reveal animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(60px);
+            transition:
+                opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Tech icons */
+        .tech-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            color: var(--accent-glow);
+            flex-shrink: 0;
+        }
+
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Container */
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .section-number {
+                font-size: 1.25rem;
+            }
+
+            .glass-card {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Star decoration for featured items */
+        .featured::before {
+            content: '★';
+            color: var(--accent-glow);
+            margin-right: 0.5rem;
+            font-size: 1.2em;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        @keyframes sparkle {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.7;
+                transform: scale(1.1);
+            }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(10, 14, 39, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        nav.scrolled {
+            background: rgba(10, 14, 39, 0.95);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-link {
+            position: relative;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
+            transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-block;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-glow));
+            transform: scaleX(0);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-link:hover {
+            color: var(--accent-primary);
+        }
+
+        .nav-link:hover::before,
+        .nav-link.active::before {
+            transform: scaleX(1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        section[id] {
+            scroll-margin-top: 100px;
+        }
+
+        /* Enhanced Mobile Responsiveness */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem !important;
+            }
+
+            h2 {
+                font-size: 1.75rem !important;
+            }
+
+            .section-title {
+                font-size: 1.75rem !important;
+            }
+
+            .cta-button {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            .glass-card {
+                padding: 1.25rem;
+            }
+
+            .timeline-connector::before {
+                left: 1rem;
+            }
+
+            .timeline-item {
+                padding-left: 2.5rem;
+            }
+
+            .project-card {
+                padding: 1.25rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            h1 {
+                font-size: 2rem !important;
+            }
+
+            h2 {
+                font-size: 1.5rem !important;
+            }
+
+            .skill-badge {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+            }
+        }
+
+        .terminal-input-line .terminal-prompt::before {
+            display: none;
+        }
+
+        @media (prefers-color-scheme: light) {
+            :root {
+                --bg-primary: #f8fafc;
+                --bg-secondary: #ffffff;
+                --bg-card: rgba(255, 255, 255, 0.65);
+                --text-primary: #0f172a;
+                --text-secondary: #334155;
+                --text-muted: #64748b;
+                --border-color: rgba(15, 23, 42, 0.1);
+                --accent-primary: #008cc9;
+                --accent-secondary: #5000b3;
+                --accent-glow: #00b377;
             }
 
             body {
-                font-family: 'Inter', sans-serif;
-                background: linear-gradient(135deg, #0a0e27 0%, #151932 50%, #1a1f3a 100%);
-                background-attachment: fixed;
+                background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
                 color: var(--text-secondary);
-                scroll-behavior: smooth;
-                overflow-x: hidden;
-                position: relative;
             }
 
-            /* Animated background particles */
-            body::before {
-                content: '';
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background:
-                    radial-gradient(circle at 20% 50%, rgba(0, 217, 255, 0.05) 0%, transparent 50%),
-                    radial-gradient(circle at 80% 80%, rgba(112, 0, 255, 0.05) 0%, transparent 50%), radial-gradient(circle at 40% 20%, rgba(0, 255, 170, 0.03) 0%, transparent 50%);
-                pointer-events: none;
-                z-index: 0;
-                animation: float 20s ease-in-out infinite;
+            nav {
+                background: rgba(255, 255, 255, 0.85) !important;
+                border-bottom: 1px solid var(--border-color);
             }
 
-            @keyframes float {
-                0%,
-                100% {
-                    transform: translateY(0) translateX(0);
-                }
-                33% {
-                    transform: translateY(-20px) translateX(10px);
-                }
-                66% {
-                    transform: translateY(10px) translateX(-10px);
-                }
+            nav.scrolled {
+                background: rgba(255, 255, 255, 0.95) !important;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
             }
 
-            /* Custom scrollbar */
-            ::-webkit-scrollbar {
-                width: 10px;
-            }
-
-            ::-webkit-scrollbar-track {
-                background: var(--bg-primary);
-            }
-
-            ::-webkit-scrollbar-thumb {
-                background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
-                border-radius: 10px;
-            }
-
-            ::-webkit-scrollbar-thumb:hover {
-                background: var(--accent-glow);
+            .nav-link {
+                color: var(--text-secondary);
             }
 
             h1,
             h2,
             h3,
-            h4 {
-                font-family: 'JetBrains Mono', monospace;
-                color: var(--text-primary);
-                font-weight: 700;
+            h4,
+            .text-primary {
+                color: var(--text-primary) !important;
             }
 
-            .font-mono {
-                font-family: 'JetBrains Mono', monospace;
+            p,
+            .text-secondary {
+                color: var(--text-secondary) !important;
             }
 
-            /* Section title with gradient */
-            .section-title {
-                display: flex;
-                align-items: center;
-                font-size: 2rem;
-                font-weight: 800;
-                background: linear-gradient(135deg, var(--accent-primary), var(--accent-glow));
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-                margin-bottom: 3rem;
-                white-space: nowrap;
-                position: relative;
-            }
-
-            .section-number {
-                font-family: 'JetBrains Mono', monospace;
-                color: var(--accent-primary);
-                margin-right: 0.5rem;
-                font-size: 1.5rem;
-            }
-
-            .section-title::after {
-                content: '';
-                display: block;
-                position: relative;
-                width: 100%;
-                height: 2px;
-                margin-left: 20px;
-                background: linear-gradient(90deg, var(--accent-primary) 0%, transparent 100%);
-            }
-
-            /* Glassmorphic cards */
             .glass-card {
                 background: var(--bg-card);
-                backdrop-filter: blur(20px);
                 border: 1px solid var(--border-color);
-                border-radius: 16px;
-                padding: 2rem;
-                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-                position: relative;
-                overflow: hidden;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
             }
 
-            .glass-card::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                height: 2px;
-                background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
-                opacity: 0;
-                transition: opacity 0.4s ease;
+            .project-card .text-black {
+                color: var(--text-primary);
             }
 
-            .glass-card:hover {
-                transform: translateY(-5px);
-                border-color: var(--accent-primary);
-                box-shadow:
-                    0 20px 60px -15px rgba(0, 217, 255, 0.3),
-                    0 0 40px rgba(0, 217, 255, 0.1);
+            .skill-badge {
+                background: rgba(15, 23, 42, 0.05);
+                border-color: rgba(15, 23, 42, 0.1);
+                color: var(--text-primary);
             }
 
-            .glass-card:hover::before {
-                opacity: 1;
-            }
-
-            /* Terminal-style elements */
             .terminal-prompt {
-                font-family: 'JetBrains Mono', monospace;
-                color: var(--accent-glow);
-                font-size: 1.125rem;
-                display: inline-flex;
-                align-items: center;
-                gap: 0.5rem;
-                margin-bottom: 1rem;
-            }
-
-            .terminal-prompt::before {
-                content: '>';
                 color: var(--accent-primary);
-                animation: blink 1.5s step-end infinite;
-            }
-
-            @keyframes blink {
-                0%,
-                50% {
-                    opacity: 1;
-                }
-                51%,
-                100% {
-                    opacity: 0;
-                }
-            }
-
-            /* CTA Button with glow effect */
-            .cta-button {
-                position: relative;
-                display: inline-block;
-                padding: 1rem 2.5rem;
-                font-family: 'JetBrains Mono', monospace;
-                font-weight: 600;
-                font-size: 1.125rem;
-                color: var(--accent-primary);
-                text-decoration: none;
-                border: 2px solid var(--accent-primary);
-                border-radius: 8px;
-                background: transparent;
-                overflow: hidden;
-                transition: all 0.4s ease;
-                z-index: 1;
-            }
-
-            .cta-button::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: -100%;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
-                transition: left 0.5s ease;
-                z-index: -1;
-            }
-
-            .cta-button:hover {
-                color: var(--bg-primary);
-                box-shadow: 0 0 30px rgba(0, 217, 255, 0.5);
-                transform: translateY(-2px);
-            }
-
-            .cta-button:hover::before {
-                left: 100%;
-            }
-
-            .cta-button::after {
-                content: '';
-                position: absolute;
-                inset: 0;
-                background: var(--accent-primary);
-                opacity: 0;
-                transition: opacity 0.4s ease;
-                z-index: -1;
-            }
-
-            .cta-button:hover::after {
-                opacity: 1;
-            }
-
-            /* Profile picture with modern effects */
-            .profile-wrapper {
-                position: relative;
-                max-width: 400px;
-                filter: drop-shadow(0 10px 30px rgba(0, 217, 255, 0.2));
-            }
-
-            .profile-wrapper img {
-                border-radius: 16px;
-                border: 3px solid transparent;
-                background:
-                    linear-gradient(var(--bg-secondary), var(--bg-secondary)) padding-box,
-                    linear-gradient(135deg, var(--accent-primary), var(--accent-glow)) border-box;
-                transition: all 0.4s ease;
-            }
-
-            .profile-wrapper:hover img {
-                transform: scale(1.02);
-                box-shadow: 0 20px 60px rgba(0, 217, 255, 0.3);
-            }
-
-            /* Timeline styles */
-            .timeline-connector {
-                position: relative;
-                padding-left: 2.5rem;
-            }
-
-            .timeline-connector::before {
-                content: '';
-                position: absolute;
-                left: 0;
-                top: 0;
-                bottom: 0;
-                width: 2px;
-                background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
-                opacity: 0.3;
-            }
-
-            .timeline-item {
-                position: relative;
-                padding-bottom: 3rem;
             }
 
             .timeline-item::before {
-                content: '';
-                position: absolute;
-                left: -2.375rem;
-                top: 0.5rem;
-                width: 16px;
-                height: 16px;
-                border-radius: 50%;
-                background: var(--accent-glow);
-                box-shadow: 0 0 20px var(--accent-glow);
-                z-index: 2;
-                animation: pulse 2s infinite;
+                box-shadow: 0 0 15px var(--accent-primary);
             }
 
-            @keyframes pulse {
-                0%,
-                100% {
-                    box-shadow: 0 0 20px var(--accent-glow);
-                }
-                50% {
-                    box-shadow: 0 0 40px var(--accent-glow);
-                }
+            body::before {
+                opacity: 0.3;
             }
+        }
+    </style>
+</head>
 
-            /* Skill badges */
-            .skill-badge {
-                display: inline-flex;
-                align-items: center;
-                gap: 0.5rem;
-                padding: 0.75rem 1.25rem;
-                background: rgba(0, 217, 255, 0.1);
-                border: 1px solid rgba(0, 217, 255, 0.3);
-                border-radius: 8px;
-                font-family: 'JetBrains Mono', monospace;
-                font-size: 0.875rem;
-                color: var(--accent-primary);
-                transition: all 0.3s ease;
-            }
-
-            .skill-badge:hover {
-                background: rgba(0, 217, 255, 0.2);
-                transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(0, 217, 255, 0.2);
-            }
-
-            /* Project card hover effects */
-            .project-card {
-                position: relative;
-                padding: 1.5rem;
-                background: var(--bg-card);
-                backdrop-filter: blur(10px);
-                border: 1px solid var(--border-color);
-                border-radius: 12px;
-                font-family: 'JetBrains Mono', monospace;
-                color: var(--text-secondary);
-                text-decoration: none;
-                display: block;
-                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-                overflow: hidden;
-            }
-
-            .project-card::before {
-                content: '';
-                position: absolute;
-                top: -2px;
-                left: -2px;
-                right: -2px;
-                bottom: -2px;
-                background: linear-gradient(135deg, var(--accent-primary), var(--accent-glow));
-                opacity: 0;
-                border-radius: 12px;
-                z-index: -1;
-                transition: opacity 0.4s ease;
-            }
-
-            .project-card:hover {
-                transform: translateY(-5px);
-                color: var(--text-primary);
-                box-shadow: 0 20px 40px rgba(0, 217, 255, 0.2);
-            }
-
-            .project-card:hover::before {
-                opacity: 0.2;
-            }
-
-            /* Reveal animations */
-            .reveal {
-                opacity: 0;
-                transform: translateY(60px);
-                transition:
-                    opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
-                    transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-
-            .reveal.active {
-                opacity: 1;
-                transform: translateY(0);
-            }
-
-            /* Tech icons */
-            .tech-icon {
-                width: 1.5rem;
-                height: 1.5rem;
-                color: var(--accent-glow);
-                flex-shrink: 0;
-            }
-
-            /* Gradient text */
-            .gradient-text {
-                background: linear-gradient(135deg, var(--accent-primary), var(--accent-glow));
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-            }
-
-            /* Container */
-            .container {
-                position: relative;
-                z-index: 1;
-            }
-
-            /* Responsive adjustments */
-            @media (max-width: 768px) {
-                .section-title {
-                    font-size: 1.5rem;
-                }
-
-                .section-number {
-                    font-size: 1.25rem;
-                }
-
-                .glass-card {
-                    padding: 1.5rem;
-                }
-            }
-
-            /* Star decoration for featured items */
-            .featured::before {
-                content: '★';
-                color: var(--accent-glow);
-                margin-right: 0.5rem;
-                font-size: 1.2em;
-                animation: sparkle 2s ease-in-out infinite;
-            }
-
-            @keyframes sparkle {
-                0%,
-                100% {
-                    opacity: 1;
-                    transform: scale(1);
-                }
-                50% {
-                    opacity: 0.7;
-                    transform: scale(1.1);
-                }
-            }
-
-            /* Navigation */
-            nav {
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                z-index: 100;
-                background: rgba(10, 14, 39, 0.85);
-                backdrop-filter: blur(20px);
-                border-bottom: 1px solid var(--border-color);
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-
-            nav.scrolled {
-                background: rgba(10, 14, 39, 0.95);
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            }
-
-            .nav-link {
-                position: relative;
-                color: var(--text-secondary);
-                text-decoration: none;
-                font-family: 'JetBrains Mono', monospace;
-                font-size: 0.875rem;
-                padding: 0.5rem 1rem;
-                transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                display: inline-block;
-            }
-
-            .nav-link::before {
-                content: '';
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                height: 2px;
-                background: linear-gradient(90deg, var(--accent-primary), var(--accent-glow));
-                transform: scaleX(0);
-                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-
-            .nav-link:hover {
-                color: var(--accent-primary);
-            }
-
-            .nav-link:hover::before,
-            .nav-link.active::before {
-                transform: scaleX(1);
-            }
-
-            html {
-                scroll-behavior: smooth;
-            }
-
-            section[id] {
-                scroll-margin-top: 100px;
-            }
-
-            /* Enhanced Mobile Responsiveness */
-            @media (max-width: 768px) {
-                h1 {
-                    font-size: 2.5rem !important;
-                }
-
-                h2 {
-                    font-size: 1.75rem !important;
-                }
-
-                .section-title {
-                    font-size: 1.75rem !important;
-                }
-
-                .cta-button {
-                    padding: 0.75rem 1.5rem;
-                    font-size: 0.9rem;
-                }
-
-                .glass-card {
-                    padding: 1.25rem;
-                }
-
-                .timeline-connector::before {
-                    left: 1rem;
-                }
-
-                .timeline-item {
-                    padding-left: 2.5rem;
-                }
-
-                .project-card {
-                    padding: 1.25rem;
-                }
-            }
-
-            @media (max-width: 640px) {
-                h1 {
-                    font-size: 2rem !important;
-                }
-
-                h2 {
-                    font-size: 1.5rem !important;
-                }
-
-                .skill-badge {
-                    font-size: 0.8rem;
-                    padding: 0.4rem 0.8rem;
-                }
-            }
-        </style>
-    </head>
-    <body class="leading-relaxed" style="padding-top: 70px">
-        <!-- Navigation -->
-        <nav id="navbar">
-            <div class="max-w-6xl mx-auto px-4 sm:px-8 py-4">
-                <div class="flex justify-between items-center">
-                    <a href="#" class="terminal-prompt text-sm" style="margin-bottom: 0">~$ ali.sh</a>
-                    <div class="hidden md:flex gap-6">
-                        <a href="#about" class="nav-link">About</a>
-                        <a href="#experience" class="nav-link">Experience</a>
-                        <a href="#skills" class="nav-link">Skills</a>
-                        <a href="#projects" class="nav-link">Projects</a>
-                        <a href="#contact" class="nav-link">Contact</a>
-                    </div>
-                    <a href="#contact" class="cta-button" style="padding: 0.5rem 1.5rem; font-size: 0.875rem">Get In Touch</a>
+<body class="leading-relaxed" style="padding-top: 70px">
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="max-w-6xl mx-auto px-4 sm:px-8 py-4">
+            <div class="flex justify-between items-center">
+                <a href="#" class="terminal-prompt text-sm" style="margin-bottom: 0; text-decoration: none;">~$
+                    ali.sh</a>
+                <div class="hidden md:flex gap-4 items-center">
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#experience" class="nav-link">Experience</a>
+                    <a href="#skills" class="nav-link">Skills</a>
+                    <a href="#projects" class="nav-link">Projects</a>
+                </div>
+                <div class="flex gap-4 items-center">
+                    <a href="#contact" class="cta-button" style="padding: 0.5rem 1.5rem; font-size: 0.875rem">Get In
+                        Touch</a>
                 </div>
             </div>
-        </nav>
+        </div>
+    </nav>
 
-        <div class="container max-w-7xl mx-auto p-3 sm:p-6 lg:p-12">
-            <header class="min-h-screen flex flex-col justify-center">
-                <div class="grid md:grid-cols-2 gap-16 items-center">
-                    <div>
-                        <div class="terminal-prompt">whoami</div>
-                        <h1 class="text-5xl sm:text-6xl md:text-7xl font-black mt-4 mb-2 leading-tight">
-                            <span class="gradient-text">Ali Fattahi</span>
-                        </h1>
-                        <h2 class="text-xl sm:text-2xl md:text-4xl font-bold mt-2 mb-6" style="color: var(--text-secondary)">Senior DevOps Engineer Infrastructure Architect</h2>
-                        <p class="mt-6 max-w-xl text-lg leading-relaxed" style="color: var(--text-secondary)">
-                            Building resilient, scalable infrastructure through automation and DevOps best practices. I transform complex technical challenges into elegant,
-                            high-performance solutions that power mission-critical systems.
+    <div class="container max-w-7xl mx-auto p-3 sm:p-6 lg:p-12">
+        <header class="min-h-screen flex flex-col justify-center">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div>
+                    <div class="terminal-prompt">whoami</div>
+                    <h1 class="text-5xl sm:text-6xl md:text-7xl font-black mt-4 mb-2 leading-tight">
+                        <span class="gradient-text">Ali Fattahi</span>
+                    </h1>
+                    <h2 class="text-xl sm:text-2xl md:text-4xl font-bold mt-2 mb-6"
+                        style="color: var(--text-secondary)">Senior DevOps Engineer Infrastructure Architect</h2>
+                    <p class="mt-6 max-w-xl text-lg leading-relaxed" style="color: var(--text-secondary)">
+                        Building resilient, scalable infrastructure through automation and DevOps best practices. I
+                        transform complex technical challenges into elegant,
+                        high-performance solutions that power mission-critical systems.
+                    </p>
+                    <div class="mt-10 flex gap-4 flex-wrap">
+                        <a href="#contact" class="cta-button">Get In Touch</a>
+                        <a href="#projects" class="cta-button">View Projects</a>
+                    </div>
+                </div>
+                <div class="flex justify-center md:justify-end">
+                    <div class="profile-wrapper">
+                        <img src="assets/profile.jpg" alt="Ali Fattahi - DevOps Engineer"
+                            class="w-full h-full object-cover" />
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="mt-16">
+            <section id="about" class="my-24 reveal">
+                <h2 class="section-title"><span class="section-number">01.</span>About Me</h2>
+                <div class="grid md:grid-cols-3 gap-8 items-start">
+                    <div class="md:col-span-2 text-lg space-y-4" style="color: var(--text-secondary)">
+                        <p>
+                            Hello! I'm Ali. For over a decade, I've been engineering IT infrastructure that doesn't just
+                            work, it excels. My passion lies in creating systems
+                            that are <span class="gradient-text font-semibold">resilient, efficient, and secure by
+                                design</span>. I approach every challenge with a clear
+                            philosophy: understand the core problem, architect a robust solution, and automate
+                            relentlessly.
                         </p>
-                        <div class="mt-10 flex gap-4 flex-wrap">
-                            <a href="#contact" class="cta-button">Get In Touch</a>
-                            <a href="#projects" class="cta-button">View Projects</a>
-                        </div>
+                        <p>
+                            From managing infrastructure in a premier national datacenter to optimizing high-frequency
+                            trading systems, my journey has equipped me with deep
+                            expertise in <span class="gradient-text font-semibold">Linux administration, DevOps
+                                practices, and network engineering</span>. My BSc in Network
+                            Engineering provides the theoretical foundation that complements my hands-on experience.
+                        </p>
+                        <p>
+                            I believe the best infrastructure is invisible. It just works. This philosophy of
+                            operational excellence drives everything I do, and I'm excited to
+                            bring this expertise to new challenges in forward-thinking organizations.
+                        </p>
+                        <p>
+                            Beyond the technical stack, I take pride in fostering collaboration and clarity across
+                            teams. I enjoy <span class="gradient-text font-semibold">translating complex infrastructure
+                                concepts</span>
+                            into practical strategies that empower developers, stakeholders, and leadership alike. By
+                            combining strong communication with a continuous
+                            improvement mindset, I strive to build environments where innovation moves quickly, <span
+                                class="gradient-text font-semibold">reliability</span> remains uncompromised, and teams
+                            can focus
+                            on <span class="gradient-text font-semibold">delivering real value</span>.
+                        </p>
                     </div>
-                    <div class="flex justify-center md:justify-end">
-                        <div class="profile-wrapper">
-                            <img src="assets/profile.jpg" alt="Ali Fattahi - DevOps Engineer" class="w-full h-full object-cover" />
+                    <div class="space-y-4">
+                        <div class="glass-card">
+                            <h3 class="text-xl font-bold mb-3" style="color: var(--text-primary)">🎓 Education</h3>
+                            <p class="font-semibold" style="color: var(--text-secondary)">BSc, Network Engineering</p>
+                            <p class="text-sm mt-1" style="color: var(--text-muted)">University of Applied Science and
+                                Technology</p>
+                            <p class="text-sm mt-2" style="color: var(--accent-glow)">GPA: 18/20</p>
+                        </div>
+                        <div class="glass-card">
+                            <h3 class="text-xl font-bold mb-3" style="color: var(--text-primary)">🌍 Languages</h3>
+                            <p class="font-semibold" style="color: var(--text-secondary)">Farsi, Azeri (Native)</p>
+                            <p class="font-semibold" style="color: var(--text-secondary)">English (Professional)</p>
+                            <p class="font-semibold" style="color: var(--text-secondary)">Turkish (Proficient)</p>
+                            <p class="text-sm mt-2" style="color: var(--text-muted)">Currently learning <span
+                                    class="gradient-text font-semibold">Dutch (A2)</span></p>
+                        </div>
+                        <div class="glass-card">
+                            <h3 class="text-xl font-bold mb-3" style="color: var(--text-primary)">🎯 Hobbies</h3>
+                            <p style="color: var(--text-secondary)">Travel, strategy games, fitness & hiking</p>
                         </div>
                     </div>
                 </div>
-            </header>
+            </section>
 
-            <main class="mt-16">
-                <section id="about" class="my-24 reveal">
-                    <h2 class="section-title"><span class="section-number">01.</span>About Me</h2>
-                    <div class="grid md:grid-cols-3 gap-8 items-start">
-                        <div class="md:col-span-2 text-lg space-y-4" style="color: var(--text-secondary)">
-                            <p>
-                                Hello! I'm Ali. For over a decade, I've been engineering IT infrastructure that doesn't just work, it excels. My passion lies in creating systems
-                                that are <span class="gradient-text font-semibold">resilient, efficient, and secure by design</span>. I approach every challenge with a clear
-                                philosophy: understand the core problem, architect a robust solution, and automate relentlessly.
+            <section id="experience" class="my-24 reveal">
+                <h2 class="section-title"><span class="section-number">02.</span>Professional Journey</h2>
+                <div class="timeline-connector">
+                    <div class="space-y-8">
+                        <div class="timeline-item glass-card">
+                            <h3 class="text-2xl font-bold mb-2" style="color: var(--text-primary)">DevOps & Linux System
+                                Administrator</h3>
+                            <p class="terminal-prompt text-base mb-4">Dannie.cc | Nov 2025 - Present (Antalya, Turkey)
                             </p>
-                            <p>
-                                From managing infrastructure in a premier national datacenter to optimizing high-frequency trading systems, my journey has equipped me with deep
-                                expertise in <span class="gradient-text font-semibold">Linux administration, DevOps practices, and network engineering</span>. My BSc in Network
-                                Engineering provides the theoretical foundation that complements my hands-on experience.
-                            </p>
-                            <p>
-                                I believe the best infrastructure is invisible. It just works. This philosophy of operational excellence drives everything I do, and I'm excited to
-                                bring this expertise to new challenges in forward-thinking organizations.
-                            </p>
-                            <p>
-                                Beyond the technical stack, I take pride in fostering collaboration and clarity across teams. I enjoy <span class="gradient-text font-semibold">translating complex infrastructure concepts</span> 
-                                into practical strategies that empower developers, stakeholders, and leadership alike. By combining strong communication with a continuous 
-                                improvement mindset, I strive to build environments where innovation moves quickly, <span class="gradient-text font-semibold">reliability</span> remains uncompromised, and teams can focus 
-                                on <span class="gradient-text font-semibold">delivering real value</span>.
+                            <ul class="space-y-3 text-base" style="color: var(--text-secondary)">
+                                <li class="flex items-start gap-3">
+                                    <span style="color: var(--accent-glow)">▹</span>
+                                    <span>Cut CI/CD pipeline runtime across dev, staging, and production by <strong
+                                            class="gradient-text">40%</strong>, accelerating development
+                                        and deployment cycles</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span style="color: var(--accent-glow)">▹</span>
+                                    <span>Built comprehensive monitoring stack for ERP systems and VMs to identify
+                                        performance bottlenecks and reduce troubleshooting time</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span style="color: var(--accent-glow)">▹</span>
+                                    <span>Designed multi-region network connecting Russia, Lithuania, and Turkey
+                                        branches, ensuring reliable data transfer</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span style="color: var(--accent-glow)">▹</span>
+                                    <span>Standardized technical documentation and network maps for hybrid
+                                        infrastructure to streamline troubleshooting</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span style="color: var(--accent-glow)">▹</span>
+                                    <span>Led Turkey branch network upgrade to meet IATF standards, achieving successful
+                                        certification audit passage</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="timeline-item glass-card">
+                            <h3 class="text-2xl font-bold mb-2" style="color: var(--text-primary)">Linux System
+                                Administrator</h3>
+                            <p class="terminal-prompt text-base mb-4">Hermes Capital | Feb 2021 - Oct 2025 (Tehran,
+                                Iran)</p>
+                            <ul class="space-y-3 text-base" style="color: var(--text-secondary)">
+                                <li class="flex items-start gap-3">
+                                    <span style="color: var(--accent-glow)">▹</span>
+                                    <span>Orchestrated a high-availability Linux infrastructure (<strong
+                                            class="gradient-text">250+ Linux-VMs, 200+TB storage</strong>) for seamless
+                                        and performant operations</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span style="color: var(--accent-glow)">▹</span>
+                                    <span>Cut monthly operational spending by <strong class="gradient-text">38%</strong>
+                                        through strategic infrastructure upgrades and smarter resource allocation</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span style="color: var(--accent-glow)">▹</span>
+                                    <span>Enhanced team project delivery speed by <strong
+                                            class="gradient-text">~55%</strong> after recruiting and training 4 junior
+                                        engineers to full productivity</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span style="color: var(--accent-glow)">▹</span>
+                                    <span>Ensured IT systems met government standards, critical for the company securing
+                                        6 key security and trade permits</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span style="color: var(--accent-glow)">▹</span>
+                                    <span>Streamlined <strong class="gradient-text">41 micro-service
+                                            deployments</strong> via automation, cutting times by over half while
+                                        eliminating manual error</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span style="color: var(--accent-glow)">▹</span>
+                                    <span>Managed a full infrastructure co-location migration, cutting service latency
+                                        by <strong class="gradient-text">97%</strong> (from ~9ms to ~270μs)</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span style="color: var(--accent-glow)">▹</span>
+                                    <span>Reduced trading and order execution latency by <strong
+                                            class="gradient-text">22%</strong> via Linux kernel adjustments and network
+                                        fine-tuning</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span style="color: var(--accent-glow)">▹</span>
+                                    <span>Reduced average troubleshooting time by <strong
+                                            class="gradient-text">18%</strong> through more precise system alerts,
+                                        enabling faster issue identification</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span style="color: var(--accent-glow)">▹</span>
+                                    <span>Improved troubleshooting consistency and identified new automation
+                                        opportunities by developing structured runbooks</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span style="color: var(--accent-glow)">▹</span>
+                                    <span>Ensured servers & network devices performed reliably by managing their
+                                        lifecycle with consistent upkeep and checks</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="timeline-item glass-card">
+                            <h3 class="text-2xl font-bold mb-2" style="color: var(--text-primary)">Offshore IT Systems
+                                Engineer</h3>
+                            <p class="terminal-prompt text-base mb-4">Persia Telecom Co. | Jan 2017 - Apr 2023 (Persian
+                                Gulf)</p>
+                            <ul class="space-y-3 text-base" style="color: var(--text-secondary)">
+                                <li class="flex items-start gap-3">
+                                    <span style="color: var(--accent-glow)">▹</span>
+                                    <span>Engineered and maintained critical IT infrastructure for maritime fleet,
+                                        ensuring seamless offshore operations</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span style="color: var(--accent-glow)">▹</span>
+                                    <span>Improved vessel-to-shore connectivity by refining IT methods and automating
+                                        monitoring workflows</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span style="color: var(--accent-glow)">▹</span>
+                                    <span>Delivered tailored technology solutions meeting unique operational
+                                        requirements of each vessel</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span style="color: var(--accent-glow)">▹</span>
+                                    <span>Built collaborative environment within diverse, international workforce
+                                        emphasizing effective communication</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="timeline-item glass-card">
+                            <h3 class="text-2xl font-bold mb-2" style="color: var(--text-primary)">Datacenter Operations
+                                Specialist</h3>
+                            <p class="terminal-prompt text-base mb-4">AFRANET | Feb 2014 - May 2015 (Tehran, Iran)</p>
+                            <ul class="space-y-3 text-base" style="color: var(--text-secondary)">
+                                <li class="flex items-start gap-3">
+                                    <span style="color: var(--accent-glow)">▹</span>
+                                    <span>Provided prompt technical support, enhancing efficiency of customer support
+                                        team</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span style="color: var(--accent-glow)">▹</span>
+                                    <span>Developed comprehensive documentation on standards like <strong
+                                            class="gradient-text">TIA-942, BICSI, and ISO 27001</strong></span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span style="color: var(--accent-glow)">▹</span>
+                                    <span>Analyzed and presented strategic insights driving datacenter operation
+                                        enhancements</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="skills" class="my-24 reveal">
+                <h2 class="section-title"><span class="section-number">03.</span>Core Expertise</h2>
+                <div class="max-w-5xl">
+                    <h3 class="text-2xl font-bold mb-6 gradient-text">Technical Skills</h3>
+
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
+
+                        <div class="glass-card p-5">
+                            <h4 class="font-bold text-base mb-3 flex items-center gap-2"
+                                style="color: var(--text-primary)">
+                                <span style="color: var(--accent-glow)"></span> OS & Automation
+                            </h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="devicon-linux-plain text-white mr-1.5"></i>Linux</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="devicon-ansible-plain colored mr-1.5"></i>Ansible</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="devicon-terraform-plain colored mr-1.5"></i>Terraform</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="devicon-nomad-plain colored mr-1.5"></i>Nomad</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="devicon-bash-plain text-[var(--text-primary)] mr-1.5"></i>Bash</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="devicon-python-plain colored mr-1.5"></i>Python</span>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-5">
+                            <h4 class="font-bold text-base mb-3 flex items-center gap-2"
+                                style="color: var(--text-primary)">
+                                <span style="color: var(--accent-glow)"></span> Cloud & Hardware
+                            </h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="devicon-vsphere-plain text-[var(--text-primary)] mr-1.5"></i>VMware</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="devicon-kubernetes-plain colored mr-1.5"></i>Kubernetes</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="devicon-amazonwebservices-plain-wordmark colored mr-1.5"></i>AWS</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="fa-solid fa-server mr-1.5 text-blue-400"></i>HPE/Dell</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="fa-solid fa-hard-drive mr-1.5 text-[var(--text-secondary)]"></i>EMC/TrueNAS</span>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-5">
+                            <h4 class="font-bold text-base mb-3 flex items-center gap-2"
+                                style="color: var(--text-primary)">
+                                <span style="color: var(--accent-glow)"></span> Databases & HA
+                            </h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="devicon-postgresql-plain colored mr-1.5"></i>Postgres</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="devicon-mysql-plain colored mr-1.5"></i>MySQL</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="devicon-mongodb-plain colored mr-1.5"></i>MongoDB</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="devicon-redis-plain colored mr-1.5"></i>Redis</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="fa-solid fa-database mr-1.5 text-purple-400"></i>Patroni</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="devicon-haproxy-plain colored mr-1.5"></i>HAProxy</span>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-5">
+                            <h4 class="font-bold text-base mb-3 flex items-center gap-2"
+                                style="color: var(--text-primary)">
+                                <span style="color: var(--accent-glow)"></span> Monitoring & Logs
+                            </h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="devicon-grafana-plain text-orange-500 mr-1.5"></i>Grafana</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="devicon-prometheus-original colored mr-1.5"></i>Prometheus</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="devicon-elasticsearch-plain colored mr-1.5"></i>ELK/Graylog</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="fa-solid fa-chart-line mr-1.5 text-red-500"></i>Zabbix</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="fa-solid fa-table mr-1.5 text-blue-300"></i>Percona</span>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-5">
+                            <h4 class="font-bold text-base mb-3 flex items-center gap-2"
+                                style="color: var(--text-primary)">
+                                <span style="color: var(--accent-glow)"></span> Network & Security
+                            </h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="fa-solid fa-shield-halved mr-1.5 text-blue-500"></i>pfSense</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="fa-brands fa-fort-awesome mr-1.5 text-red-500"></i>Fortinet</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="devicon-vault-original colored mr-1.5"></i>Vault</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="fa-solid fa-users-gear mr-1.5 text-yellow-500"></i>OpenLDAP</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="devicon-elasticsearch-plain colored mr-1.5"></i>Elastic SIEM</span>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-5">
+                            <h4 class="font-bold text-base mb-3 flex items-center gap-2"
+                                style="color: var(--text-primary)">
+                                <span style="color: var(--accent-glow)"></span> CI/CD & Web
+                            </h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="devicon-gitlab-plain colored mr-1.5"></i>GitLab</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="devicon-github-original colored mr-1.5"></i>Actions</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="devicon-bitbucket-original colored mr-1.5"></i>Bitbucket</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="devicon-nginx-original colored mr-1.5"></i>Nginx</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                        class="fa-solid fa-floppy-disk mr-1.5 text-green-500"></i>Backups</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <h3 class="text-2xl font-bold mb-6 gradient-text mt-12">Soft Skills</h3>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+                    <div class="glass-card p-5 flex items-start gap-4">
+                        <div class="shrink-0 p-2 bg-indigo-500/10 rounded-lg">
+                            <svg class="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 117.072 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-[var(--text-primary)] text-base">Team Leadership</h4>
+                            <p class="text-sm text-[var(--text-secondary)] mt-1 leading-relaxed">
+                                Mentoring junior engineers, conducting periodic meetings, and aligning technical
+                                initiatives with business goals.
                             </p>
                         </div>
-                        <div class="space-y-4">
-                            <div class="glass-card">
-                                <h3 class="text-xl font-bold mb-3" style="color: var(--text-primary)">🎓 Education</h3>
-                                <p class="font-semibold" style="color: var(--text-secondary)">BSc, Network Engineering</p>
-                                <p class="text-sm mt-1" style="color: var(--text-muted)">University of Applied Science and Technology</p>
-                                <p class="text-sm mt-2" style="color: var(--accent-glow)">GPA: 18/20</p>
+                    </div>
+
+                    <div class="glass-card p-5 flex items-start gap-4">
+                        <div class="shrink-0 p-2 bg-blue-500/10 rounded-lg">
+                            <svg class="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-[var(--text-primary)] text-base">Communication</h4>
+                            <p class="text-sm text-[var(--text-secondary)] mt-1 leading-relaxed">
+                                Translating complex infrastructure concepts for stakeholders and maintaining clear,
+                                concise technical documentation.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-5 flex items-start gap-4">
+                        <div class="shrink-0 p-2 bg-emerald-500/10 rounded-lg">
+                            <svg class="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-[var(--text-primary)] text-base">Problem Solving</h4>
+                            <p class="text-sm text-[var(--text-secondary)] mt-1 leading-relaxed">
+                                Rapid root-cause analysis during incidents and designing innovative workarounds for
+                                legacy system constraints.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-5 flex items-start gap-4">
+                        <div class="shrink-0 p-2 bg-purple-500/10 rounded-lg">
+                            <svg class="w-6 h-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-[var(--text-primary)] text-base">Strategic Planning</h4>
+                            <p class="text-sm text-[var(--text-secondary)] mt-1 leading-relaxed">
+                                Architecting scalable systems that anticipate future growth while optimizing current
+                                resource costs.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-5 flex items-start gap-4">
+                        <div class="shrink-0 p-2 bg-orange-500/10 rounded-lg">
+                            <svg class="w-6 h-6 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-[var(--text-primary)] text-base">Time Management</h4>
+                            <p class="text-sm text-[var(--text-secondary)] mt-1 leading-relaxed">
+                                Balancing critical incident response with long-term project milestones to meet strict
+                                SLAs.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-5 flex items-start gap-4">
+                        <div class="shrink-0 p-2 bg-pink-500/10 rounded-lg">
+                            <svg class="w-6 h-6 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-[var(--text-primary)] text-base">Adaptability</h4>
+                            <p class="text-sm text-[var(--text-secondary)] mt-1 leading-relaxed">
+                                Quickly mastering new DevOps tools and pivoting strategies to handle evolving client
+                                requirements.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+                <section id="projects" class="my-24 reveal">
+                    <div class="max-w-5xl mx-auto px-4">
+                        <h2 class="section-title"><span class="section-number">04.</span>Featured Projects</h2>
+
+                        <p class="text-lg mb-10" style="color: var(--text-secondary)">
+                            A collection of my technical work and infrastructure projects. These repositories showcase
+                            expertise in automation, infrastructure as code, and system configuration.
+                        </p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                            <a href="https://github.com/alitman22/network-architecture-for-HFT" target="_blank"
+                                rel="noopener noreferrer"
+                                class="project-card glass-card p-5 flex flex-col justify-center min-h-[100px] transition-all duration-300 border-none group"
+                                style="background: linear-gradient(135deg, #00f2ea 0%, #00c9ff 100%);">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-sm font-bold tracking-wide text-black">Networking</span>
+                                    <i
+                                        class="fa-brands fa-github text-black opacity-70 group-hover:opacity-100 transition-opacity"></i>
+                                </div>
+                                <span class="text-xs font-medium text-black/90 mb-2">Multi-Layer Secure Network
+                                    Design</span>
+                                <p class="text-xs text-black/80 leading-snug">
+                                    Designed an ultra-low latency network architecture for High Frequency Trading,
+                                    focusing on kernel bypass, multicast optimization, and microsecond-precision time
+                                    sync.
+                                </p>
+                            </a>
+
+                            <div class="project-card glass-card p-5 flex flex-col justify-center min-h-[100px]">
+                                <span class="text-sm font-bold mb-1" style="color: var(--text-primary)">Ansible</span>
+                                <span class="text-xs font-medium mb-2" style="color: var(--text-secondary)">Kafka
+                                    Cluster Installation</span>
+                                <p class="text-xs text-[var(--text-secondary)] leading-snug">
+                                    Automated the deployment of a multi-node Kafka and Zookeeper cluster with idempotent
+                                    playbooks for configuration management and scaling.
+                                </p>
                             </div>
-                            <div class="glass-card">
-                                <h3 class="text-xl font-bold mb-3" style="color: var(--text-primary)">🌍 Languages</h3>
-                                <p class="font-semibold" style="color: var(--text-secondary)">Farsi, Azeri (Native)</p>
-                                <p class="font-semibold" style="color: var(--text-secondary)">English (Professional)</p>
-                                <p class="font-semibold" style="color: var(--text-secondary)">Turkish (Proficient)</p>
-                                <p class="text-sm mt-2" style="color: var(--text-muted)">Currently learning <span class="gradient-text font-semibold">Dutch (A2)</span></p>
+
+                            <div class="project-card glass-card p-5 flex flex-col justify-center min-h-[100px]">
+                                <span class="text-sm font-bold mb-1" style="color: var(--text-primary)">VMware</span>
+                                <span class="text-xs font-medium mb-2" style="color: var(--text-secondary)">vSAN Cluster
+                                    Design & Deployment</span>
+                                <p class="text-xs text-[var(--text-secondary)] leading-snug">
+                                    Architected a hyper-converged infrastructure using vSAN, optimizing storage policies
+                                    for performance and implementing high-availability failover.
+                                </p>
                             </div>
-                            <div class="glass-card">
-                                <h3 class="text-xl font-bold mb-3" style="color: var(--text-primary)">🎯 Hobbies</h3>
-                                <p style="color: var(--text-secondary)">Travel, strategy games, fitness & hiking</p>
+                            <a href="https://github.com/alitman22/ray-vmware-cluster" target="_blank"
+                                rel="noopener noreferrer"
+                                class="project-card glass-card p-5 flex flex-col justify-center min-h-[100px] transition-all duration-300 border-none group"
+                                style="background: linear-gradient(135deg, #00f2ea 0%, #00c9ff 100%);">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-sm font-bold tracking-wide text-black">Docker</span>
+                                    <i
+                                        class="fa-brands fa-github text-black opacity-70 group-hover:opacity-100 transition-opacity"></i>
+                                </div>
+                                <span class="text-xs font-medium text-black/90 mb-2">Ray Cluster Deployment</span>
+                                <p class="text-xs text-black/80 leading-snug">
+                                    Containerized a distributed Ray computing cluster for AI/ML workloads, ensuring
+                                    seamless node auto-discovery and resource scaling.
+                                </p>
+                            </a>
+
+                            <a href="https://github.com/alitman22/ha-postgres-patroni-etcd-haproxy" target="_blank"
+                                rel="noopener noreferrer"
+                                class="project-card glass-card p-5 flex flex-col justify-center min-h-[100px] transition-all duration-300 border-none group"
+                                style="background: linear-gradient(135deg, #00f2ea 0%, #00c9ff 100%);">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-sm font-bold tracking-wide text-black">Database</span>
+                                    <i
+                                        class="fa-brands fa-github text-black opacity-70 group-hover:opacity-100 transition-opacity"></i>
+                                </div>
+                                <span class="text-xs font-medium text-black/90 mb-2">HA PostgreSQL with Patroni</span>
+                                <p class="text-xs text-black/80 leading-snug">
+                                    Deployed a highly available PostgreSQL cluster using Patroni for leader election and
+                                    HAProxy for load balancing read/write traffic.
+                                </p>
+                            </a>
+
+                            <a href="https://github.com/alitman22/Systemd-Monitoring-DBUS" target="_blank"
+                                rel="noopener noreferrer"
+                                class="project-card glass-card p-5 flex flex-col justify-center min-h-[100px] transition-all duration-300 border-none group"
+                                style="background: linear-gradient(135deg, #00f2ea 0%, #00c9ff 100%);">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-sm font-bold tracking-wide text-black">Python</span>
+                                    <i
+                                        class="fa-brands fa-github text-black opacity-70 group-hover:opacity-100 transition-opacity"></i>
+                                </div>
+                                <span class="text-xs font-medium text-black/90 mb-2">Systemd Services Health
+                                    Monitoring</span>
+                                <p class="text-xs text-black/80 leading-snug">
+                                    Developed a real-time system monitor using Python and D-Bus to track systemd unit
+                                    states, capture signals, and alert on service failures.
+                                </p>
+                            </a>
+
+                            <div class="project-card glass-card p-5 flex flex-col justify-center min-h-[100px]">
+                                <span class="text-sm font-bold mb-1" style="color: var(--text-primary)">Bash</span>
+                                <span class="text-xs font-medium mb-2" style="color: var(--text-secondary)">Collection
+                                    of DevOps Tools</span>
+                                <p class="text-xs text-[var(--text-secondary)] leading-snug">
+                                    Created a comprehensive suite of shell scripts for automated backups, log rotation,
+                                    system health checks, and user management.
+                                </p>
                             </div>
+
+                            <a href="https://github.com/alitman22/full-stack-monitoring" target="_blank"
+                                rel="noopener noreferrer"
+                                class="project-card glass-card p-5 flex flex-col justify-center min-h-[100px] transition-all duration-300 border-none group"
+                                style="background: linear-gradient(135deg, #00f2ea 0%, #00c9ff 100%);">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-sm font-bold tracking-wide text-black">Monitoring</span>
+                                    <i
+                                        class="fa-brands fa-github text-black opacity-70 group-hover:opacity-100 transition-opacity"></i>
+                                </div>
+                                <span class="text-xs font-medium text-black/90 mb-2">Prometheus & Grafana Stack</span>
+                                <p class="text-xs text-black/80 leading-snug">
+                                    Implemented full-stack observability with Prometheus exporters and custom Grafana
+                                    dashboards for visualizing infrastructure metrics.
+                                </p>
+                            </a>
+
+                            <div class="project-card glass-card p-5 flex flex-col justify-center min-h-[100px]">
+                                <span class="text-sm font-bold mb-1" style="color: var(--text-primary)">CI/CD</span>
+                                <span class="text-xs font-medium mb-2" style="color: var(--text-secondary)">GitLab
+                                    Pipeline for Python</span>
+                                <p class="text-xs text-[var(--text-secondary)] leading-snug">
+                                    Built a multi-stage CI/CD pipeline in GitLab to lint, test, build Docker images, and
+                                    deploy Python applications to staging environments.
+                                </p>
+                            </div>
+
+                            <a href="https://github.com/alitman22/pfsense-ha-enterprise" target="_blank"
+                                rel="noopener noreferrer"
+                                class="project-card glass-card p-5 flex flex-col justify-center min-h-[100px] transition-all duration-300 border-none group"
+                                style="background: linear-gradient(135deg, #00f2ea 0%, #00c9ff 100%);">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-sm font-bold tracking-wide text-black">Security</span>
+                                    <i
+                                        class="fa-brands fa-github text-black opacity-70 group-hover:opacity-100 transition-opacity"></i>
+                                </div>
+                                <span class="text-xs font-medium text-black/90 mb-2">pfSense Cluster
+                                    Implementation</span>
+                                <p class="text-xs text-black/80 leading-snug">
+                                    Configured a redundant pfSense firewall cluster with CARP for failover, VLAN
+                                    segmentation, and strict intrusion detection rules.
+                                </p>
+                            </a>
+
                         </div>
                     </div>
                 </section>
-
-                <section id="experience" class="my-24 reveal">
-                    <h2 class="section-title"><span class="section-number">02.</span>Professional Journey</h2>
-                    <div class="timeline-connector">
-                        <div class="space-y-8">
-                            <div class="timeline-item glass-card">
-                                <h3 class="text-2xl font-bold mb-2" style="color: var(--text-primary)">DevOps & Linux System Administrator</h3>
-                                <p class="terminal-prompt text-base mb-4">Dannie.cc | Nov 2025 - Present (Antalya, Turkey)</p>
-                                <ul class="space-y-3 text-base" style="color: var(--text-secondary)">
-                                    <li class="flex items-start gap-3">
-                                        <span style="color: var(--accent-glow)">▹</span>
-                                        <span
-                                            >Cut CI/CD pipeline runtime across dev, staging, and production by <strong class="gradient-text">40%</strong>, accelerating development
-                                            and deployment cycles</span
-                                        >
-                                    </li>
-                                    <li class="flex items-start gap-3">
-                                        <span style="color: var(--accent-glow)">▹</span>
-                                        <span
-                                            >Built comprehensive monitoring stack for ERP systems and VMs to identify performance bottlenecks and reduce troubleshooting time</span
-                                        >
-                                    </li>
-                                    <li class="flex items-start gap-3">
-                                        <span style="color: var(--accent-glow)">▹</span>
-                                        <span>Designed multi-region network connecting Russia, Lithuania, and Turkey branches, ensuring reliable data transfer</span>
-                                    </li>
-                                    <li class="flex items-start gap-3">
-                                        <span style="color: var(--accent-glow)">▹</span>
-                                        <span>Standardized technical documentation and network maps for hybrid infrastructure to streamline troubleshooting</span>
-                                    </li>
-                                    <li class="flex items-start gap-3">
-                                        <span style="color: var(--accent-glow)">▹</span>
-                                        <span>Led Turkey branch network upgrade to meet IATF standards, achieving successful certification audit passage</span>
-                                    </li>
-                                </ul>
-                            </div>
-
-<div class="timeline-item glass-card">
-    <h3 class="text-2xl font-bold mb-2" style="color: var(--text-primary)">Linux System Administrator</h3>
-    <p class="terminal-prompt text-base mb-4">Hermes Capital | Feb 2021 - Oct 2025 (Tehran, Iran)</p>
-    <ul class="space-y-3 text-base" style="color: var(--text-secondary)">
-        <li class="flex items-start gap-3">
-            <span style="color: var(--accent-glow)">▹</span>
-            <span>Orchestrated a high-availability Linux infrastructure (<strong class="gradient-text">250+ Linux-VMs, 200+TB storage</strong>) for seamless and performant operations</span>
-        </li>
-        <li class="flex items-start gap-3">
-            <span style="color: var(--accent-glow)">▹</span>
-            <span>Cut monthly operational spending by <strong class="gradient-text">38%</strong> through strategic infrastructure upgrades and smarter resource allocation</span>
-        </li>
-        <li class="flex items-start gap-3">
-            <span style="color: var(--accent-glow)">▹</span>
-            <span>Enhanced team project delivery speed by <strong class="gradient-text">~55%</strong> after recruiting and training 4 junior engineers to full productivity</span>
-        </li>
-        <li class="flex items-start gap-3">
-            <span style="color: var(--accent-glow)">▹</span>
-            <span>Ensured IT systems met government standards, critical for the company securing 6 key security and trade permits</span>
-        </li>
-        <li class="flex items-start gap-3">
-            <span style="color: var(--accent-glow)">▹</span>
-            <span>Streamlined <strong class="gradient-text">41 micro-service deployments</strong> via automation, cutting times by over half while eliminating manual error</span>
-        </li>
-        <li class="flex items-start gap-3">
-            <span style="color: var(--accent-glow)">▹</span>
-            <span>Managed a full infrastructure co-location migration, cutting service latency by <strong class="gradient-text">97%</strong> (from ~9ms to ~270μs)</span>
-        </li>
-        <li class="flex items-start gap-3">
-            <span style="color: var(--accent-glow)">▹</span>
-            <span>Reduced trading and order execution latency by <strong class="gradient-text">22%</strong> via Linux kernel adjustments and network fine-tuning</span>
-        </li>
-        <li class="flex items-start gap-3">
-            <span style="color: var(--accent-glow)">▹</span>
-            <span>Reduced average troubleshooting time by <strong class="gradient-text">18%</strong> through more precise system alerts, enabling faster issue identification</span>
-        </li>
-        <li class="flex items-start gap-3">
-            <span style="color: var(--accent-glow)">▹</span>
-            <span>Improved troubleshooting consistency and identified new automation opportunities by developing structured runbooks</span>
-        </li>
-        <li class="flex items-start gap-3">
-            <span style="color: var(--accent-glow)">▹</span>
-            <span>Ensured servers & network devices performed reliably by managing their lifecycle with consistent upkeep and checks</span>
-        </li>
-    </ul>
-</div>
-                            <div class="timeline-item glass-card">
-                                <h3 class="text-2xl font-bold mb-2" style="color: var(--text-primary)">Offshore IT Systems Engineer</h3>
-                                <p class="terminal-prompt text-base mb-4">Persia Telecom Co. | Jan 2017 - Apr 2023 (Persian Gulf)</p>
-                                <ul class="space-y-3 text-base" style="color: var(--text-secondary)">
-                                    <li class="flex items-start gap-3">
-                                        <span style="color: var(--accent-glow)">▹</span>
-                                        <span>Engineered and maintained critical IT infrastructure for maritime fleet, ensuring seamless offshore operations</span>
-                                    </li>
-                                    <li class="flex items-start gap-3">
-                                        <span style="color: var(--accent-glow)">▹</span>
-                                        <span>Improved vessel-to-shore connectivity by refining IT methods and automating monitoring workflows</span>
-                                    </li>
-                                    <li class="flex items-start gap-3">
-                                        <span style="color: var(--accent-glow)">▹</span>
-                                        <span>Delivered tailored technology solutions meeting unique operational requirements of each vessel</span>
-                                    </li>
-                                    <li class="flex items-start gap-3">
-                                        <span style="color: var(--accent-glow)">▹</span>
-                                        <span>Built collaborative environment within diverse, international workforce emphasizing effective communication</span>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div class="timeline-item glass-card">
-                                <h3 class="text-2xl font-bold mb-2" style="color: var(--text-primary)">Datacenter Operations Specialist</h3>
-                                <p class="terminal-prompt text-base mb-4">AFRANET | Feb 2014 - May 2015 (Tehran, Iran)</p>
-                                <ul class="space-y-3 text-base" style="color: var(--text-secondary)">
-                                    <li class="flex items-start gap-3">
-                                        <span style="color: var(--accept-glow)">▹</span>
-                                        <span>Provided prompt technical support, enhancing efficiency of customer support team</span>
-                                    </li>
-                                    <li class="flex items-start gap-3">
-                                        <span style="color: var(--accent-glow)">▹</span>
-                                        <span>Developed comprehensive documentation on standards like <strong class="gradient-text">TIA-942, BICSI, and ISO 27001</strong></span>
-                                    </li>
-                                    <li class="flex items-start gap-3">
-                                        <span style="color: var(--accent-glow)">▹</span>
-                                        <span>Analyzed and presented strategic insights driving datacenter operation enhancements</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-<section id="skills" class="my-24 reveal">
-    <h2 class="section-title"><span class="section-number">03.</span>Core Expertise</h2>
-    <div class="max-w-5xl">
-        <h3 class="text-2xl font-bold mb-6 gradient-text">Technical Skills</h3>
-        
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
-            
-            <div class="glass-card p-5">
-                <h4 class="font-bold text-base mb-3 flex items-center gap-2" style="color: var(--text-primary)">
-                    <span style="color: var(--accent-glow)"></span> OS & Automation
-                </h4>
-                <div class="flex flex-wrap gap-2">
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="devicon-linux-plain text-white mr-1.5"></i>Linux</span>
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="devicon-ansible-plain colored mr-1.5"></i>Ansible</span>
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="devicon-terraform-plain colored mr-1.5"></i>Terraform</span>
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="devicon-nomad-plain colored mr-1.5"></i>Nomad</span>
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="devicon-bash-plain text-gray-200 mr-1.5"></i>Bash</span>
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="devicon-python-plain colored mr-1.5"></i>Python</span>
-                </div>
-            </div>
-
-            <div class="glass-card p-5">
-                <h4 class="font-bold text-base mb-3 flex items-center gap-2" style="color: var(--text-primary)">
-                    <span style="color: var(--accent-glow)"></span> Cloud & Hardware
-                </h4>
-                <div class="flex flex-wrap gap-2">
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="devicon-vsphere-plain text-gray-300 mr-1.5"></i>VMware</span>
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="devicon-kubernetes-plain colored mr-1.5"></i>Kubernetes</span>
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="devicon-amazonwebservices-plain-wordmark colored mr-1.5"></i>AWS</span>
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="fa-solid fa-server mr-1.5 text-blue-400"></i>HPE/Dell</span>
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="fa-solid fa-hard-drive mr-1.5 text-gray-400"></i>EMC/TrueNAS</span>
-                </div>
-            </div>
-
-            <div class="glass-card p-5">
-                <h4 class="font-bold text-base mb-3 flex items-center gap-2" style="color: var(--text-primary)">
-                    <span style="color: var(--accent-glow)"></span> Databases & HA
-                </h4>
-                <div class="flex flex-wrap gap-2">
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="devicon-postgresql-plain colored mr-1.5"></i>Postgres</span>
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="devicon-mysql-plain colored mr-1.5"></i>MySQL</span>
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="devicon-mongodb-plain colored mr-1.5"></i>MongoDB</span>
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="devicon-redis-plain colored mr-1.5"></i>Redis</span>
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="fa-solid fa-database mr-1.5 text-purple-400"></i>Patroni</span>
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="devicon-haproxy-plain colored mr-1.5"></i>HAProxy</span>
-                </div>
-            </div>
-
-            <div class="glass-card p-5">
-                <h4 class="font-bold text-base mb-3 flex items-center gap-2" style="color: var(--text-primary)">
-                    <span style="color: var(--accent-glow)"></span> Monitoring & Logs
-                </h4>
-                <div class="flex flex-wrap gap-2">
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="devicon-grafana-plain text-orange-500 mr-1.5"></i>Grafana</span>
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="devicon-prometheus-original colored mr-1.5"></i>Prometheus</span>
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="devicon-elasticsearch-plain colored mr-1.5"></i>ELK/Graylog</span>
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="fa-solid fa-chart-line mr-1.5 text-red-500"></i>Zabbix</span>
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="fa-solid fa-table mr-1.5 text-blue-300"></i>Percona</span>
-                </div>
-            </div>
-
-            <div class="glass-card p-5">
-                <h4 class="font-bold text-base mb-3 flex items-center gap-2" style="color: var(--text-primary)">
-                    <span style="color: var(--accent-glow)"></span> Network & Security
-                </h4>
-                <div class="flex flex-wrap gap-2">
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="fa-solid fa-shield-halved mr-1.5 text-blue-500"></i>pfSense</span>
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="fa-brands fa-fort-awesome mr-1.5 text-red-500"></i>Fortinet</span>
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="devicon-vault-original colored mr-1.5"></i>Vault</span>
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="fa-solid fa-users-gear mr-1.5 text-yellow-500"></i>OpenLDAP</span>
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="devicon-elasticsearch-plain colored mr-1.5"></i>Elastic SIEM</span>
-                </div>
-            </div>
-
-            <div class="glass-card p-5">
-                <h4 class="font-bold text-base mb-3 flex items-center gap-2" style="color: var(--text-primary)">
-                    <span style="color: var(--accent-glow)"></span> CI/CD & Web
-                </h4>
-                <div class="flex flex-wrap gap-2">
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="devicon-gitlab-plain colored mr-1.5"></i>GitLab</span>
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="devicon-github-original colored mr-1.5"></i>Actions</span>
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="devicon-bitbucket-original colored mr-1.5"></i>Bitbucket</span>
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="devicon-nginx-original colored mr-1.5"></i>Nginx</span>
-                    <span class="skill-badge text-sm px-2.5 py-1"><i class="fa-solid fa-floppy-disk mr-1.5 text-green-500"></i>Backups</span>
-                </div>
-            </div>
-
-        </div>
-    </div>
-<h3 class="text-2xl font-bold mb-6 gradient-text mt-12">Soft Skills</h3>
-<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-
-    <div class="glass-card p-5 flex items-start gap-4">
-        <div class="shrink-0 p-2 bg-indigo-500/10 rounded-lg">
-            <svg class="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-            </svg>
-        </div>
-        <div>
-            <h4 class="font-bold text-gray-100 text-base">Team Leadership</h4>
-            <p class="text-sm text-gray-400 mt-1 leading-relaxed">
-                Mentoring junior engineers, conducting periodic meetings, and aligning technical initiatives with business goals.
-            </p>
-        </div>
-    </div>
-
-    <div class="glass-card p-5 flex items-start gap-4">
-        <div class="shrink-0 p-2 bg-blue-500/10 rounded-lg">
-            <svg class="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-            </svg>
-        </div>
-        <div>
-            <h4 class="font-bold text-gray-100 text-base">Communication</h4>
-            <p class="text-sm text-gray-400 mt-1 leading-relaxed">
-                Translating complex infrastructure concepts for stakeholders and maintaining clear, concise technical documentation.
-            </p>
-        </div>
-    </div>
-
-    <div class="glass-card p-5 flex items-start gap-4">
-        <div class="shrink-0 p-2 bg-emerald-500/10 rounded-lg">
-            <svg class="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-            </svg>
-        </div>
-        <div>
-            <h4 class="font-bold text-gray-100 text-base">Problem Solving</h4>
-            <p class="text-sm text-gray-400 mt-1 leading-relaxed">
-                Rapid root-cause analysis during incidents and designing innovative workarounds for legacy system constraints.
-            </p>
-        </div>
-    </div>
-
-    <div class="glass-card p-5 flex items-start gap-4">
-        <div class="shrink-0 p-2 bg-purple-500/10 rounded-lg">
-            <svg class="w-6 h-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-        </div>
-        <div>
-            <h4 class="font-bold text-gray-100 text-base">Strategic Planning</h4>
-            <p class="text-sm text-gray-400 mt-1 leading-relaxed">
-                Architecting scalable systems that anticipate future growth while optimizing current resource costs.
-            </p>
-        </div>
-    </div>
-
-    <div class="glass-card p-5 flex items-start gap-4">
-        <div class="shrink-0 p-2 bg-orange-500/10 rounded-lg">
-            <svg class="w-6 h-6 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-        </div>
-        <div>
-            <h4 class="font-bold text-gray-100 text-base">Time Management</h4>
-            <p class="text-sm text-gray-400 mt-1 leading-relaxed">
-                Balancing critical incident response with long-term project milestones to meet strict SLAs.
-            </p>
-        </div>
-    </div>
-
-    <div class="glass-card p-5 flex items-start gap-4">
-        <div class="shrink-0 p-2 bg-pink-500/10 rounded-lg">
-            <svg class="w-6 h-6 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-            </svg>
-        </div>
-        <div>
-            <h4 class="font-bold text-gray-100 text-base">Adaptability</h4>
-            <p class="text-sm text-gray-400 mt-1 leading-relaxed">
-                Quickly mastering new DevOps tools and pivoting strategies to handle evolving client requirements.
-            </p>
-        </div>
-    </div>
-
-</div>
-<section id="projects" class="my-24 reveal">
-    <div class="max-w-5xl mx-auto px-4">
-        <h2 class="section-title"><span class="section-number">04.</span>Featured Projects</h2>
-        
-        <p class="text-lg mb-10" style="color: var(--text-secondary)">
-            A collection of my technical work and infrastructure projects. These repositories showcase expertise in automation, infrastructure as code, and system configuration.
-        </p>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            
-            <a href="https://github.com/alitman22/network-architecture-for-HFT" target="_blank" rel="noopener noreferrer" 
-               class="project-card glass-card p-5 flex flex-col justify-center min-h-[100px] transition-all duration-300 border-none group"
-               style="background: linear-gradient(135deg, #00f2ea 0%, #00c9ff 100%);">
-                <div class="flex items-center justify-between mb-1">
-                    <span class="text-sm font-bold tracking-wide text-black">Networking</span>
-                    <i class="fa-brands fa-github text-black opacity-70 group-hover:opacity-100 transition-opacity"></i>
-                </div>
-                <span class="text-xs font-medium text-black/90 mb-2">Multi-Layer Secure Network Design</span>
-                <p class="text-xs text-black/80 leading-snug">
-                    Designed an ultra-low latency network architecture for High Frequency Trading, focusing on kernel bypass, multicast optimization, and microsecond-precision time sync.
-                </p>
-            </a>
-
-            <div class="project-card glass-card p-5 flex flex-col justify-center min-h-[100px]">
-                <span class="text-sm font-bold mb-1" style="color: var(--text-primary)">Ansible</span>
-                <span class="text-xs font-medium mb-2" style="color: var(--text-secondary)">Kafka Cluster Installation</span>
-                <p class="text-xs text-gray-400 leading-snug">
-                    Automated the deployment of a multi-node Kafka and Zookeeper cluster with idempotent playbooks for configuration management and scaling.
-                </p>
-            </div>
-
-            <div class="project-card glass-card p-5 flex flex-col justify-center min-h-[100px]">
-                <span class="text-sm font-bold mb-1" style="color: var(--text-primary)">VMware</span>
-                <span class="text-xs font-medium mb-2" style="color: var(--text-secondary)">vSAN Cluster Design & Deployment</span>
-                <p class="text-xs text-gray-400 leading-snug">
-                    Architected a hyper-converged infrastructure using vSAN, optimizing storage policies for performance and implementing high-availability failover.
-                </p>
-            </div>
-            <a href="https://github.com/alitman22/ray-vmware-cluster" target="_blank" rel="noopener noreferrer" 
-               class="project-card glass-card p-5 flex flex-col justify-center min-h-[100px] transition-all duration-300 border-none group"
-               style="background: linear-gradient(135deg, #00f2ea 0%, #00c9ff 100%);">
-                <div class="flex items-center justify-between mb-1">
-                    <span class="text-sm font-bold tracking-wide text-black">Docker</span>
-                    <i class="fa-brands fa-github text-black opacity-70 group-hover:opacity-100 transition-opacity"></i>
-                </div>
-                <span class="text-xs font-medium text-black/90 mb-2">Ray Cluster Deployment</span>
-                <p class="text-xs text-black/80 leading-snug">
-                    Containerized a distributed Ray computing cluster for AI/ML workloads, ensuring seamless node auto-discovery and resource scaling.
-                </p>
-            </a>
-
-            <a href="https://github.com/alitman22/ha-postgres-patroni-etcd-haproxy" target="_blank" rel="noopener noreferrer" 
-               class="project-card glass-card p-5 flex flex-col justify-center min-h-[100px] transition-all duration-300 border-none group"
-               style="background: linear-gradient(135deg, #00f2ea 0%, #00c9ff 100%);">
-                <div class="flex items-center justify-between mb-1">
-                    <span class="text-sm font-bold tracking-wide text-black">Database</span>
-                    <i class="fa-brands fa-github text-black opacity-70 group-hover:opacity-100 transition-opacity"></i>
-                </div>
-                <span class="text-xs font-medium text-black/90 mb-2">HA PostgreSQL with Patroni</span>
-                <p class="text-xs text-black/80 leading-snug">
-                    Deployed a highly available PostgreSQL cluster using Patroni for leader election and HAProxy for load balancing read/write traffic.
-                </p>
-            </a>
-
-            <a href="https://github.com/alitman22/Systemd-Monitoring-DBUS" target="_blank" rel="noopener noreferrer" 
-               class="project-card glass-card p-5 flex flex-col justify-center min-h-[100px] transition-all duration-300 border-none group"
-               style="background: linear-gradient(135deg, #00f2ea 0%, #00c9ff 100%);">
-                <div class="flex items-center justify-between mb-1">
-                    <span class="text-sm font-bold tracking-wide text-black">Python</span>
-                    <i class="fa-brands fa-github text-black opacity-70 group-hover:opacity-100 transition-opacity"></i>
-                </div>
-                <span class="text-xs font-medium text-black/90 mb-2">Systemd Services Health Monitoring</span>
-                <p class="text-xs text-black/80 leading-snug">
-                    Developed a real-time system monitor using Python and D-Bus to track systemd unit states, capture signals, and alert on service failures.
-                </p>
-            </a>
-
-            <div class="project-card glass-card p-5 flex flex-col justify-center min-h-[100px]">
-                <span class="text-sm font-bold mb-1" style="color: var(--text-primary)">Bash</span>
-                <span class="text-xs font-medium mb-2" style="color: var(--text-secondary)">Collection of DevOps Tools</span>
-                <p class="text-xs text-gray-400 leading-snug">
-                    Created a comprehensive suite of shell scripts for automated backups, log rotation, system health checks, and user management.
-                </p>
-            </div>
-
-            <a href="https://github.com/alitman22/full-stack-monitoring" target="_blank" rel="noopener noreferrer" 
-               class="project-card glass-card p-5 flex flex-col justify-center min-h-[100px] transition-all duration-300 border-none group"
-               style="background: linear-gradient(135deg, #00f2ea 0%, #00c9ff 100%);">
-                <div class="flex items-center justify-between mb-1">
-                    <span class="text-sm font-bold tracking-wide text-black">Monitoring</span>
-                    <i class="fa-brands fa-github text-black opacity-70 group-hover:opacity-100 transition-opacity"></i>
-                </div>
-                <span class="text-xs font-medium text-black/90 mb-2">Prometheus & Grafana Stack</span>
-                <p class="text-xs text-black/80 leading-snug">
-                    Implemented full-stack observability with Prometheus exporters and custom Grafana dashboards for visualizing infrastructure metrics.
-                </p>
-            </a>
-
-            <div class="project-card glass-card p-5 flex flex-col justify-center min-h-[100px]">
-                <span class="text-sm font-bold mb-1" style="color: var(--text-primary)">CI/CD</span>
-                <span class="text-xs font-medium mb-2" style="color: var(--text-secondary)">GitLab Pipeline for Python</span>
-                <p class="text-xs text-gray-400 leading-snug">
-                    Built a multi-stage CI/CD pipeline in GitLab to lint, test, build Docker images, and deploy Python applications to staging environments.
-                </p>
-            </div>
-
-            <a href="https://github.com/alitman22/pfsense-ha-enterprise" target="_blank" rel="noopener noreferrer" 
-               class="project-card glass-card p-5 flex flex-col justify-center min-h-[100px] transition-all duration-300 border-none group"
-               style="background: linear-gradient(135deg, #00f2ea 0%, #00c9ff 100%);">
-                <div class="flex items-center justify-between mb-1">
-                    <span class="text-sm font-bold tracking-wide text-black">Security</span>
-                    <i class="fa-brands fa-github text-black opacity-70 group-hover:opacity-100 transition-opacity"></i>
-                </div>
-                <span class="text-xs font-medium text-black/90 mb-2">pfSense Cluster Implementation</span>
-                <p class="text-xs text-black/80 leading-snug">
-                    Configured a redundant pfSense firewall cluster with CARP for failover, VLAN segmentation, and strict intrusion detection rules.
-                </p>
-            </a>
-            
-        </div>
-    </div>
-</section>        
-        <section id="contact" class="my-24 text-center reveal">
+                <section id="contact" class="my-24 text-center reveal">
                     <h2 class="terminal-prompt text-2xl mb-4" style="display: inline-flex">What's Next?</h2>
                     <h3 class="text-5xl font-bold mt-4 mb-6 gradient-text">Let's Connect</h3>
-                    <p class="text-lg mt-6 max-w-2xl mx-auto leading-relaxed" style="color: var(--text-secondary)">
-                        I'm a <strong class="gradient-text">Turkish Work Permit holder</strong> available for immediate transfer to remote-first or Istanbul/Ankara-based roles. If
-                        you're building infrastructure that demands excellence, automation, and rock-solid reliability, I'd be excited to discuss how I can contribute to your
-                        team's success.
-                    </p>
+                    <div id="contact-text-tr" style="display: none;">
+                        <p class="text-lg mt-6 max-w-2xl mx-auto leading-relaxed" style="color: var(--text-secondary)">
+                            I'm a <strong class="gradient-text">Turkish Work Permit holder</strong> available for
+                            immediate
+                            transfer and ready for remote-first or to move to cities like Istanbul or Ankara for on-site
+                            jobs. If
+                            you're building infrastructure that demands excellence, automation, and rock-solid
+                            reliability, I'd
+                            be excited to discuss how I can contribute to your
+                            team's success.
+                        </p>
+                    </div>
+                    <div id="contact-text-global">
+                        <p class="text-lg mt-6 max-w-2xl mx-auto leading-relaxed" style="color: var(--text-secondary)">
+                            I'm actively seeking opportunities to <strong class="gradient-text">move and relocate to the
+                                Netherlands or Germany</strong>. If
+                            you're building infrastructure that demands excellence, automation, and rock-solid
+                            reliability, I'd
+                            be excited to discuss how I can contribute to your
+                            team's success.
+                        </p>
+                    </div>
                     <div class="mt-10 flex gap-4 justify-center flex-wrap">
                         <a href="mailto:alit.fattahi@gmail.com" class="cta-button">Say Hello</a>
-                        <a href="https://www.linkedin.com/in/alit-fattahi/" target="_blank" rel="noopener noreferrer" class="cta-button">LinkedIn Profile</a>
+                        <a href="https://www.linkedin.com/in/alit-fattahi/" target="_blank" rel="noopener noreferrer"
+                            class="cta-button">LinkedIn Profile</a>
                     </div>
                 </section>
-            </main>
-        </div>
+        </main>
+    </div>
 
-<footer class="text-center py-12 border-t border-white/10">
-                <div class="flex flex-col items-center space-y-8">
-                    <a href="https://www.linkedin.com/in/alit-fattahi/" 
-                       class="font-mono text-sm transition-colors duration-300 hover:text-[#00d9ff]" 
-                       style="color: var(--text-muted)">
-                        Designed & Built by Ali Fattahi
-                    </a>
-                    
-                    <div class="flex justify-center">
-                         <img src="https://visitor-badge.laobi.icu/badge?page_id=alitman22.portfolio.total&color=007ec6&left_text=Total%20Visits" 
-                              alt="Total Visitors" 
-                              class="opacity-80 hover:opacity-100 transition-opacity">
-                    </div>
+    <footer class="text-center py-12 border-t border-white/10">
+        <div class="flex flex-col items-center space-y-8">
+            <a href="https://www.linkedin.com/in/alit-fattahi/"
+                class="font-mono text-sm transition-colors duration-300 hover:text-[#00d9ff]"
+                style="color: var(--text-muted)">
+                Designed & Built by Ali Fattahi
+            </a>
 
-                    <div class="flex gap-4 justify-center" style="min-height: 50px">
-                        
-                        <div id="box-turkey" class="flex items-center gap-3 glass-card p-2 px-4" style="display: none; border-radius: 8px;">
-                            <span class="text-2xl" title="Welcome from Turkey">🇹🇷</span>
-                            <img id="badge-turkey" alt="TR Count" style="height: 20px;">
-                        </div>
+            <!-- Total visitors removed as requested -->
 
-                        <div id="box-global" class="flex items-center gap-3 glass-card p-2 px-4" style="display: none; border-radius: 8px;">
-                            <span class="text-2xl" title="International Visitor">🌍</span>
-                            <img id="badge-global" alt="Global Count" style="height: 20px;">
-                        </div>
+            <div class="flex gap-4 justify-center" style="min-height: 50px">
 
-                    </div>
+                <div id="visitor-box" class="flex items-center gap-3 glass-card p-2 px-4"
+                    style="display: none; border-radius: 8px;">
+                    <span id="visitor-flag" class="text-lg font-bold" style="color: var(--text-secondary)"
+                        title="Visitor Location">GL</span>
+                    <img id="visitor-badge" alt="Visitor Count" style="height: 20px;">
                 </div>
-            </footer>
+
+            </div>
+
         </div>
+        </div>
+    </footer>
+    </div>
 
-<script>
-    // 1. Scroll-reveal animation
-    const reveal = () => {
-        const reveals = document.querySelectorAll('.reveal');
-        reveals.forEach(el => {
-            const windowHeight = window.innerHeight;
-            const elementTop = el.getBoundingClientRect().top;
-            const elementVisible = 100;
-            if (elementTop < windowHeight - elementVisible) {
-                el.classList.add('active');
-            }
-        });
-    };
+    <script>
+        const textGlobal = document.getElementById('contact-text-global');
+        const textTr = document.getElementById('contact-text-tr');
 
-    // 2. Navigation active state
-    const updateNav = () => {
-        const navbar = document.getElementById('navbar');
-        const sections = document.querySelectorAll('section[id]');
-        const navLinks = document.querySelectorAll('.nav-link');
-
-        if (window.scrollY > 50) navbar.classList.add('scrolled');
-        else navbar.classList.remove('scrolled');
-
-        let current = '';
-        sections.forEach(section => {
-            if (window.scrollY >= section.offsetTop - 150) {
-                current = section.getAttribute('id');
-            }
-        });
-
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === `#${current}`) link.classList.add('active');
-        });
-    };
-
-    // 3. Robust Visitor Badge Logic
-    const updateVisitorBadge = async () => {
-        const boxTR = document.getElementById('box-turkey');
-        const badgeTR = document.getElementById('badge-turkey');
-        
-        const boxGlobal = document.getElementById('box-global');
-        const badgeGlobal = document.getElementById('badge-global');
-        
-        const baseId = 'alitman22.portfolio.2024';
-
-        try {
-            // switching to api.country.is for better reliability on free tier
-            const response = await fetch('https://api.country.is'); 
-            const data = await response.json();
-            
-            // Debugging: Check your browser console (F12) to see what country is detected
-            console.log("Detected Country:", data.country);
-
-            if (data.country === 'TR') {
-                // Visitor is in Turkey
-                if (boxTR) boxTR.style.display = 'flex';
-                if (badgeTR) badgeTR.src = `https://visitor-badge.laobi.icu/badge?page_id=${baseId}.tr&color=00f2ea&left_text=%20`;
+        function setRegion(region) {
+            if (region === 'TR') {
+                document.documentElement.setAttribute('data-region', 'TR');
+                textTr.style.display = 'block';
+                textGlobal.style.display = 'none';
             } else {
-                // Visitor is Global
-                if (boxGlobal) boxGlobal.style.display = 'flex';
-                if (badgeGlobal) badgeGlobal.src = `https://visitor-badge.laobi.icu/badge?page_id=${baseId}.global&color=444&left_text=%20`;
+                document.documentElement.setAttribute('data-region', 'GLOBAL');
+                textGlobal.style.display = 'block';
+                textTr.style.display = 'none';
             }
-        } catch (error) {
-            console.error('Location check failed:', error);
-            // Fallback: Show Global if API fails entirely
-            if (boxGlobal) boxGlobal.style.display = 'flex';
-            if (badgeGlobal) badgeGlobal.src = `https://visitor-badge.laobi.icu/badge?page_id=${baseId}.global&color=444&left_text=%20`;
         }
-    };
 
-    // Event Listeners
-    window.addEventListener('scroll', () => { reveal(); updateNav(); });
-    document.addEventListener('DOMContentLoaded', () => {
-        reveal();
-        updateNav();
-        updateVisitorBadge();
-    });
-</script>    
-    </body>
+        // 1. Scroll-reveal animation
+        const reveal = () => {
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(el => {
+                const windowHeight = window.innerHeight;
+                const elementTop = el.getBoundingClientRect().top;
+                const elementVisible = 100;
+                if (elementTop < windowHeight - elementVisible) {
+                    el.classList.add('active');
+                }
+            });
+        };
+
+        // 2. Navigation active state
+        const updateNav = () => {
+            const navbar = document.getElementById('navbar');
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            if (window.scrollY > 50) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+
+            let current = '';
+            sections.forEach(section => {
+                if (window.scrollY >= section.offsetTop - 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) link.classList.add('active');
+            });
+        };
+
+        const getFlagEmoji = (countryCode) => {
+            if (!countryCode || countryCode === 'GLOBAL') return '🌍';
+            const codePoints = countryCode
+                .toUpperCase()
+                .split('')
+                .map(char => 127397 + char.charCodeAt());
+            return String.fromCodePoint(...codePoints);
+        };
+
+        // 3. Robust Visitor Badge Logic
+        const updateVisitorBadge = async () => {
+            const visitorBox = document.getElementById('visitor-box');
+            const visitorFlag = document.getElementById('visitor-flag');
+            const visitorBadge = document.getElementById('visitor-badge');
+
+            const baseId = 'alitman22.portfolio.2024';
+
+            try {
+                // switching to api.country.is for better reliability on free tier
+                const response = await fetch('https://api.country.is');
+                const data = await response.json();
+
+                // Debugging: Check your browser console (F12) to see what country is detected
+                console.log("Detected Country:", data.country);
+
+                const countryCode = data.country || 'GLOBAL';
+                if (countryCode === 'TR') {
+                    setRegion('TR');
+                } else {
+                    setRegion('GLOBAL');
+                }
+
+                if (visitorBox) visitorBox.style.display = 'flex';
+                if (visitorFlag) visitorFlag.textContent = getFlagEmoji(countryCode);
+
+                let color = '007ec6';
+
+                if (visitorBadge) visitorBadge.src = `https://visitor-badge.laobi.icu/badge?page_id=${baseId}.${(countryCode === 'GLOBAL' ? 'global' : countryCode.toLowerCase())}&color=${color}&left_text=%20`;
+
+            } catch (error) {
+                console.error('Location check failed:', error);
+                setRegion('GLOBAL');
+                if (visitorBox) visitorBox.style.display = 'flex';
+                if (visitorFlag) visitorFlag.textContent = '🌍';
+                if (visitorBadge) visitorBadge.src = `https://visitor-badge.laobi.icu/badge?page_id=${baseId}.global&color=444&left_text=%20`;
+            }
+        };
+
+        // Event Listeners
+        window.addEventListener('scroll', () => { reveal(); updateNav(); });
+        document.addEventListener('DOMContentLoaded', () => {
+            reveal();
+            updateNav();
+            updateVisitorBadge();
+        });
+    </script>
+</body>
+
 </html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor Dashboard</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #0a0e27;
+            color: #e4e9f7;
+            padding: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .card {
+            background: rgba(21, 25, 50, 0.7);
+            border: 1px solid rgba(100, 255, 218, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            border-bottom: 2px solid #00d9ff;
+            padding-bottom: 0.5rem;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            margin-top: 3rem;
+            color: #a8b2d1;
+            font-weight: 500;
+            font-size: 1.25rem;
+        }
+
+        h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: #e4e9f7;
+            font-size: 1.1rem;
+        }
+
+        img {
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+            height: 20px;
+        }
+
+        .note {
+            padding: 1rem;
+            background: rgba(100, 255, 218, 0.05);
+            border-left: 4px solid #00d9ff;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            color: #a8b2d1;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Portfolio Insights Dashboard 📊</h1>
+    <div class="note">
+        This is a private dashboard tracking visitor metrics for your portfolio.<br>
+        <strong>Note:</strong> Do not link this file in index.html to keep it hidden from public view.
+    </div>
+
+    <h2>Global Aggregates</h2>
+    <div class="grid">
+        <div class="card">
+            <h3>🌍 Total Historical Visits</h3>
+            <img src="https://visitor-badge.laobi.icu/badge?page_id=alitman22.portfolio.total&color=00d9ff&left_text=Total%20Visits"
+                alt="Total">
+        </div>
+        <div class="card">
+            <h3>🌍 Any Unknown Region</h3>
+            <img src="https://visitor-badge.laobi.icu/badge?page_id=alitman22.portfolio.2024.global&color=00d9ff&left_text=Global"
+                alt="Global Fallback">
+        </div>
+    </div>
+
+    <h2>All Tracked Regions</h2>
+    <div class="grid" id="all-countries">
+    </div>
+
+    <script>
+        const countryCodes = [
+            "US", "TR", "IR", "RU", "DE", "FR", "IT", "ES", "NL", "GB"
+        ];
+
+        const getFlagEmoji = (countryCode) => {
+            if (!countryCode) return '';
+            const codePoints = countryCode
+                .toUpperCase()
+                .split('')
+                .map(char => 127397 + char.charCodeAt());
+            return String.fromCodePoint(...codePoints);
+        };
+
+        const grid = document.getElementById('all-countries');
+        const baseId = 'alitman22.portfolio.2024';
+
+        countryCodes.forEach(code => {
+            const lowerCode = code.toLowerCase();
+            const flag = getFlagEmoji(code);
+
+            const card = document.createElement('div');
+            card.className = 'card';
+
+            const title = document.createElement('h3');
+            title.textContent = `${flag} ${code}`;
+
+            const img = document.createElement('img');
+            img.src = `https://visitor-badge.laobi.icu/badge?page_id=${baseId}.${lowerCode}&color=00d9ff&left_text=${code}`;
+            img.alt = code;
+            img.loading = "lazy"; // Prevents overwhelming network natively
+
+            card.appendChild(title);
+            card.appendChild(img);
+            grid.appendChild(card);
+        });
+    </script>
+</body>
+
+</html>
