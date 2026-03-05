@@ -46,13 +46,14 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'system-ui', sans-serif;
             background: linear-gradient(135deg, #0a0e27 0%, #151932 50%, #1a1f3a 100%);
             background-attachment: fixed;
             color: var(--text-secondary);
             scroll-behavior: smooth;
             overflow-x: hidden;
             position: relative;
+            font-weight: 250;
         }
 
         /* Animated background particles */
@@ -311,6 +312,45 @@
         .timeline-item {
             position: relative;
             padding-bottom: 3rem;
+        }
+
+        .timeline-collapsible {
+            padding-bottom: 1.5rem;
+        }
+
+        .timeline-collapsible .timeline-toggle {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: transparent;
+            border: none;
+            padding: 0;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .timeline-collapsible .timeline-content {
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transition: max-height 0.35s ease, opacity 0.25s ease, margin-top 0.25s ease;
+            margin-top: 0;
+        }
+
+        .timeline-collapsible.is-open .timeline-content {
+            opacity: 1;
+            margin-top: 0.75rem;
+        }
+
+        .timeline-chevron {
+            color: var(--accent-primary);
+            transition: transform 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .timeline-collapsible.is-open .timeline-chevron {
+            transform: rotate(180deg);
         }
 
         .timeline-item::before {
@@ -675,6 +715,7 @@
                     <a href="#about" class="nav-link">About</a>
                     <a href="#experience" class="nav-link">Experience</a>
                     <a href="#skills" class="nav-link">Skills</a>
+                    <a href="#study" class="nav-link">Study</a>
                     <a href="#projects" class="nav-link">Projects</a>
                 </div>
                 <div class="flex gap-4 items-center">
@@ -935,12 +976,12 @@
 
             <section id="skills" class="my-24 reveal">
                 <h2 class="section-title"><span class="section-number">03.</span>Core Expertise</h2>
-                <div class="max-w-5xl">
+                <div class="max-w-6xl mx-auto">
                     <h3 class="text-2xl font-bold mb-6 gradient-text">Technical Skills</h3>
 
-                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
+                    <div class="grid md:grid-cols-2 gap-6 mb-12">
 
-                        <div class="glass-card p-5">
+                        <div class="glass-card p-6">
                             <h4 class="font-bold text-base mb-3 flex items-center gap-2"
                                 style="color: var(--text-primary)">
                                 <span style="color: var(--accent-glow)"></span> OS & Automation
@@ -958,10 +999,14 @@
                                         class="devicon-bash-plain text-[var(--text-primary)] mr-1.5"></i>Bash</span>
                                 <span class="skill-badge text-sm px-2.5 py-1"><i
                                         class="devicon-python-plain colored mr-1.5"></i>Python</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                    class="fa-solid fa-gears mr-1.5 text-[var(--text-secondary)]"></i>Systemd</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                    class="devicon-git-plain colored mr-1.5"></i>Git</span>
                             </div>
                         </div>
 
-                        <div class="glass-card p-5">
+                        <div class="glass-card p-6">
                             <h4 class="font-bold text-base mb-3 flex items-center gap-2"
                                 style="color: var(--text-primary)">
                                 <span style="color: var(--accent-glow)"></span> Cloud & Hardware
@@ -977,10 +1022,14 @@
                                         class="fa-solid fa-server mr-1.5 text-blue-400"></i>HPE/Dell</span>
                                 <span class="skill-badge text-sm px-2.5 py-1"><i
                                         class="fa-solid fa-hard-drive mr-1.5 text-[var(--text-secondary)]"></i>EMC/TrueNAS</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                    class="devicon-docker-plain colored mr-1.5"></i>Docker</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                    class="devicon-openstack-plain colored mr-1.5"></i>OpenStack</span>
                             </div>
                         </div>
 
-                        <div class="glass-card p-5">
+                        <div class="glass-card p-6">
                             <h4 class="font-bold text-base mb-3 flex items-center gap-2"
                                 style="color: var(--text-primary)">
                                 <span style="color: var(--accent-glow)"></span> Databases & HA
@@ -998,10 +1047,14 @@
                                         class="fa-solid fa-database mr-1.5 text-purple-400"></i>Patroni</span>
                                 <span class="skill-badge text-sm px-2.5 py-1"><i
                                         class="devicon-haproxy-plain colored mr-1.5"></i>HAProxy</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                    class="fa-solid fa-network-wired mr-1.5 text-[var(--text-secondary)]"></i>PgBouncer</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                    class="fa-solid fa-layer-group mr-1.5 text-[var(--text-secondary)]"></i>ETCD</span>
                             </div>
                         </div>
 
-                        <div class="glass-card p-5">
+                        <div class="glass-card p-6">
                             <h4 class="font-bold text-base mb-3 flex items-center gap-2"
                                 style="color: var(--text-primary)">
                                 <span style="color: var(--accent-glow)"></span> Monitoring & Logs
@@ -1017,10 +1070,14 @@
                                         class="fa-solid fa-chart-line mr-1.5 text-red-500"></i>Zabbix</span>
                                 <span class="skill-badge text-sm px-2.5 py-1"><i
                                         class="fa-solid fa-table mr-1.5 text-blue-300"></i>Percona</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                    class="fa-solid fa-wave-square mr-1.5 text-[var(--text-secondary)]"></i>Loki</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                    class="fa-solid fa-bell mr-1.5 text-[var(--text-secondary)]"></i>Alertmanager</span>
                             </div>
                         </div>
 
-                        <div class="glass-card p-5">
+                        <div class="glass-card p-6">
                             <h4 class="font-bold text-base mb-3 flex items-center gap-2"
                                 style="color: var(--text-primary)">
                                 <span style="color: var(--accent-glow)"></span> Network & Security
@@ -1036,10 +1093,14 @@
                                         class="fa-solid fa-users-gear mr-1.5 text-yellow-500"></i>OpenLDAP</span>
                                 <span class="skill-badge text-sm px-2.5 py-1"><i
                                         class="devicon-elasticsearch-plain colored mr-1.5"></i>Elastic SIEM</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                    class="fa-solid fa-route mr-1.5 text-[var(--text-secondary)]"></i>WireGuard</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                    class="fa-solid fa-network-wired mr-1.5 text-[var(--text-secondary)]"></i>BGP</span>
                             </div>
                         </div>
 
-                        <div class="glass-card p-5">
+                        <div class="glass-card p-6">
                             <h4 class="font-bold text-base mb-3 flex items-center gap-2"
                                 style="color: var(--text-primary)">
                                 <span style="color: var(--accent-glow)"></span> CI/CD & Web
@@ -1055,6 +1116,10 @@
                                         class="devicon-nginx-original colored mr-1.5"></i>Nginx</span>
                                 <span class="skill-badge text-sm px-2.5 py-1"><i
                                         class="fa-solid fa-floppy-disk mr-1.5 text-green-500"></i>Backups</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                    class="devicon-jenkins-line colored mr-1.5"></i>Jenkins</span>
+                                <span class="skill-badge text-sm px-2.5 py-1"><i
+                                    class="fa-solid fa-diagram-project mr-1.5 text-[var(--text-secondary)]"></i>ArgoCD</span>
                             </div>
                         </div>
 
@@ -1160,13 +1225,137 @@
                     </div>
 
                 </div>
-                <section id="projects" class="my-24 reveal">
+                <section id="study" class="my-24 reveal">
                     <div class="max-w-5xl mx-auto px-4">
-                        <h2 class="section-title"><span class="section-number">04.</span>Featured Projects</h2>
+                        <h2 class="section-title"><span class="section-number">04.</span>Study Workflow</h2>
 
                         <p class="text-lg mb-10" style="color: var(--text-secondary)">
-                            A collection of my technical work and infrastructure projects. These repositories showcase
-                            expertise in automation, infrastructure as code, and system configuration.
+                            My foundation for staying sharp has always been a strict cycle of learning from trusted
+                            sources, labbing new concepts, and rigorously reviewing updates. I recently realized that
+                            keeping this process to myself was a missed opportunity to help others. I am sharing my
+                            learning stage publicly to encourage a culture of growth. No matter how much experience we
+                            accumulate, there is always more to learn. I hope this transparency motivates you to tackle
+                            that next certification or course, rather than resting on the years of experience on your
+                            resume.
+                        </p>
+                        <p class="text-sm mb-8" style="color: var(--text-muted)">Last updated: March 2026</p>
+
+                        <div class="glass-card p-6 mb-6">
+                            <h3 class="text-2xl font-bold mb-4" style="color: var(--text-primary)">Current Status
+                            </h3>
+                            <h4 class="text-xl font-bold mb-3" style="color: var(--text-primary)">Continuous
+                                Learning Journey</h4>
+                            <p class="text-lg leading-relaxed mb-4" style="color: var(--text-secondary)">
+                                Technology moves fast, and my commitment to mastering it moves just as quickly. I am
+                                deeply enthusiastic about <strong class="gradient-text">expanding my technical
+                                    stack</strong> and am currently engaged in <strong class="gradient-text">intensive,
+                                    self-directed training</strong>.
+                            </p>
+                            <p class="text-lg leading-relaxed" style="color: var(--text-secondary)">
+                                I treat <strong class="gradient-text">continuous self-improvement</strong> as a
+                                permanent fixture of my career, always striving to stay aligned with the <strong
+                                    class="gradient-text">latest industry best practices</strong>.
+                            </p>
+                            <p class="text-base mt-5" style="color: var(--text-secondary)">
+                                <strong class="gradient-text">Active Pursuits:</strong> Deep-diving into DevOps
+                                toolchains and core networking principles.
+                            </p>
+                        </div>
+
+                        <div class="glass-card p-6 mb-10">
+                            <h3 class="text-2xl font-bold mb-4" style="color: var(--text-primary)">Study Sources
+                            </h3>
+                            <ul class="grid sm:grid-cols-2 gap-3" style="color: var(--text-secondary)">
+                                <li class="flex items-center gap-3"><i class="fa-brands fa-linkedin text-lg"
+                                        style="color: var(--accent-glow)"></i><span>LinkedIn Learning</span></li>
+                                <li class="flex items-center gap-3"><i class="fa-brands fa-youtube text-lg"
+                                        style="color: var(--accent-glow)"></i><span>YouTube</span></li>
+                                <li class="flex items-center gap-3"><i class="fa-brands fa-linux text-lg"
+                                        style="color: var(--accent-glow)"></i><span>Linux Foundation</span></li>
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-graduation-cap text-lg"
+                                        style="color: var(--accent-glow)"></i><span>Udemy</span></li>
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-certificate text-lg"
+                                        style="color: var(--accent-glow)"></i><span>CompTIA</span></li>
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-book-open text-lg"
+                                    style="color: var(--accent-glow)"></i><span>Coursera</span></li>
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-code text-lg"
+                                    style="color: var(--accent-glow)"></i><span>boot.dev</span></li>
+                            </ul>
+                        </div>
+
+                        <h3 class="text-2xl font-bold mb-6 gradient-text">Learning History Timeline</h3>
+                        <div class="timeline-connector">
+                            <div class="space-y-6">
+                                <div class="timeline-item timeline-collapsible glass-card">
+                                    <button type="button" class="timeline-toggle" aria-expanded="true">
+                                        <h4 class="text-xl font-bold" style="color: var(--text-primary)">Ongoing
+                                        </h4>
+                                        <i class="fa-solid fa-chevron-down timeline-chevron" aria-hidden="true"></i>
+                                    </button>
+                                    <div class="timeline-content">
+                                        <p class="terminal-prompt text-base mb-3">Active Learning Track</p>
+                                        <p style="color: var(--text-secondary)">
+                                            I'm Continuing structured learning across all sources, then completed topics
+                                            will add here as new timeline entries.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="timeline-item timeline-collapsible glass-card">
+                                    <button type="button" class="timeline-toggle" aria-expanded="true">
+                                        <h4 class="text-xl font-bold" style="color: var(--text-primary)">March 2026
+                                        </h4>
+                                        <i class="fa-solid fa-chevron-down timeline-chevron" aria-hidden="true"></i>
+                                    </button>
+                                    <div class="timeline-content">
+                                        <p class="terminal-prompt text-base mb-3">Review Cycle</p>
+                                        <ul class="space-y-2" style="color: var(--text-secondary)">
+                                            <li class="flex items-start gap-3">
+                                                <span style="color: var(--accent-glow)">▹</span>
+                                                <span><strong class="gradient-text">DevOps Foundations</strong> — LinkedIn
+                                                    Learning (review completed).</span>
+                                            </li>
+                                            <li class="flex items-start gap-3">
+                                                <span style="color: var(--accent-glow)">▹</span>
+                                                <span><strong class="gradient-text">Network+</strong> — CompTIA latest
+                                                    updates (review completed).</span>
+                                            </li>
+                                        </ul>
+
+                                        <p class="terminal-prompt text-base mt-6 mb-3">Finished Learning</p>
+                                        <ul class="space-y-2" style="color: var(--text-secondary)">
+                                            <li class="flex items-start gap-3">
+                                                <span style="color: var(--accent-glow)">▹</span>
+                                                <span>Newly completed courses and certifications will be added here.</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section id="projects" class="my-24 reveal">
+                    <div class="max-w-5xl mx-auto px-4">
+                        <h2 class="section-title"><span class="section-number">05.</span>Featured Projects</h2>
+
+                        <p class="text-lg mb-3" style="color: var(--text-secondary)">
+                            <strong class="gradient-text">True Stories from the Trenches</strong>
+                        </p>
+                        <p class="text-lg mb-10" style="color: var(--text-secondary)">
+                            Below is a collection of my <strong class="gradient-text">technical work</strong>,
+                            <strong class="gradient-text">automation scripts</strong>, and
+                            <strong class="gradient-text">infrastructure projects</strong>. In the past, balancing a
+                            busy career, protecting company secrets, and finding the time to properly document
+                            repositories kept my public portfolio quiet. Now, I use AI as a
+                            <strong class="gradient-text">technical writing assistant</strong>. It handles the
+                            formatting and organization, allowing me to focus on sharing the
+                            <strong class="gradient-text">core engineering</strong>. If the documentation reads a bit
+                            like AI, that's because it helped write it! However, every project, script, and solution is
+                            <strong class="gradient-text">100% human-approved</strong> and based on
+                            <strong class="gradient-text">authentic scenarios</strong> I have navigated throughout my
+                            career.
                         </p>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1410,25 +1599,38 @@
         };
 
         // 2. Navigation active state
+        const setActiveNavLink = (sectionId) => {
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${sectionId}`) {
+                    link.classList.add('active');
+                }
+            });
+        };
+
         const updateNav = () => {
             const navbar = document.getElementById('navbar');
             const sections = document.querySelectorAll('section[id]');
-            const navLinks = document.querySelectorAll('.nav-link');
 
             if (window.scrollY > 50) navbar.classList.add('scrolled');
             else navbar.classList.remove('scrolled');
 
-            let current = '';
+            if (!sections.length) return;
+
+            const markerY = (navbar ? navbar.offsetHeight : 0) + 36;
+            let closestSectionId = sections[0].getAttribute('id');
+            let closestDistance = Number.POSITIVE_INFINITY;
+
             sections.forEach(section => {
-                if (window.scrollY >= section.offsetTop - 150) {
-                    current = section.getAttribute('id');
+                const distance = Math.abs(section.getBoundingClientRect().top - markerY);
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closestSectionId = section.getAttribute('id');
                 }
             });
 
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${current}`) link.classList.add('active');
-            });
+            if (closestSectionId) setActiveNavLink(closestSectionId);
         };
 
         const getFlagEmoji = (countryCode) => {
@@ -1438,6 +1640,39 @@
                 .split('')
                 .map(char => 127397 + char.charCodeAt());
             return String.fromCodePoint(...codePoints);
+        };
+
+        const initLearningTimeline = () => {
+            const timelineSection = document.querySelector('#study .timeline-connector');
+            if (!timelineSection) return;
+
+            const timelineItems = timelineSection.querySelectorAll('.timeline-collapsible');
+
+            timelineItems.forEach((item, index) => {
+                const toggle = item.querySelector('.timeline-toggle');
+                const content = item.querySelector('.timeline-content');
+                if (!toggle || !content) return;
+
+                const isOpenByDefault = index < 2;
+                item.classList.toggle('is-open', isOpenByDefault);
+                toggle.setAttribute('aria-expanded', String(isOpenByDefault));
+                content.style.maxHeight = isOpenByDefault ? `${content.scrollHeight}px` : '0px';
+
+                toggle.addEventListener('click', () => {
+                    const isOpen = item.classList.contains('is-open');
+                    item.classList.toggle('is-open', !isOpen);
+                    toggle.setAttribute('aria-expanded', String(!isOpen));
+                    content.style.maxHeight = !isOpen ? `${content.scrollHeight}px` : '0px';
+                });
+            });
+
+            window.addEventListener('resize', () => {
+                timelineItems.forEach(item => {
+                    if (!item.classList.contains('is-open')) return;
+                    const content = item.querySelector('.timeline-content');
+                    if (content) content.style.maxHeight = `${content.scrollHeight}px`;
+                });
+            });
         };
 
         // 3. Robust Visitor Badge Logic
@@ -1480,12 +1715,29 @@
         };
 
         // Event Listeners
-        window.addEventListener('scroll', () => { reveal(); updateNav(); });
+        window.addEventListener('scroll', () => { reveal(); updateNav(); }, { passive: true });
+        window.addEventListener('resize', updateNav);
+        window.addEventListener('hashchange', () => {
+            const hashId = window.location.hash.replace('#', '');
+            if (hashId) setActiveNavLink(hashId);
+            updateNav();
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    const sectionId = link.getAttribute('href').replace('#', '');
+                    setActiveNavLink(sectionId);
+                });
+            });
+
             reveal();
             updateNav();
+            initLearningTimeline();
             updateVisitorBadge();
         });
+
+        window.addEventListener('load', updateNav);
     </script>
 </body>
 
