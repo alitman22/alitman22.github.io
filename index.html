@@ -794,7 +794,7 @@
                     </div>
                     <div class="resume-highlight" aria-live="polite">
                         <strong style="color: var(--text-primary)">Resume:</strong>
-                        <a id="resume-link-hero" class="resume-link" href="assets/Ali-Fattahi-v2.1.4.pdf" download>
+                        <a id="resume-link-hero" class="resume-link" href="assets/Ali-Fattahi-v2.14.pdf" download>
                             <i class="fa-solid fa-download" aria-hidden="true"></i>
                             Download Resume
                         </a>
@@ -1677,7 +1677,7 @@
                             class="cta-button">LinkedIn Profile</a>
                     </div>
                     <div class="resume-contact">
-                        <a id="resume-link-footer" class="cta-button" href="assets/Ali-Fattahi-v2.1.4.pdf" download>
+                        <a id="resume-link-footer" class="cta-button" href="assets/Ali-Fattahi-v2.14.pdf" download>
                             <i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i>
                             Download Resume
                         </a>
@@ -1723,33 +1723,32 @@
 
         const resumeMap = {
             TR: {
-                href: 'assets/Ali-Fattahi-v2.1.4.pdf',
+                href: 'assets/Ali-Fattahi-v2.14.pdf',
                 text: 'Download Resume',
                 regionText: 'Region: Turkey'
             },
             GLOBAL: {
-                href: 'assets/Ali-Fattahi-v2.1.4.pdf',
+                href: 'assets/Ali-Fattahi-v2.14.1.pdf',
                 text: 'Download Resume',
                 regionText: 'Region: Global'
             }
         };
 
         const updateResumeLinks = (region) => {
+            console.log('Updating resume links for region:', region);
             const selected = region === 'TR' ? resumeMap.TR : resumeMap.GLOBAL;
+            console.log('Selected resume:', selected);
             const links = [resumeLinkHero, resumeLinkFooter];
             const labels = [resumeRegionLabelHero, resumeRegionLabelFooter];
 
             links.forEach(link => {
                 if (!link) return;
-                link.href = selected.href;
-                const icon = link.querySelector('i');
-                if (icon) {
-                    link.innerHTML = '';
-                    link.appendChild(icon);
-                    link.append(` ${selected.text}`);
-                } else {
-                    link.textContent = selected.text;
-                }
+                // Update href attribute
+                link.setAttribute('href', selected.href);
+                // Update download attribute to set filename
+                const filename = selected.href.split('/').pop();
+                link.setAttribute('download', filename);
+                console.log('Updated link href to:', selected.href);
             });
 
             labels.forEach(label => {
