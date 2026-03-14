@@ -536,6 +536,21 @@
             .glass-card {
                 padding: 1.5rem;
             }
+
+            header {
+                min-height: auto !important;
+                padding-top: 3rem;
+                padding-bottom: 3rem;
+            }
+
+            .profile-wrapper {
+                max-width: 260px;
+                margin: 0 auto;
+            }
+
+            .section-title::after {
+                display: none;
+            }
         }
 
         /* Star decoration for featured items */
@@ -609,6 +624,120 @@
         .nav-link:hover::before,
         .nav-link.active::before {
             transform: scaleX(1);
+        }
+
+        .lang-switch {
+            display: none; /* shown only for visitors from Turkey */
+            gap: 0.35rem;
+            padding: 0.25rem;
+            border: 1px solid var(--border-color);
+            border-radius: 999px;
+            background: rgba(0, 217, 255, 0.08);
+            align-items: center;
+        }
+
+        .lang-btn {
+            border: 0;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            padding: 0.35rem 0.7rem;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            line-height: 1;
+        }
+
+        .lang-btn:hover {
+            color: var(--text-primary);
+            background: rgba(0, 217, 255, 0.15);
+        }
+
+        .lang-btn.active {
+            color: var(--bg-primary);
+            background: var(--accent-primary);
+            box-shadow: 0 0 14px rgba(0, 217, 255, 0.35);
+        }
+
+        /* Mobile hamburger menu */
+        .hamburger-btn {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            width: 2.25rem;
+            height: 2.25rem;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            padding: 0.4rem 0.5rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .hamburger-btn:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .hamburger-btn span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: var(--text-secondary);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+
+        .hamburger-btn.is-open span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .hamburger-btn.is-open span:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+
+        .hamburger-btn.is-open span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        /* Mobile navigation drawer */
+        #mobile-menu {
+            display: none;
+            position: fixed;
+            top: 62px;
+            left: 0;
+            right: 0;
+            z-index: 99;
+            background: rgba(10, 14, 39, 0.97);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 1.5rem 1.5rem;
+            flex-direction: column;
+            gap: 0.25rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        #mobile-menu.is-open {
+            display: flex;
+        }
+
+        #mobile-menu .nav-link {
+            font-size: 1rem;
+            padding: 0.75rem 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        #mobile-menu .nav-link:last-of-type {
+            border-bottom: none;
+        }
+
+        @media (max-width: 767px) {
+            .hamburger-btn {
+                display: flex;
+            }
         }
 
         html {
@@ -765,13 +894,32 @@
                     <a href="#study" class="nav-link">Study</a>
                     <a href="#projects" class="nav-link">Projects</a>
                 </div>
-                <div class="flex gap-4 items-center">
-                    <a href="#contact" class="cta-button" style="padding: 0.5rem 1.5rem; font-size: 0.875rem">Get In
+                <div class="flex gap-3 items-center">
+                    <div class="lang-switch" aria-label="Language selector">
+                        <button id="lang-en" class="lang-btn active" type="button">EN</button>
+                        <button id="lang-tr" class="lang-btn" type="button">TR</button>
+                    </div>
+                    <a href="#contact" class="cta-button hidden md:inline-block" style="padding: 0.5rem 1.5rem; font-size: 0.875rem">Get In
                         Touch</a>
+                    <button id="hamburger-btn" class="hamburger-btn md:hidden" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mobile-menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
                 </div>
             </div>
         </div>
     </nav>
+
+    <!-- Mobile navigation drawer -->
+    <div id="mobile-menu" role="navigation" aria-label="Mobile navigation">
+        <a href="#about" class="nav-link">About</a>
+        <a href="#experience" class="nav-link">Experience</a>
+        <a href="#skills" class="nav-link">Skills</a>
+        <a href="#study" class="nav-link">Study</a>
+        <a href="#projects" class="nav-link">Projects</a>
+        <a href="#contact" class="cta-button mt-3" style="text-align:center; padding: 0.6rem 1rem; font-size: 0.9rem">Get In Touch</a>
+    </div>
 
     <div class="container max-w-7xl mx-auto p-3 sm:p-6 lg:p-12">
         <header class="min-h-screen flex flex-col justify-center">
@@ -800,7 +948,7 @@
                         </a>
                         <span id="resume-region-label-hero" class="resume-note">Region: Detecting...</span>
                     </div>
-                    <div style="margin-top: 1.25rem; display: flex; align-items: center; column-gap: 1.5rem; row-gap: 0.5rem; justify-content: flex-start; flex-wrap: nowrap; text-align: left; width: 100%;">
+                    <div style="margin-top: 1.25rem; display: flex; align-items: center; column-gap: 1.5rem; row-gap: 0.75rem; justify-content: flex-start; flex-wrap: wrap; text-align: left; width: 100%;">
                         <div style="display: flex; align-items: center; gap: 0.6rem; color: var(--text-secondary); white-space: nowrap;">
                             <i class="fa-solid fa-map-pin" style="color: var(--accent-glow); font-size: 1.1rem; flex-shrink: 0;"></i>
                             <span style="font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 400;">Antalya, Türkiye</span>
@@ -809,7 +957,7 @@
                             <i class="fa-solid fa-envelope" style="color: var(--accent-glow); font-size: 1.1rem; flex-shrink: 0;"></i>
                             <a href="mailto:alit.fattahi@gmail.com" style="font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 400; color: var(--accent-primary); text-decoration: none; transition: all 0.3s ease;">alit.fattahi@gmail.com</a>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 0.6rem; color: var(--text-secondary); white-space: nowrap;">
+                        <div id="hero-phone" style="display: none; align-items: center; gap: 0.6rem; color: var(--text-secondary); white-space: nowrap;">
                             <i class="fa-solid fa-phone" style="color: var(--accent-glow); font-size: 1.1rem; flex-shrink: 0;"></i>
                             <a href="tel:+905016403103" style="font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 400; color: var(--accent-primary); text-decoration: none; transition: all 0.3s ease;">(+90) 501 640 3103</a>
                         </div>
@@ -1716,6 +1864,8 @@
     <script>
         const textGlobal = document.getElementById('contact-text-global');
         const textTr = document.getElementById('contact-text-tr');
+        const langEnBtn = document.getElementById('lang-en');
+        const langTrBtn = document.getElementById('lang-tr');
         const resumeLinkHero = document.getElementById('resume-link-hero');
         const resumeLinkFooter = document.getElementById('resume-link-footer');
         const resumeRegionLabelHero = document.getElementById('resume-region-label-hero');
@@ -1769,6 +1919,322 @@
                 updateResumeLinks('GLOBAL');
             }
         }
+
+        const originalContent = new Map();
+
+        const setLocalized = (node, value, asHtml = false) => {
+            if (!node) return;
+            if (!originalContent.has(node)) {
+                originalContent.set(node, {
+                    asHtml,
+                    value: asHtml ? node.innerHTML : node.textContent
+                });
+            }
+
+            if (asHtml) node.innerHTML = value;
+            else node.textContent = value;
+        };
+
+        const restoreOriginalContent = () => {
+            originalContent.forEach((snapshot, node) => {
+                if (snapshot.asHtml) node.innerHTML = snapshot.value;
+                else node.textContent = snapshot.value;
+            });
+        };
+
+        const applyTurkishContent = () => {
+            document.title = 'Ali Fattahi | DevOps ve Altyapi Muhendisi';
+            document.documentElement.lang = 'tr';
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            if (navLinks[0]) setLocalized(navLinks[0], 'Hakkimda');
+            if (navLinks[1]) setLocalized(navLinks[1], 'Deneyim');
+            if (navLinks[2]) setLocalized(navLinks[2], 'Yetenekler');
+            if (navLinks[3]) setLocalized(navLinks[3], 'Calisma');
+            if (navLinks[4]) setLocalized(navLinks[4], 'Projeler');
+
+            // Also translate mobile menu nav links
+            const mobileNavLinks = document.querySelectorAll('#mobile-menu .nav-link');
+            if (mobileNavLinks[0]) setLocalized(mobileNavLinks[0], 'Hakkimda');
+            if (mobileNavLinks[1]) setLocalized(mobileNavLinks[1], 'Deneyim');
+            if (mobileNavLinks[2]) setLocalized(mobileNavLinks[2], 'Yetenekler');
+            if (mobileNavLinks[3]) setLocalized(mobileNavLinks[3], 'Calisma');
+            if (mobileNavLinks[4]) setLocalized(mobileNavLinks[4], 'Projeler');
+            const mobileCtaBtn = document.querySelector('#mobile-menu .cta-button');
+            if (mobileCtaBtn) setLocalized(mobileCtaBtn, 'Iletisime Gec');
+
+            setLocalized(document.querySelector('nav .cta-button'), 'Iletisime Gec');
+            setLocalized(document.querySelector('header .terminal-prompt'), 'Merhaba Dunya, whoami');
+            setLocalized(document.querySelector('header h2'), 'Kidemli DevOps Muhendisi ve Altyapi Mimari');
+            setLocalized(
+                document.querySelector('header p.mt-6'),
+                'Otomasyon ve DevOps en iyi uygulamalariyla dayanikli ve olceklenebilir altyapilar insa ediyorum. Karmasik teknik zorluklari, kritik sistemlere guc veren zarif ve yuksek performansli cozumlere donusturuyorum.'
+            );
+
+            const heroCtas = document.querySelectorAll('header .mt-10 .cta-button');
+            if (heroCtas[0]) setLocalized(heroCtas[0], 'Iletisime Gec');
+            if (heroCtas[1]) setLocalized(heroCtas[1], 'Projeleri Incele');
+
+            setLocalized(document.querySelector('.resume-highlight strong'), 'Ozgecmis:');
+            setLocalized(resumeLinkHero, '<i class="fa-solid fa-download" aria-hidden="true"></i> Ozgecmisi Indir', true);
+            setLocalized(resumeLinkFooter, '<i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i> Ozgecmisi Indir', true);
+
+            const aboutHeading = document.querySelector('#about .section-title');
+            if (aboutHeading) setLocalized(aboutHeading, '<span class="section-number">01.</span>Hakkimda', true);
+            const aboutParagraphs = document.querySelectorAll('#about .md\\:col-span-2 p');
+            if (aboutParagraphs[0]) setLocalized(aboutParagraphs[0], 'Merhaba, ben Ali. On yili askin suredir yalnizca calisan degil, ayni zamanda ustun performans gosteren BT altyapilari tasarliyor ve hayata geciriyorum. Tutkum, <span class="gradient-text font-semibold">tasarimi itibariyla dayanikli, verimli ve guvenli</span> sistemler kurmaktir. Her zorluga net bir yaklasimla ilerlerim: temel problemi dogru tespit etmek, <span class="gradient-text font-semibold">saglam bir cozum</span> tasarlamak ve surecleri kararlilikla otomatize etmek.', true);
+            if (aboutParagraphs[1]) setLocalized(aboutParagraphs[1], 'Ust duzey bir ulusal veri merkezinde altyapi yonetiminden, yuksek frekansli islem sistemlerinin optimizasyonuna kadar uzanan kariyerim; bana <span class="gradient-text font-semibold">Linux administration, DevOps practices ve network engineering</span> alanlarinda derin bir uzmanlik kazandirdi. Ag Muhendisligi lisans egitimim, sahadaki deneyimimi guclu bir teorik temelle desteklemektedir.', true);
+            if (aboutParagraphs[2]) setLocalized(aboutParagraphs[2], '<span class="gradient-text font-semibold">Open-world technologies</span> alaninda daha derin birikim olusturmak ve global olcekte calisabilmek icin yakin zamanda Iran\'dan Turkiye\'ye tasindim. Bu adim, <span class="gradient-text font-semibold">regional limitations</span> engellerini asmamı, uzmanligimi gelistirmemi ve <span class="gradient-text font-semibold">international tech ecosystem</span> ile dogrudan calismami sagladi.', true);
+            if (aboutParagraphs[3]) setLocalized(aboutParagraphs[3], 'En iyi altyapinin gorunmez olduguna inaniyorum: sadece sorunsuz calisir. <span class="gradient-text font-semibold">Operational excellence</span> odakli bu anlayis, tum calismalarimin merkezindedir ve bu uzmanligi vizyoner kurumlarda yeni sorumluluklara tasimayi hedefliyorum.', true);
+            if (aboutParagraphs[4]) setLocalized(aboutParagraphs[4], 'Teknik yetkinligin otesinde, ekipler arasinda is birligi ve netlik kulturunu guclendirmeye onem veriyorum. <span class="gradient-text font-semibold">Karmasik altyapi konularini uygulanabilir stratejilere donusturmekten</span> keyif aliyorum. Guclu iletisim ve surekli iyilestirme zihniyetini birlestirerek, <span class="gradient-text font-semibold">inovasyonun hiz kazandigi</span>, <span class="gradient-text font-semibold">guvenilirligin tavizsiz korundugu</span> ve ekiplerin <span class="gradient-text font-semibold">gercek deger uretmeye</span> odaklandigi ortamlar kurmayi hedefliyorum.', true);
+
+            const aboutCards = document.querySelectorAll('#about .space-y-4 .glass-card');
+            if (aboutCards[0]) {
+                setLocalized(aboutCards[0].querySelector('h3'), '🎓 Egitim');
+                setLocalized(aboutCards[0].querySelectorAll('p')[0], 'BSc, Network Engineering');
+                setLocalized(aboutCards[0].querySelectorAll('p')[1], 'University of Applied Science and Technology');
+            }
+            if (aboutCards[1]) {
+                setLocalized(aboutCards[1].querySelector('h3'), '🌍 Diller');
+                const langRows = aboutCards[1].querySelectorAll('p');
+                if (langRows[0]) setLocalized(langRows[0], 'English (Profesyonel)');
+                if (langRows[1]) setLocalized(langRows[1], 'Turkish (Ileri Seviye)');
+                if (langRows[2]) setLocalized(langRows[2], 'Farsi (Ana Dil)');
+                if (langRows[3]) setLocalized(langRows[3], 'Azerbaijani (Ana Dil)');
+                if (langRows[4]) setLocalized(langRows[4], 'Su anda ogreniyorum: <span class="gradient-text font-semibold">Dutch (A2)</span>', true);
+            }
+            if (aboutCards[2]) {
+                setLocalized(aboutCards[2].querySelector('h3'), '🎯 Hobiler');
+                setLocalized(aboutCards[2].querySelector('p'), 'Seyahat, strateji oyunlari, yuruyus');
+            }
+
+            const experienceHeading = document.querySelector('#experience .section-title');
+            if (experienceHeading) setLocalized(experienceHeading, '<span class="section-number">02.</span>Profesyonel Yolculuk', true);
+
+            const expCards = document.querySelectorAll('#experience .timeline-item');
+            const expTitles = [
+                'DevOps ve Linux Sistem Yoneticisi',
+                'Linux Sistem Yoneticisi',
+                'Offshore BT Sistemleri Muhendisi',
+                'Linux Sistem Yoneticisi',
+                'Veri Merkezi Operasyon Uzmani'
+            ];
+            const expMeta = [
+                'Dannie.cc | Kas 2025 - Mar 2026 (Antalya, Turkiye) - Sirket Tasfiyesi',
+                'Hermes Capital | Sub 2021 - Eki 2025 (Tahran, Iran)',
+                'Persia Telecom Co. | Oca 2017 - Nis 2023 (Persian Gulf)',
+                'Brieflands | Sub 2016 - May 2017 (Tahran, Iran)',
+                'AFRANET | Sub 2014 - May 2015 (Tahran, Iran)'
+            ];
+
+            const expBullets = [
+                [
+                    'Dev, staging ve production ortamlari genelinde CI/CD surelerini <strong class="gradient-text">%40</strong> azalttim; gelistirme ve yayinlama dongulerini hizlandirdim.',
+                    'ERP sistemleri ve VM\'ler icin kapsamli bir <strong class="gradient-text">monitoring stack</strong> kurarak performans darbo gazlarini belirledim ve sorun giderme surelerini kisalttim.',
+                    'Rusya, Litvanya ve Turkiye ofislerini baglayan <strong class="gradient-text">multi-region</strong> ag tasarimi ile guvenilir veri iletimini sagladim.',
+                    'Hibrit altyapi icin teknik dokumantasyon ve ag topolojilerini standartlastirarak sorun cozum sureclerini hizlandirdim.',
+                    'Turkiye ofisinin ag modernizasyonuna liderlik ederek <strong class="gradient-text">IATF</strong> standartlarina uyum ve basarili denetim gecisi sagladim.'
+                ],
+                [
+                    '<strong class="gradient-text">250+ Linux-VM ve 200+TB storage</strong> iceren yuksek erisilebilirlikli Linux altyapisini orkestre ederek kesintisiz ve yuksek performansli operasyonlar sagladim.',
+                    'Stratejik altyapi iyilestirmeleri ve akilli kaynak planlamasiyla aylik operasyon maliyetlerini <strong class="gradient-text">%38</strong> azalttim.',
+                    '4 junior muhendisin ise alim ve gelisim surecini yoneterek proje teslim hizini <strong class="gradient-text">~%55</strong> artirdim.',
+                    'BT sistemlerini kamu standartlariyla uyumlu hale getirerek sirketin 6 kritik guvenlik ve ticaret iznini almasina katkida bulundum.',
+                    'Otomasyonla <strong class="gradient-text">41 micro-service deployment</strong> surecini sadeleştirerek sureleri yaridan fazla azalttim ve manuel hatayi ortadan kaldirdim.',
+                    'Tam kapsamli co-location gecisini yoneterek servis gecikmesini <strong class="gradient-text">%97</strong> azalttim (yaklasik 9ms\'den 270us\'ye).',
+                    'Linux kernel ayarlari ve ag optimizasyonlariyla islem ve emir gerceklesme gecikmesini <strong class="gradient-text">%22</strong> dusurdum.',
+                    'Daha hassas sistem alarm mekanizmalariyla ortalama sorun giderme suresini <strong class="gradient-text">%18</strong> azalttim.',
+                    'Yapilandirilmis runbook\'lar olusturarak sorun cozum tutarliligini artirdim ve yeni otomasyon firsatlari gelistirdim.',
+                    'Sunucu ve ag cihazlarinin yasam dongusunu duzenli bakim ve kontrollerle yoneterek guvenilirligi surdurdum.'
+                ],
+                [
+                    'Deniz filosu icin kritik BT altyapisini tasarlayip surdurdum; offshore operasyonlarin kesintisiz yurumesini sagladim.',
+                    'BT yontemlerini iyilestirip monitoring sureclerini otomatize ederek gemi-kara baglantisini guclendirdim.',
+                    'Her geminin operasyonel ihtiyacina uygun ozel teknoloji cozumleri sundum.',
+                    'Farkli uluslardan ekiplerde etkili iletisimi onceliklendiren bir is birligi ortami kurdum.'
+                ],
+                [
+                    '<strong class="gradient-text">5 ulkede multi-region sunucu ortamini</strong> olceklendirip yonettim; uluslararasi medikal platformlari ve 7 kisilik gelistirme ekibini destekledim.',
+                    'Dagitik LeaseWeb co-hosting yapisini ve <strong class="gradient-text">14TB in-house backup</strong> altyapisini yoneterek 5 uluslararasi bolgede <strong class="gradient-text">%99.8 uptime</strong> sagladim.',
+                    '<strong class="gradient-text">12-node Docker Swarm cluster</strong> uzerinde 25+ servisin orkestrasyonunu yonettim; deployment ve olcekleme surelerini <strong class="gradient-text">%40</strong> azalttim.',
+                    'Tek sysadmin olarak Redmine uzerinden <strong class="gradient-text">300+ altyapi talebini</strong> yonettim; ortalama geri donus suresini 12 saatin altinda tuttum.'
+                ],
+                [
+                    'Hizli ve etkili teknik destek saglayarak musteri destek ekibinin verimliligini artirdim.',
+                    '<strong class="gradient-text">TIA-942, BICSI ve ISO 27001</strong> gibi standartlara iliskin kapsamli dokumantasyon gelistirdim.',
+                    'Veri merkezi operasyonlarini guclendiren stratejik analizleri hazirlayip yonetime sundum.'
+                ]
+            ];
+
+            expCards.forEach((card, idx) => {
+                setLocalized(card.querySelector('h3'), expTitles[idx]);
+                setLocalized(card.querySelector('p.terminal-prompt'), expMeta[idx]);
+                const lines = card.querySelectorAll('li span:last-child');
+                lines.forEach((line, lineIdx) => {
+                    const txt = expBullets[idx] && expBullets[idx][lineIdx] ? expBullets[idx][lineIdx] : '';
+                    if (txt) setLocalized(line, txt, true);
+                });
+            });
+
+            const skillsHeading = document.querySelector('#skills .section-title');
+            if (skillsHeading) setLocalized(skillsHeading, '<span class="section-number">03.</span>Temel Uzmanlik Alanlari', true);
+            setLocalized(document.querySelector('#skills .max-w-6xl > h3'), 'Teknik Yetkinlikler');
+            setLocalized(document.querySelector('#skills > h3'), 'Yetkinlikler');
+
+            const skillCats = document.querySelectorAll('#skills .max-w-6xl .grid.md\\:grid-cols-2.gap-6.mb-12 .glass-card h4');
+            const skillCatLabels = [
+                'OS ve Otomasyon',
+                'Cloud ve Donanim',
+                'Veritabani ve HA',
+                'Monitoring ve Log',
+                'Ag ve Guvenlik',
+                'CI/CD ve Web'
+            ];
+            skillCats.forEach((h4, idx) => {
+                setLocalized(h4, `<span style="color: var(--accent-glow)"></span> ${skillCatLabels[idx]}`, true);
+            });
+
+            const softCards = document.querySelectorAll('#skills .grid.md\\:grid-cols-2.lg\\:grid-cols-3.gap-4 .glass-card');
+            const softTitles = ['Ekip Liderligi', 'Iletisim', 'Problem Cozme', 'Stratejik Planlama', 'Zaman Yonetimi', 'Uyum Yetkinligi'];
+            const softDescs = [
+                'Junior muhendislerin mentorlugu, periyodik toplantilarin yonetimi ve teknik inisiyatiflerin is hedefleriyle hizalanmasi.',
+                'Karmasik altyapi konularini paydaslar icin anlasilir hale getirerek net ve oz teknik dokumantasyon surdurme.',
+                'Olay anlarinda hizli kok neden analizi yurutme ve legacy system kisitlari icin yenilikci cozumler gelistirme.',
+                'Mevcut kaynak maliyetlerini optimize ederken gelecekteki buyumeyi ongoren olceklenebilir mimariler kurma.',
+                'Kritik olay mudahalesi ile uzun vadeli proje kilometre taslarini dengeleyerek SLA hedeflerini karsilama.',
+                'Yeni DevOps araclarini hizla benimseyip degisen musteri beklentilerine gore strateji gelistirme.'
+            ];
+            softCards.forEach((card, idx) => {
+                setLocalized(card.querySelector('h4'), softTitles[idx]);
+                setLocalized(card.querySelector('p'), softDescs[idx]);
+            });
+
+            const studyHeading = document.querySelector('#study .section-title');
+            if (studyHeading) setLocalized(studyHeading, '<span class="section-number">04.</span>Calisma Sureci', true);
+            const studyTopParagraphs = document.querySelectorAll('#study > p');
+            if (studyTopParagraphs[0]) setLocalized(studyTopParagraphs[0], 'Guncel kalmamin temeli; guvenilir kaynaklardan ogrenme, yeni konseptleri lab ortaminda deneme ve guncellemeleri disiplinli sekilde gozden gecirme dongusudur. Bu sureci yalnizca kendime saklamanin baskalarina katkisini sinirladigini fark ettim. Bu nedenle ogrenme asamami acik sekilde paylasiyorum. Ne kadar deneyim kazanirsak kazanalim, her zaman yeni seyler ogrenmek mumkundur. Bu seffafligin, bir sonraki sertifika ya da egitime baslamak icin motivasyon saglamasini umuyorum.');
+            if (studyTopParagraphs[1]) setLocalized(studyTopParagraphs[1], 'Son guncelleme: Mart 2026');
+
+            const studyCards = document.querySelectorAll('#study .glass-card');
+            if (studyCards[0]) {
+                const h = studyCards[0].querySelectorAll('h3, h4, p');
+                if (h[0]) setLocalized(h[0], 'Guncel Durum');
+                if (h[1]) setLocalized(h[1], 'Surekli Ogrenme Yolculugu');
+                if (h[2]) setLocalized(h[2], 'Teknoloji cok hizli ilerliyor; bu hizla paralel sekilde bilgi birikimimi gelistirmeye devam ediyorum. <strong class="gradient-text">Teknik yiginimi genisletmeye</strong> odakliyim ve su anda <strong class="gradient-text">yogun, kendi kendini yoneten bir egitim sureci</strong> icindeyim.', true);
+                if (h[3]) setLocalized(h[3], '<strong class="gradient-text">Surekli gelisim</strong> anlayisini kariyerimin kalici bir parcasi olarak goruyor; <strong class="gradient-text">en guncel sektor uygulamalariyla</strong> uyumlu kalmak icin sistemli sekilde calisiyorum.', true);
+                if (h[4]) setLocalized(h[4], '<strong class="gradient-text">Aktif Odak:</strong> DevOps toolchain ve temel networking prensiplerinde derinlesme.', true);
+            }
+            if (studyCards[1]) {
+                setLocalized(studyCards[1].querySelector('h3'), 'Calisma Kaynaklari');
+            }
+
+            const historyHeading = document.querySelector('#study > h3.text-2xl.font-bold.mb-6.gradient-text');
+            if (historyHeading) setLocalized(historyHeading, 'Ogrenme Gecmisi Zaman Cizelgesi');
+
+            const timelineCards = document.querySelectorAll('#study .timeline-collapsible');
+            if (timelineCards[0]) {
+                setLocalized(timelineCards[0].querySelector('.timeline-toggle h4'), 'Devam Ediyor');
+                setLocalized(timelineCards[0].querySelector('.timeline-content .terminal-prompt'), 'Aktif Gozden Gecirme ve Ogrenme Yolu');
+                setLocalized(timelineCards[0].querySelector('.timeline-content p.text-sm'), 'Yapilandirilmis ogrenme yolunda surekli ilerleme:');
+                const trackSteps = timelineCards[0].querySelectorAll('.timeline-content .px-3 strong');
+                const stepLabels = ['System Foundations', 'Cloud Literacy', 'Solutions Design', 'Orchestration', 'Automated Provisioning'];
+                trackSteps.forEach((step, idx) => setLocalized(step, stepLabels[idx]));
+            }
+
+            if (timelineCards[1]) {
+                setLocalized(timelineCards[1].querySelector('.timeline-toggle h4'), 'Mart 2026');
+                const prompts = timelineCards[1].querySelectorAll('.timeline-content .terminal-prompt');
+                if (prompts[0]) setLocalized(prompts[0], 'Gozden Gecirme Dongusu');
+                if (prompts[1]) setLocalized(prompts[1], 'Mart Ayi Calisma Hedefi');
+                const lines = timelineCards[1].querySelectorAll('li span:last-child');
+                if (lines[0]) setLocalized(lines[0], '<strong class="gradient-text">AWS Certified Cloud Practitioner</strong> (gozden gecirme tamamlandi).', true);
+                if (lines[1]) setLocalized(lines[1], '<strong class="gradient-text">AWS Solutions Architect Associate</strong> - sertifika hazirligi.', true);
+                if (lines[2]) setLocalized(lines[2], '<strong class="gradient-text">Certified Kubernetes Administrator (CKA)</strong> - sertifika hazirligi.', true);
+            }
+
+            if (timelineCards[2]) {
+                setLocalized(timelineCards[2].querySelector('.timeline-toggle h4'), 'Subat 2026');
+                const prompt = timelineCards[2].querySelector('.timeline-content .terminal-prompt');
+                if (prompt) setLocalized(prompt, 'Gozden Gecirme Dongusu');
+                const lines = timelineCards[2].querySelectorAll('li span:last-child');
+                if (lines[0]) setLocalized(lines[0], '<strong class="gradient-text">Network+</strong> - CompTIA son guncellemeleri (gozden gecirme tamamlandi).', true);
+                if (lines[1]) setLocalized(lines[1], '<strong class="gradient-text">LPIC 1 ve LPIC 2</strong> - Linux Professional Institute sertifikalari (gozden gecirme tamamlandi).', true);
+                if (lines[2]) setLocalized(lines[2], '<strong class="gradient-text">CCNP Encor</strong> - Cisco ileri seviye routing ve switching (gozden gecirme tamamlandi).', true);
+                if (lines[3]) setLocalized(lines[3], '<strong class="gradient-text">DevOps Foundations</strong> - LinkedIn Learning (gozden gecirme tamamlandi).', true);
+            }
+
+            const projectsHeading = document.querySelector('#projects .section-title');
+            if (projectsHeading) setLocalized(projectsHeading, '<span class="section-number">05.</span>One Cikan Projeler', true);
+            const projectIntro = document.querySelectorAll('#projects > p');
+            if (projectIntro[0]) setLocalized(projectIntro[0], '<strong class="gradient-text">Sahadan Gercek Hikayeler</strong>', true);
+            if (projectIntro[1]) setLocalized(projectIntro[1], 'Asagida; <strong class="gradient-text">teknik calismalarim</strong>, <strong class="gradient-text">automation scripts</strong> ve <strong class="gradient-text">infrastructure projects</strong> seckisi yer aliyor. Gecmiste yogun is temposu, sirket gizliligi ve depolari dogru sekilde dokumante etmek icin zaman kisiti nedeniyle acik portfoyum sinirliydi. Bugun AI\'yi bir <strong class="gradient-text">technical writing assistant</strong> olarak kullaniyorum. Formatlama ve duzeni AI desteklerken ben <strong class="gradient-text">core engineering</strong> icerigine odaklaniyorum. Dokumantasyonun tonu yer yer AI gibi gelebilir; ancak tum proje, script ve cozumler <strong class="gradient-text">%100 insan onayli</strong> ve kariyerimde karsilastigim <strong class="gradient-text">gercek senaryolara</strong> dayalidir.', true);
+
+            const projectCards = document.querySelectorAll('#projects .grid > .project-card');
+            const projectTitles = [
+                'Multi-Layer Secure Network Design',
+                'Kafka Cluster Installation',
+                'vSAN Cluster Design ve Deployment',
+                'Ray Cluster Deployment',
+                'HA PostgreSQL with Patroni',
+                'Systemd Services Health Monitoring',
+                'DevOps Tool Koleksiyonu',
+                'Prometheus ve Grafana Stack',
+                'GitLab Pipeline for Python',
+                'pfSense Cluster Implementation'
+            ];
+            const projectDescs = [
+                'High Frequency Trading icin kernel bypass, multicast optimization ve mikrosaniye hassasiyetinde time sync odakli ultra dusuk gecikmeli ag mimarisi tasarladim.',
+                'Konfigurasyon yonetimi, monitoring ve olcekleme icin idempotent playbook\'lar kullanarak cok dugumlu Kafka ve Zookeeper kurulumunu otomatize ettim.',
+                'vSAN kullanan hyper-converged bir altyapi tasarladim; storage policy ayarlarini performans icin optimize edip high-availability failover yapisini devreye aldim.',
+                'AI/ML is yukleri icin dagitik Ray cluster\'ini container tabanli hale getirip node auto-discovery ve kaynak olceklemesini sorunsuzlastirdim.',
+                'Leader election icin Patroni, read/write trafik dagitimi icin HAProxy kullanarak high-availability PostgreSQL cluster\'i devreye aldim.',
+                'Python ve D-Bus ile systemd unit durumlarini gercek zamanli izleyen, sinyal kaydeden ve servis hatalarinda alarm ureten bir monitor cozumunu gelistirdim.',
+                'Yedekleme, log rotasyonu, sistem saglik kontrolleri ve kullanici yonetimi icin kapsamli bir shell script paketi olusturdum.',
+                'Prometheus exporter\'lari ve ozel Grafana panolariyla full-stack observability kurarak altyapi metriklerini gorunur hale getirdim.',
+                'GitLab uzerinde lint, test, Docker image build ve staging deployment adimlarini iceren cok asamali bir CI/CD pipeline insha ettim.',
+                'CARP failover, VLAN segmentasyonu ve kati intrusion detection kurallariyla yedekli bir pfSense firewall cluster yapisi konfigure ettim.'
+            ];
+
+            projectCards.forEach((card, idx) => {
+                const title = card.querySelector('span.text-xs');
+                const desc = card.querySelector('p');
+                if (title) setLocalized(title, projectTitles[idx]);
+                if (desc) setLocalized(desc, projectDescs[idx]);
+            });
+
+            setLocalized(document.querySelector('#contact h2'), 'Sirada Ne Var?');
+            setLocalized(document.querySelector('#contact h3'), 'Iletisime Gecelim');
+            setLocalized(document.querySelector('#contact .mt-10 .cta-button'), 'Merhaba Deyin');
+            const contactButtons = document.querySelectorAll('#contact .mt-10 .cta-button');
+            if (contactButtons[0]) setLocalized(contactButtons[0], 'Merhaba Deyin');
+            if (contactButtons[1]) setLocalized(contactButtons[1], 'LinkedIn Profili');
+
+            const contactParagraphs = document.querySelectorAll('#contact p.text-lg');
+            if (contactParagraphs[0]) setLocalized(contactParagraphs[0], 'Turkiye calisma izni sahibiyim ve kisa surede goreve baslayabilirim. Remote-first rollere acigim; Istanbul veya Ankara gibi sehirlere ofis calismasi icin tasinmaya da hazirim. Mukemmellik, otomasyon ve yuksek guvenilirlik gerektiren altyapilar kuruyorsaniz, ekibinize nasil katkida bulunabilecegimi memnuniyetle gorusmek isterim.');
+            if (contactParagraphs[1]) setLocalized(contactParagraphs[1], 'Yuksek performansli, otomasyon odakli ve guvenilir altyapi sistemleri insa ediyorum. Bu uzmanligi <strong class="gradient-text">Almanya veya Hollanda\'daki yenilikci ekiplerle</strong> bulusturabilecegim yeni firsatlara acigim. Ekibinizin hedeflerine teknik katkida bulunabilecek bir muhendis ariyorsaniz, iletisime gecelim.', true);
+
+            const footerLines = document.querySelectorAll('footer a p');
+            if (footerLines[0]) setLocalized(footerLines[0], 'Tasarim ve Ozellestirme: <strong class="gradient-text">Ali Fattahi</strong>', true);
+            if (footerLines[1]) setLocalized(footerLines[1], '<strong class="gradient-text">AI</strong> ile olusturuldu - 2026 - v2.14', true);
+        };
+
+        const setLanguage = (lang) => {
+            const targetLang = lang === 'tr' ? 'tr' : 'en';
+
+            if (targetLang === 'tr') {
+                applyTurkishContent();
+                localStorage.setItem('preferredLanguage', 'tr');
+                if (langTrBtn) langTrBtn.classList.add('active');
+                if (langEnBtn) langEnBtn.classList.remove('active');
+            } else {
+                restoreOriginalContent();
+                document.title = 'Ali Fattahi | DevOps & Infrastructure Engineer';
+                document.documentElement.lang = 'en';
+                localStorage.setItem('preferredLanguage', 'en');
+                if (langEnBtn) langEnBtn.classList.add('active');
+                if (langTrBtn) langTrBtn.classList.remove('active');
+            }
+        };
 
         // 1. Scroll-reveal animation
         const reveal = () => {
@@ -1877,10 +2343,19 @@
                 console.log("Detected Country:", data.country);
 
                 const countryCode = data.country || 'GLOBAL';
+                const detectedRegion = countryCode === 'TR' ? 'TR' : 'GLOBAL';
+
+                setRegion(detectedRegion);
+
+                // Show language switch and phone number only for visitors from Turkey
                 if (countryCode === 'TR') {
-                    setRegion('TR');
-                } else {
-                    setRegion('GLOBAL');
+                    const langSwitch = document.querySelector('.lang-switch');
+                    if (langSwitch) langSwitch.style.display = 'inline-flex';
+                    const heroPhone = document.getElementById('hero-phone');
+                    if (heroPhone) heroPhone.style.display = 'flex';
+                    // Apply saved language preference now that we know the visitor is from Turkey
+                    const savedLanguage = localStorage.getItem('preferredLanguage');
+                    if (savedLanguage === 'tr') setLanguage('tr');
                 }
 
                 if (visitorBox) visitorBox.style.display = 'flex';
@@ -1893,6 +2368,7 @@
             } catch (error) {
                 console.error('Location check failed:', error);
                 setRegion('GLOBAL');
+                // Keep lang-switch hidden on error (treat as non-TR visitor)
                 if (visitorBox) visitorBox.style.display = 'flex';
                 if (visitorFlag) visitorFlag.textContent = '🌍';
                 if (visitorBadge) visitorBadge.src = `https://visitor-badge.laobi.icu/badge?page_id=${baseId}.global&color=444&left_text=%20`;
@@ -1909,6 +2385,44 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => {
+            if (langEnBtn) {
+                langEnBtn.addEventListener('click', () => {
+                    setLanguage('en');
+                });
+            }
+
+            if (langTrBtn) {
+                langTrBtn.addEventListener('click', () => {
+                    setLanguage('tr');
+                });
+            }
+
+            // Always start in English; updateVisitorBadge() will show the language
+            // switcher and restore the TR preference only for visitors from Turkey.
+            setLanguage('en');
+
+            // Hamburger menu toggle
+            const hamburgerBtn = document.getElementById('hamburger-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (hamburgerBtn && mobileMenu) {
+                hamburgerBtn.addEventListener('click', () => {
+                    const isOpen = mobileMenu.classList.contains('is-open');
+                    mobileMenu.classList.toggle('is-open', !isOpen);
+                    hamburgerBtn.classList.toggle('is-open', !isOpen);
+                    hamburgerBtn.setAttribute('aria-expanded', String(!isOpen));
+                });
+
+                // Close menu when a nav link is clicked
+                mobileMenu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.remove('is-open');
+                        hamburgerBtn.classList.remove('is-open');
+                        hamburgerBtn.setAttribute('aria-expanded', 'false');
+                    });
+                });
+            }
+
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.addEventListener('click', () => {
                     const sectionId = link.getAttribute('href').replace('#', '');
