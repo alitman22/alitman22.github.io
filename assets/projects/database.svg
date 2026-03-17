@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-labelledby="title desc">
+  <title id="title">Database project placeholder</title>
+  <desc id="desc">High availability database cylinders with failover paths.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#11162a"/>
+      <stop offset="100%" stop-color="#224466"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" rx="28" fill="url(#bg)"/>
+  <g transform="translate(180 110)">
+    <ellipse cx="110" cy="40" rx="90" ry="28" fill="#87e8ff"/>
+    <rect x="20" y="40" width="180" height="150" fill="#5fc8f2"/>
+    <ellipse cx="110" cy="190" rx="90" ry="28" fill="#4ca9d6"/>
+  </g>
+  <g transform="translate(430 140)">
+    <ellipse cx="90" cy="30" rx="70" ry="22" fill="#b4fff0"/>
+    <rect x="20" y="30" width="140" height="110" fill="#5ed8c2"/>
+    <ellipse cx="90" cy="140" rx="70" ry="22" fill="#3fb79f"/>
+  </g>
+  <g stroke="#a0f1ff" stroke-width="6" stroke-linecap="round">
+    <path d="M360 180 H430"/>
+    <path d="M396 160 l34 20 l-34 20" fill="none"/>
+  </g>
+</svg>
