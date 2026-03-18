@@ -617,8 +617,7 @@ p {
   margin-top: 0.85rem;
   max-width: 52ch;
   min-height: 9.6rem;
-  padding-left: 0.85rem;
-  border-left: 2px solid rgba(0, 217, 255, 0.45);
+  padding-left: 0;
   color: var(--text-primary);
   font-size: clamp(1.02rem, 1.15vw, 1.2rem);
   font-weight: 430;
@@ -655,10 +654,6 @@ p {
 [data-theme="light"] .hero-terminal-control {
   border-color: rgba(15, 95, 191, 0.14);
   background: rgba(15, 95, 191, 0.04);
-}
-
-[data-theme="light"] .hero-terminal-output {
-  border-left-color: rgba(15, 95, 191, 0.42);
 }
 
 @media (max-width: 1040px) {
@@ -787,7 +782,7 @@ p {
   align-self: start;
   width: min(100%, 430px);
   max-width: 430px;
-  height: var(--hero-top-height);
+  aspect-ratio: 1 / 1;
   border-radius: 18px;
   overflow: hidden;
   border: 2px solid transparent;
@@ -1316,7 +1311,6 @@ main .reveal:nth-child(7) {
     align-self: center;
     max-width: 320px;
     width: min(100%, 320px);
-    height: 29rem;
   }
 }
 
@@ -1339,7 +1333,7 @@ main .reveal:nth-child(7) {
   }
 
   .glass-card:not(.hero-terminal)::before {
-    content: "$ cat ...";
+    content: "$ cat " attr(data-terminal-file);
     right: 3.15rem;
     font-size: 0.62rem;
   }
@@ -1424,7 +1418,7 @@ main .reveal:nth-child(7) {
   }
 
   .glass-card:not(.hero-terminal)::before {
-    content: "$ cat ...";
+    content: "$ cat " attr(data-terminal-file);
     right: 1rem;
     font-size: 0.58rem;
   }

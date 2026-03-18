@@ -1,0 +1,1 @@
+import{_ as e}from"./index-C_403Qkq.js";function i({number:s,title:n}){return e.jsxs("h2",{className:"section-title",children:[e.jsxs("span",{className:"section-number",children:[s,"."]}),n]})}export{i};
