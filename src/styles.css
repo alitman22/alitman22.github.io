@@ -1376,17 +1376,34 @@ main .reveal:nth-child(7) {
   }
 
   .glass-card:not(.hero-terminal) {
-    padding-top: 0.95rem;
-    background: var(--bg-card);
+    padding-top: 2.15rem;
+    background:
+      linear-gradient(180deg, rgba(7, 12, 24, 0.72) 0 1.4rem, transparent 1.4rem),
+      var(--bg-card);
   }
 
-  .glass-card:not(.hero-terminal)::before,
+  .glass-card:not(.hero-terminal)::before {
+    content: "$ cat " attr(data-terminal-file);
+    top: 0.32rem;
+    right: 2.95rem;
+    max-width: calc(100% - 3.75rem);
+    font-size: 0.6rem;
+    line-height: 0.86rem;
+  }
+
   .glass-card:not(.hero-terminal)::after {
-    content: none;
+    content: "● ● ●";
+    top: 0.3rem;
+    right: 0.72rem;
+    font-size: 0.34rem;
+    letter-spacing: 0.16rem;
+    opacity: 0.78;
   }
 
   [data-theme="light"] .glass-card:not(.hero-terminal) {
-    background: rgba(255,255,255,0.96);
+    background:
+      linear-gradient(180deg, rgba(15, 95, 191, 0.11) 0 1.4rem, transparent 1.4rem),
+      rgba(255,255,255,0.96);
   }
 }
 
@@ -1419,12 +1436,18 @@ main .reveal:nth-child(7) {
 
   .glass-card:not(.hero-terminal)::before {
     content: "$ cat " attr(data-terminal-file);
-    right: 1rem;
-    font-size: 0.58rem;
+    right: 2.6rem;
+    font-size: 0.56rem;
+    max-width: calc(100% - 3.3rem);
   }
 
   .glass-card:not(.hero-terminal)::after {
-    content: "";
+    content: "● ● ●";
+    right: 0.62rem;
+    top: 0.3rem;
+    font-size: 0.32rem;
+    letter-spacing: 0.14rem;
+    opacity: 0.72;
   }
 
   .projects-grid {
