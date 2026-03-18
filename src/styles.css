@@ -1356,6 +1356,10 @@ main .reveal:nth-child(7) {
 }
 
 @media (max-width: 760px) {
+  .navbar .cta-button.small {
+    display: none;
+  }
+
   .nav-social {
     display: none;
   }
@@ -1372,6 +1376,20 @@ main .reveal:nth-child(7) {
   .lang-btn {
     font-size: 0.68rem;
     padding: 0.28rem 0.5rem;
+  }
+
+  .glass-card:not(.hero-terminal) {
+    padding-top: 0.95rem;
+    background: var(--bg-card);
+  }
+
+  .glass-card:not(.hero-terminal)::before,
+  .glass-card:not(.hero-terminal)::after {
+    content: none;
+  }
+
+  [data-theme="light"] .glass-card:not(.hero-terminal) {
+    background: rgba(255,255,255,0.96);
   }
 }
 
