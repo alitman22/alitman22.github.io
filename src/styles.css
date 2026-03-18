@@ -570,13 +570,13 @@ p {
 .hero-terminal-body {
   flex: 1;
   display: grid;
-  grid-template-rows: auto auto auto 1fr;
+  grid-template-rows: auto auto auto;
+  align-content: start;
   gap: 0.4rem;
   padding: 1rem 1rem 1.05rem;
 }
 
 .hero-terminal-line,
-.hero-terminal-output,
 .hero-terminal-role {
   font-family: "JetBrains Mono", monospace;
 }
@@ -1111,6 +1111,7 @@ p {
   text-decoration: none;
   transition: var(--transition-theme), transform 0.28s cubic-bezier(0.4,0,0.2,1);
   min-height: 100%;
+  overflow: hidden;
 }
 .project-card:hover {
   box-shadow: 0 16px 34px -18px var(--accent-primary);
@@ -1185,6 +1186,7 @@ svg.project-thumb {
   margin-top: 0.4rem;
   font-size: 0.9rem;
   line-height: 1.48;
+  overflow-wrap: anywhere;
 }
 
 #contact.contact-section {
@@ -1302,12 +1304,29 @@ main .reveal:nth-child(7) {
   }
 
   .nav-actions {
+    margin-left: auto;
     gap: 0.45rem;
+    min-width: 0;
+    flex-wrap: nowrap;
+    overflow: hidden;
   }
 
   .nav-social-link {
     width: 1.85rem;
     height: 1.85rem;
+  }
+
+  .navbar .cta-button.small {
+    font-size: 0.73rem;
+    padding: 0.34rem 0.5rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .glass-card:not(.hero-terminal)::before {
+    content: "$ cat ...";
+    right: 3.15rem;
+    font-size: 0.62rem;
   }
 
   .about-grid,
@@ -1336,6 +1355,26 @@ main .reveal:nth-child(7) {
   }
 }
 
+@media (max-width: 760px) {
+  .nav-social {
+    display: none;
+  }
+
+  .navbar .cta-button.small {
+    font-size: 0.68rem;
+    padding: 0.3rem 0.42rem;
+  }
+
+  .lang-switch {
+    padding: 0.18rem;
+  }
+
+  .lang-btn {
+    font-size: 0.68rem;
+    padding: 0.28rem 0.5rem;
+  }
+}
+
 @media (max-width: 680px) {
   .sources-grid {
     min-height: 29rem;
@@ -1349,8 +1388,38 @@ main .reveal:nth-child(7) {
     height: auto;
   }
 
+  .nav-social {
+    display: none;
+  }
+
+  .mode-toggle {
+    margin-right: 0;
+    font-size: 1.1rem;
+  }
+
+  .navbar {
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+  }
+
+  .brand {
+    font-size: 1.1rem;
+  }
+
   .navbar .cta-button.small {
     width: auto;
+    font-size: 0.69rem;
+    padding: 0.3rem 0.42rem;
+  }
+
+  .glass-card:not(.hero-terminal)::before {
+    content: "$ cat ...";
+    right: 1rem;
+    font-size: 0.58rem;
+  }
+
+  .glass-card:not(.hero-terminal)::after {
+    content: "";
   }
 
   .projects-grid {

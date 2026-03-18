@@ -410,7 +410,7 @@ function ProjectThumbnail({ projectTitle, darkMode, className = '' }) {
       xmlns="http://www.w3.org/2000/svg"
     >
       <title id={titleId}>{`${projectTitle} project thumbnail`}</title>
-      <desc id={descId}>{`${config.prompt} Reference options: ${config.references.join('; ')}`}</desc>
+      <desc id={descId}>{config.prompt}</desc>
       <Background id={id} theme={theme} accentA={config.accentA} accentB={config.accentB} />
       {renderMotif(config.motif, colors)}
     </svg>
