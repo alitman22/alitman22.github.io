@@ -225,12 +225,6 @@ export const en = {
         href: 'https://github.com/alitman22/kafka-deployment-configuration'
       },
       {
-        title: 'VMware',
-        subtitle: 'vSAN Cluster Design & Deployment',
-        description:
-          'Architected a hyper-converged infrastructure using vSAN, optimizing storage policies for performance and implementing high-availability failover.'
-      },
-      {
         title: 'Docker',
         subtitle: 'Ray Cluster Deployment',
         description:
@@ -252,23 +246,11 @@ export const en = {
         href: 'https://github.com/alitman22/Systemd-Monitoring-DBUS'
       },
       {
-        title: 'Bash',
-        subtitle: 'Collection of DevOps Tools',
-        description:
-          'Created a comprehensive suite of shell scripts for automated backups, log rotation, system health checks, and user management.'
-      },
-      {
         title: 'Monitoring',
         subtitle: 'Prometheus & Grafana Stack',
         description:
           'Implemented full-stack observability with Prometheus exporters and custom Grafana dashboards for visualizing infrastructure metrics.',
         href: 'https://github.com/alitman22/full-stack-monitoring'
-      },
-      {
-        title: 'CI/CD',
-        subtitle: 'GitLab Pipeline for Python',
-        description:
-          'Built a multi-stage CI/CD pipeline in GitLab to lint, test, build Docker images, and deploy Python applications to staging environments.'
       },
       {
         title: 'Security',

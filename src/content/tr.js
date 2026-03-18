@@ -227,12 +227,6 @@ export const tr = {
         href: 'https://github.com/alitman22/kafka-deployment-configuration'
       },
       {
-        title: 'VMware',
-        subtitle: 'vSAN Cluster Tasarım ve Kurulumu',
-        description:
-          'vSAN üzerinde hiper-bütünleşik altyapı tasarlayarak performans odaklı storage policy ve yüksek erişilebilirlik failover yapısı oluşturdum.'
-      },
-      {
         title: 'Docker',
         subtitle: 'Ray Cluster Dağıtımı',
         description:
@@ -254,23 +248,11 @@ export const tr = {
         href: 'https://github.com/alitman22/Systemd-Monitoring-DBUS'
       },
       {
-        title: 'Bash',
-        subtitle: 'DevOps Araç Koleksiyonu',
-        description:
-          'Yedekleme otomasyonu, log rotation, sistem sağlık kontrolleri ve kullanıcı yönetimi için kapsamlı shell script koleksiyonu oluşturdum.'
-      },
-      {
         title: 'Monitoring',
         subtitle: 'Prometheus & Grafana Stack',
         description:
           'Prometheus exporterlar ve özel Grafana panelleriyle altyapı metriklerini uçtan uca görünür kılan gözlemlenebilirlik yapısı kurdum.',
         href: 'https://github.com/alitman22/full-stack-monitoring'
-      },
-      {
-        title: 'CI/CD',
-        subtitle: 'Python İçin GitLab Pipeline',
-        description:
-          'Lint, test, Docker image build ve staging deploy adımlarını içeren çok aşamalı GitLab CI/CD hattını tasarladım.'
       },
       {
         title: 'Security',
