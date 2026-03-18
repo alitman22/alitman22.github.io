@@ -32,7 +32,7 @@
   --text-muted: #6b7280;
   --border-color: rgba(100, 255, 218, 0.14);
   --hl-color: #00eaff;
-  --hero-top-height: 26.5rem;
+  --hero-top-height: 28rem;
   --transition-theme: background-color 0.4s ease, background 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, fill 0.4s ease, stroke 0.4s ease;
 }
 
@@ -500,11 +500,12 @@ p {
   display: grid;
   grid-template-columns: 1.3fr 0.9fr;
   gap: clamp(1.2rem, 2.3vw, 2.2rem);
-  align-items: start;
+  align-items: stretch;
 }
 
 .hero-terminal {
   min-height: var(--hero-top-height);
+  height: var(--hero-top-height);
   display: flex;
   flex-direction: column;
   padding: 0;
@@ -613,12 +614,17 @@ p {
 }
 
 .hero-terminal-output {
-  margin-top: 0.65rem;
-  max-width: none;
-  min-height: 8.4rem;
-  color: var(--text-secondary);
-  font-size: 0.92rem;
-  line-height: 1.6;
+  margin-top: 0.85rem;
+  max-width: 52ch;
+  min-height: 9.6rem;
+  padding-left: 0.85rem;
+  border-left: 2px solid rgba(0, 217, 255, 0.45);
+  color: var(--text-primary);
+  font-size: clamp(1.02rem, 1.15vw, 1.2rem);
+  font-weight: 430;
+  line-height: 1.55;
+  letter-spacing: 0.008em;
+  text-wrap: pretty;
 }
 
 .hero-terminal-output-label {
@@ -651,15 +657,21 @@ p {
   background: rgba(15, 95, 191, 0.04);
 }
 
+[data-theme="light"] .hero-terminal-output {
+  border-left-color: rgba(15, 95, 191, 0.42);
+}
+
 @media (max-width: 1040px) {
   .hero-terminal {
     min-height: 29rem;
+    height: 29rem;
   }
 }
 
 @media (max-width: 560px) {
   .hero-terminal {
     min-height: 26.5rem;
+    height: 26.5rem;
   }
 
   .hero-terminal-output {
@@ -1304,7 +1316,7 @@ main .reveal:nth-child(7) {
     align-self: center;
     max-width: 320px;
     width: min(100%, 320px);
-    height: auto;
+    height: 29rem;
   }
 }
 

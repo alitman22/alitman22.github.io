@@ -11,7 +11,7 @@ function HeroSection({ copy, language, isTurkeyRegion }) {
           <div className="hero-terminal-bar">
             <div className="hero-terminal-bar-left">
               <span className="hero-terminal-icon" aria-hidden="true">$</span>
-              <span className="hero-terminal-label">ali@portfolio$: ~/bin/ali.sh -- running</span>
+              <span className="hero-terminal-label">ali@portfolio$ ~/bin/ali.sh -- running</span>
             </div>
             <div className="hero-terminal-controls" aria-hidden="true">
               <span className="hero-terminal-control">_</span>
