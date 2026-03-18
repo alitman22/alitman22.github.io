@@ -1,1 +1,0 @@
-import{_ as e}from"./index-DlFcXSLD.js";function i({number:s,title:n}){return e.jsxs("h2",{className:"section-title",children:[e.jsxs("span",{className:"section-number",children:[s,"."]}),n]})}export{i};
