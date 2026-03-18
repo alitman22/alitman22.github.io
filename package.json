@@ -4,9 +4,9 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build && npm run prerender",
-    "build:spa": "vite build",
+    "dev": "node -e \"require('fs').copyFileSync('index.dev.html','index.html')\" && vite",
+    "build": "node -e \"require('fs').copyFileSync('index.dev.html','index.html')\" && vite build && npm run prerender",
+    "build:spa": "node -e \"require('fs').copyFileSync('index.dev.html','index.html')\" && vite build",
     "prerender": "node scripts/prerender.mjs",
     "preview": "vite preview",
     "publish:local": "npm run build && node scripts/publish-local.mjs",
