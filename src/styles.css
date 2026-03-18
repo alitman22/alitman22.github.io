@@ -351,11 +351,14 @@ p {
   position: absolute;
   top: 0.34rem;
   left: 0.8rem;
-  right: 3.9rem;
+  right: 2.65rem;
+  width: auto;
+  max-width: calc(100% - 3.45rem);
+  display: block;
   height: 0.88rem;
   color: var(--text-muted);
   font-family: "JetBrains Mono", monospace;
-  font-size: 0.68rem;
+  font-size: 0.64rem;
   letter-spacing: 0.03em;
   line-height: 0.88rem;
   white-space: nowrap;
@@ -366,8 +369,14 @@ p {
   transition: none;
 }
 
+@media (max-width: 680px) {
+  .glass-card:not(.hero-terminal)::before {
+    content: "$ cat ~/dest/" attr(data-terminal-file);
+  }
+}
+
 .glass-card:not(.hero-terminal):not([data-terminal-file])::before {
-  content: "ali@portfolio$ cat ~/dest/section.txt";
+  content: "$ cat section.txt";
 }
 
 .glass-card:not(.hero-terminal)::after {
@@ -496,11 +505,10 @@ p {
 
 .hero-terminal {
   min-height: var(--hero-top-height);
-  height: var(--hero-top-height);
   display: flex;
   flex-direction: column;
   padding: 0;
-  overflow: hidden;
+  overflow: visible;
   border-radius: 20px;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01)),
@@ -570,7 +578,7 @@ p {
 .hero-terminal-body {
   flex: 1;
   display: grid;
-  grid-template-rows: auto auto auto;
+  grid-template-rows: auto auto auto auto;
   align-content: start;
   gap: 0.4rem;
   padding: 1rem 1rem 1.05rem;
@@ -1316,13 +1324,6 @@ main .reveal:nth-child(7) {
     height: 1.85rem;
   }
 
-  .navbar .cta-button.small {
-    font-size: 0.73rem;
-    padding: 0.34rem 0.5rem;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
   .glass-card:not(.hero-terminal)::before {
     content: "$ cat ...";
     right: 3.15rem;
@@ -1356,18 +1357,6 @@ main .reveal:nth-child(7) {
 }
 
 @media (max-width: 760px) {
-  .navbar .cta-button.small {
-    display: none;
-  }
-
-  .nav-social {
-    display: none;
-  }
-
-  .navbar .cta-button.small {
-    font-size: 0.68rem;
-    padding: 0.3rem 0.42rem;
-  }
 
   .lang-switch {
     padding: 0.18rem;
@@ -1406,10 +1395,6 @@ main .reveal:nth-child(7) {
     height: auto;
   }
 
-  .nav-social {
-    display: none;
-  }
-
   .mode-toggle {
     margin-right: 0;
     font-size: 1.1rem;
@@ -1422,12 +1407,6 @@ main .reveal:nth-child(7) {
 
   .brand {
     font-size: 1.1rem;
-  }
-
-  .navbar .cta-button.small {
-    width: auto;
-    font-size: 0.69rem;
-    padding: 0.3rem 0.42rem;
   }
 
   .glass-card:not(.hero-terminal)::before {

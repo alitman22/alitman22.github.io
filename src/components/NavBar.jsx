@@ -94,7 +94,6 @@ function NavBar({ copy, language, setLanguage, isTurkeyRegion, darkMode, setDark
             </button>
           </div>
         )}
-        <motion.a href="#contact" className="cta-button small" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.45, duration: 0.5 }}>{copy.nav.contact}</motion.a>
       </div>
     </nav>
   );

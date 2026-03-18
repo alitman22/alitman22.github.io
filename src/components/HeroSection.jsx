@@ -30,6 +30,9 @@ function HeroSection({ copy, language, isTurkeyRegion }) {
             <h2 className="hero-terminal-role">
               <span>{copy.hero.role}</span>
             </h2>
+            <p className="hero-terminal-output">
+              <span className="terminal-prompt">output:</span> {copy.hero.summary}
+            </p>
           </div>
         </div>
 
