@@ -367,6 +367,6 @@ export const tr = {
   },
   footer: {
     designed: 'Tasarım ve Özelleştirme: Ali Fattahi',
-    built: 'AI ile oluşturuldu - 2026 - v2.15.1'
+    built: '2026 - v2.15.1'
   }
 };

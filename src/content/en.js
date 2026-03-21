@@ -365,6 +365,6 @@ export const en = {
   },
   footer: {
     designed: 'Designed & Customized by Ali Fattahi',
-    built: 'Built by AI - 2026 - v2.15.1'
+    built: '2026 - v2.15.1'
   }
 };
