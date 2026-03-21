@@ -117,12 +117,30 @@ function ProjectsSection({ copy, darkMode }) {
                 <div className="project-expanded">
                   <div className="project-layout">
                     <div className="project-media project-media-inline">
-                      <ProjectVisual
-                        projectTitle={project.title}
-                        darkMode={darkMode}
-                        image={project.image}
-                        imageAlt={project.imageAlt}
-                      />
+                      {project.href ? (
+                        <a
+                          href={project.href}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="project-media-link"
+                          aria-label={`Go to ${project.subtitle} project in GitHub`}
+                        >
+                          <ProjectVisual
+                            projectTitle={project.title}
+                            darkMode={darkMode}
+                            image={project.image}
+                            imageAlt={project.imageAlt}
+                          />
+                          <span className="project-media-footnote">Go to project in GitHub</span>
+                        </a>
+                      ) : (
+                        <ProjectVisual
+                          projectTitle={project.title}
+                          darkMode={darkMode}
+                          image={project.image}
+                          imageAlt={project.imageAlt}
+                        />
+                      )}
                     </div>
 
                     <div className="project-copy">
@@ -165,17 +183,6 @@ function ProjectsSection({ copy, darkMode }) {
                           </div>
                         </section>
 
-                        {project.href && (
-                          <a
-                            href={project.href}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="project-link-button"
-                          >
-                            <i className="fa-brands fa-github" aria-hidden="true"></i>
-                            {copy.projectsSection.openLinkLabel}
-                          </a>
-                        )}
                       </div>
                     </div>
                   </div>

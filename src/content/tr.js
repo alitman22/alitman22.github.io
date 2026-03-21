@@ -234,10 +234,10 @@ export const tr = {
         image: 'assets/projects/ansible-kafka.png',
         imageAlt: 'Ansible Kafka cluster otomasyon diyagrami',
         problem:
-          'Kafka ve Zookeeper cluster kurulumlarını manuel yürütmek; düğüm sayısı ve operasyon adımları arttıkça yavaş, tutarsız ve hataya açık hale gelir.',
+          'İnternetteki çoğu Kafka kurulum rehberi yalnızca temel bir cluster kurulumunda kalır; fakat üretim ortamında güçlü metrik görünürlüğü, geliştirici dostu yönetim arayüzü ve güvenlik duvarı arkasından kontrollü broker erişimi gibi çevresel ihtiyaçlar kritik hale gelir.',
         solution:
-          'Bu proje, idempotent Ansible playbooklarıyla düğüm hazırlığını, tutarlı konfigürasyonu ve operasyonel adımları standartlaştırarak kurulum, izleme ve bakım süreçlerini tekrar edilebilir hale getirir.',
-        tools: ['Ansible', 'Kafka', 'Zookeeper', 'Linux', 'Konfigürasyon otomasyonu'],
+          'Bu çözüm, vanilla playbookların ötesine geçerek Kafka bean ve metrikleri için JMX Exporter entegrasyonunu, geliştiricilerin görsel olarak daha rahat yönetebilmesi için Redpanda Console kurulumunu ve brokerlara dış ağdan güvenli erişim için NAT tabanlı erişim konfigürasyonunu otomatikleştirir. İdempotent Ansible orkestrasyonu sayesinde cluster; kutudan çıktığı gibi güvenilir, izlenebilir, geliştirici tarafından yönetilebilir ve kolay genişletilebilir şekilde teslim edilir.',
+        tools: ['Ansible', 'Kafka', 'Zookeeper', 'JMX Exporter', 'Redpanda Console', 'NAT broker erişimi'],
         href: 'https://github.com/alitman22/kafka-deployment-configuration'
       },
       {
@@ -246,9 +246,9 @@ export const tr = {
         image: 'assets/projects/docker-ray.png',
         imageAlt: 'Docker Ray cluster dağıtım genel bakış diyagramı',
         problem:
-          'Dağıtık AI ve ML iş yüklerini yönetmek; worker keşfi, çalışma zamanı tutarlılığı ve ölçeklemeyi manuel bıraktığınızda hızla karmaşıklaşır.',
+          'Küçük bir data ekibi, altyapı uzmanı olmadan güvenebileceği bir Ray cluster yapısına ihtiyaç duyuyordu. Klasik kurulumlar yeterli değildi; çünkü gün içinde kaynaklar değiştiğinde veya bazı workerlar cluster dışına çıktığında işlerin kesintisiz devam etmesi gerekiyordu.',
         solution:
-          'Bu dağıtım, Ray servislerini konteynerleştirip tekrar edilebilir bir cluster çalışma düzeni kurarak düğümlerin öngörülebilir biçimde katılmasını ve dağıtık iş yüklerinin daha temiz ölçeklenmesini sağlar.',
+          'Bu dağıtım, şeffaf ama üretime uygun bir Ray çalışma düzeni sunar ve cluster üyeliği ile kaynak değişimlerini zarif şekilde yönetir. Bir düğüm kapasite kaybettiğinde veya erişilemez olduğunda işler çökmeden drain edilip sağlıklı düğümlere yeniden planlanır. Böylece kaynak dalgalanmaları nedeniyle yarım kalan headless işler azalır, iş yükleri daha güvenilir biçimde tamamlanır ve sonuçlar tutarlı şekilde elde edilir.',
         tools: ['Docker', 'Ray', 'Python', 'Container networking', 'Dağıtık hesaplama'],
         href: 'https://github.com/alitman22/ray-vmware-cluster'
       },
@@ -258,9 +258,9 @@ export const tr = {
         image: 'assets/projects/postgres-patroni.png',
         imageAlt: 'PostgreSQL ve Patroni yüksek erişilebilirlik mimari diyagramı',
         problem:
-          'Tek düğümlü PostgreSQL kurulumları, durum bilgisi tutan uygulamalar için hem erişilebilirlik hem de failover tarafında kritik bir zayıf nokta oluşturur.',
+          'Platform başlangıçta tek düğümlü PostgreSQL ile çalışıyordu ve ilk aşamada yeterliydi; ancak veri öneminin artması ve izleme panellerinin sorgu yükünün büyümesi, yazma performansını etkilemeye başlayarak erişilebilirlik riskini belirgin hale getirdi.',
         solution:
-          'Proje; Patroni ile orkestrasyon ve lider seçimi, etcd ile consensus, HAProxy ile trafik yönlendirmesi kurarak kontrollü failover sunan yüksek erişilebilirlikli bir PostgreSQL yapısı oluşturur.',
+          'Çözüm, Patroni tabanlı HA PostgreSQL mimarisine geçiş yaparak etcd ile consensus ve HAProxy ile trafik kontrolü kurdu; böylece okuma/yazma rolleri pratik biçimde ayrıştırıldı ve farklı lokasyonlardaki depolama katmanlarında dayanıklılık artırıldı. Panel ve raporlama sorguları okuma tarafına yönlendirilirken yazma yolu korunarak Grafana yenilemeleri daha akıcı hale geldi ve yoğunluk altında yazma istikrarı korundu.',
         tools: ['PostgreSQL', 'Patroni', 'etcd', 'HAProxy', 'Yüksek erişilebilirlik'],
         href: 'https://github.com/alitman22/ha-postgres-patroni-etcd-haproxy'
       },
@@ -270,22 +270,22 @@ export const tr = {
           image: 'assets/projects/systemd-monitoring.png',
           imageAlt: 'Systemd servis sağlık izleme infografiği',
         problem:
-          'Kritik Linux servisleri sessizce bozulabilir veya durum değişimleri çok hızlı gerçekleşebilir; bu da gerçek zamanlı görünürlüğü zorlaştırır.',
+            'Java microservice platformunda servislerin tamamı hafif değildi ve 2 cluster üzerinde toplam 84 systemd servis biriminin durumunu güvenilir izlemek gerekiyordu. Ekip, node_exporter gibi temel pull tabanlı araçlarla restart ve durum değişimlerini yeterince doğru yakalayamıyordu.',
         solution:
-          'Araç, systemd durum değişimlerini D-Bus üzerinden dinleyip bunları anlık operasyonel görünürlüğe dönüştürerek ekiplerin servis arızalarını daha hızlı fark etmesine yardımcı olur.',
+          'Bu push tabanlı izleme yaklaşımı, D-Bus üzerindeki systemd olaylarına abone olup iki cluster genelindeki servis yaşam döngüsü geçişlerini gerçek zamanlı izler. Kritik olayları Telegram kanalına escalate eder, durum verilerini Prometheus Pushgatewaye göndererek zaman serisi halinde toplar ve Grafana üzerinde görselleştirir. Bu sayede servis durumundaki bilgi kör noktaları ortadan kalkar, durum verisi eksikliği tamamen giderilir ve Java servis birimi için operasyon kararları eksiksiz state verisiyle alınır.',
         tools: ['Python', 'D-Bus', 'systemd', 'Linux izleme', 'Servis otomasyonu'],
         href: 'https://github.com/alitman22/Systemd-Monitoring-DBUS'
       },
       {
         title: 'Monitoring',
-        subtitle: 'Prometheus & Grafana Stack',
+        subtitle: 'Merkezi İzleme Çözümü',
           image: 'assets/projects/prometheus-grafana.png',
           imageAlt: 'Prometheus ve Grafana ile izleme mimarisi infografiği',
         problem:
-          'Metrikler dağınık olduğunda ve ekiplerin ortak bir operasyon görünümü olmadığında altyapı sorunlarını teşhis etmek yavaşlar.',
+          'Tek bir Prometheus ve Grafana kurmak görece kolaydır; asıl zorluk tüm kaynak ve exporter katmanlarından metrikleri eksiksiz toplamaktır. SSL sertifika sağlığından CPU costop ve disk write latency gibi detaylı kaynak metriklerine kadar geniş kapsamlı veri toplanmadığında ekipler kritik sinyalleri kaçırır.',
         solution:
-          'Bu stack, Prometheus exporterlarıyla telemetriyi merkezileştirip Grafana üzerinde anlamlı panolar oluşturarak ekiplerin eğilimleri izlemesine, anormallikleri fark etmesine ve daha hızlı müdahale etmesine imkan tanır.',
-        tools: ['Prometheus', 'Grafana', 'Exporterlar', 'Alerting', 'Observability'],
+          'Bu çözüm, geniş exporter/gatherer ekosisteminden gelen metrikleri tek bir gözlemlenebilirlik hattında merkezileştirir ve Grafana üzerinde net operasyon panolarıyla görünür hale getirir. Böylece uçtan uca ortam farkındalığı ciddi ölçüde artar, içgörüler daha kesinleşir, alarm kalitesi yükselir ve arıza tespit süresi kısalır.',
+        tools: ['Prometheus', 'Grafana', 'Exporterlar', 'Pushgateway', 'Alerting', 'Observability'],
         href: 'https://github.com/alitman22/full-stack-monitoring'
       },
       {
@@ -294,10 +294,10 @@ export const tr = {
         image: 'assets/projects/pfsense-security.png',
         imageAlt: 'pfSense cluster güvenlik uygulaması özet infografiği',
         problem:
-          'Güvenlik duvarı tarafında zayıf yedeklilik ve yetersiz segmentasyon, ağ kenarında hem erişilebilirlik hem de güvenlik riski yaratır.',
+          'Altyapı başlangıçta yalnızca tek katman FortiGate güvenlik duvarına dayanıyordu. Multi-VLAN yapısı, çok sayıda erişim kuralı ve cluster genelinde LACP striping karmaşıklığı arttıkça; maliyeti makul tutarken daha esnek bir ikinci güvenlik katmanı ve inter-VLAN yönlendirme ihtiyacı doğdu.',
         solution:
-          'Bu uygulama, CARP failover destekli yedekli pfSense cluster, VLAN segmentasyonu ve sıkı tespit kuralları ile çevre servislerinin sürekliliğini korurken hassas trafiği daha güvenli biçimde izole eder.',
-        tools: ['pfSense', 'CARP', 'VLAN segmentasyonu', 'Firewall policy', 'IDS/IPS'],
+          'Bu çözüm, pfSensei HA modunda ikinci güvenlik katmanı olarak konumlandırıp inter-VLAN routing ve detaylı erişim kural yönetimini yüksek erişilebilirlikle birlikte sağlar. HA yapısı kurulumu belirgin şekilde karmaşıklaştırsa da tasarım, HP DL160 sunucular kullanılarak hem yazılım hem donanım katmanında kurumsal seviyede dayanıklılık sunar.',
+        tools: ['pfSense', 'CARP', 'Inter-VLAN yönlendirme', 'LACP', 'Firewall policy', 'HP DL160'],
         href: 'https://github.com/alitman22/pfsense-ha-enterprise'
       },
       {

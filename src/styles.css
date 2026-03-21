@@ -1233,6 +1233,7 @@ p {
 }
 
 .project-media-inline {
+  position: relative;
   margin-bottom: 0;
   min-height: 0;
   width: 100%;
@@ -1242,6 +1243,55 @@ p {
 
 .project-media-inline .project-thumb {
   height: 100%;
+}
+
+.project-media-link {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+}
+
+.project-media-link:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 3px;
+  border-radius: 12px;
+}
+
+.project-media-footnote {
+  position: absolute;
+  left: 50%;
+  bottom: 0.6rem;
+  transform: translate(-50%, 8px);
+  opacity: 0;
+  pointer-events: none;
+  padding: 0.22rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 217, 255, 0.32);
+  background: rgba(9, 18, 32, 0.82);
+  color: #dff6ff;
+  font-size: 0.68rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+[data-theme="light"] .project-media-footnote {
+  border-color: rgba(15, 95, 191, 0.28);
+  background: rgba(255, 255, 255, 0.88);
+  color: #0f3e78;
+}
+
+.project-media-link:hover .project-media-footnote,
+.project-media-link:focus-visible .project-media-footnote {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.project-media-link:hover .project-thumb,
+.project-media-link:focus-visible .project-thumb {
+  filter: brightness(1.04);
 }
 
 .project-thumb {
@@ -1367,35 +1417,6 @@ svg.project-thumb {
 .project-tool-badge i {
   font-size: 0.9rem;
   color: var(--accent-glow);
-}
-
-.project-link-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.45rem;
-  width: fit-content;
-  margin-top: 0.25rem;
-  padding: 0.44rem 0.8rem;
-  border-radius: 999px;
-  border: 1px solid rgba(0, 217, 255, 0.28);
-  background: rgba(0, 217, 255, 0.09);
-  color: var(--text-primary);
-  font-size: 0.8rem;
-  font-weight: 500;
-  text-decoration: none;
-  transition: var(--transition-theme), transform 0.2s ease;
-}
-
-.project-link-button:hover {
-  transform: translateY(-1px);
-  border-color: rgba(0, 217, 255, 0.45);
-  background: rgba(0, 217, 255, 0.14);
-}
-
-[data-theme="light"] .project-link-button {
-  border-color: rgba(15, 95, 191, 0.24);
-  background: rgba(15, 95, 191, 0.08);
 }
 
 [data-theme="light"] .project-tool-badge {
