@@ -209,57 +209,108 @@ export const tr = {
   projectsSection: {
     title: 'Öne Çıkan Projeler',
     kicker: 'Sahadan Gerçek Hikayeler',
+    problemLabel: 'Problem',
+    solutionLabel: 'Çözüm',
+    toolsLabel: 'Kullanılan araç seti',
+    openLinkLabel: 'GitHubda Aç',
     intro:
       'Aşağıda teknik çalışmalarım, otomasyon scriptlerim ve altyapı projelerimden bir seçki bulunuyor. Geçmişte yoğun iş temposu, şirket gizliliği ve depoları düzgün şekilde dokümante etmeye zaman ayıramamak nedeniyle açık portföyüm sessiz kalmıştı. Artık AIı teknik yazı asistanı olarak kullanıyorum. Biçimlendirme ve düzeni AI üstlenirken ben çekirdek mühendislik kısmına odaklanıyorum. Dokümantasyon yer yer AI yazımı gibi geliyorsa nedeni budur. Ancak her proje, script ve çözüm %100 insan onaylıdır ve kariyerim boyunca karşılaştığım gerçek senaryolara dayanır.',
     items: [
       {
         title: 'Networking',
         subtitle: 'Çok Katmanlı Güvenli Ağ Tasarımı',
-        description:
-          'Yüksek Frekanslı İşlem senaryoları için kernel bypass, multicast optimizasyonu ve mikrosaniye hassasiyetinde zaman senkronu odaklı ultra düşük gecikmeli ağ mimarisi tasarladım.',
+        image: 'assets/projects/network-hft.png',
+        imageAlt: 'HFT projesi icin dusuk gecikmeli ag mimarisi diyagrami',
+        problem:
+          'Yüksek frekanslı işlem ortamlarında gecikme, jitter ve zamanlama sapmaları kontrol edilmezse ağ tarafındaki küçük farklar bile ciddi rekabet kaybına dönüşür.',
+        solution:
+          'Bu çalışma; temiz trafik yolları, kernel bypass uyumlu ayarlar, multicast optimizasyonu ve hassas zaman senkronizasyonu etrafında düşük gecikmeli bir ağ mimarisi tasarlayarak veri ve emir akışını daha deterministik hale getirir.',
+        tools: ['Linux ağ yapıları', 'Kernel bypass', 'Multicast tuning', 'PTP zaman senkronu', 'Düşük gecikmeli yönlendirme'],
         href: 'https://github.com/alitman22/network-architecture-for-HFT'
       },
       {
         title: 'Ansible',
         subtitle: 'Kafka Cluster Kurulumu',
-        description:
-          'Konfigürasyon yönetimi, izleme ve ölçekleme adımlarını kapsayan idempotent playbooklarla çok düğümlü Kafka ve Zookeeper ortamını otomatize ettim.',
+        image: 'assets/projects/ansible-kafka.png',
+        imageAlt: 'Ansible Kafka cluster otomasyon diyagrami',
+        problem:
+          'Kafka ve Zookeeper cluster kurulumlarını manuel yürütmek; düğüm sayısı ve operasyon adımları arttıkça yavaş, tutarsız ve hataya açık hale gelir.',
+        solution:
+          'Bu proje, idempotent Ansible playbooklarıyla düğüm hazırlığını, tutarlı konfigürasyonu ve operasyonel adımları standartlaştırarak kurulum, izleme ve bakım süreçlerini tekrar edilebilir hale getirir.',
+        tools: ['Ansible', 'Kafka', 'Zookeeper', 'Linux', 'Konfigürasyon otomasyonu'],
         href: 'https://github.com/alitman22/kafka-deployment-configuration'
       },
       {
         title: 'Docker',
         subtitle: 'Ray Cluster Dağıtımı',
-        description:
-          'AI/ML iş yükleri için dağıtık Ray cluster ortamını konteynerleştirdim; düğümlerin otomatik keşfi ve kaynak ölçeklemesini sağladım.',
+        image: 'assets/projects/docker-ray.png',
+        imageAlt: 'Docker Ray cluster dağıtım genel bakış diyagramı',
+        problem:
+          'Dağıtık AI ve ML iş yüklerini yönetmek; worker keşfi, çalışma zamanı tutarlılığı ve ölçeklemeyi manuel bıraktığınızda hızla karmaşıklaşır.',
+        solution:
+          'Bu dağıtım, Ray servislerini konteynerleştirip tekrar edilebilir bir cluster çalışma düzeni kurarak düğümlerin öngörülebilir biçimde katılmasını ve dağıtık iş yüklerinin daha temiz ölçeklenmesini sağlar.',
+        tools: ['Docker', 'Ray', 'Python', 'Container networking', 'Dağıtık hesaplama'],
         href: 'https://github.com/alitman22/ray-vmware-cluster'
       },
       {
         title: 'Database',
         subtitle: 'Patroni ile HA PostgreSQL',
-        description:
-          'Lider seçimi için Patroni ve okuma/yazma trafiği dengelemesi için HAProxy kullanarak yüksek erişilebilirlikli PostgreSQL cluster kurdum.',
+        image: 'assets/projects/postgres-patroni.png',
+        imageAlt: 'PostgreSQL ve Patroni yüksek erişilebilirlik mimari diyagramı',
+        problem:
+          'Tek düğümlü PostgreSQL kurulumları, durum bilgisi tutan uygulamalar için hem erişilebilirlik hem de failover tarafında kritik bir zayıf nokta oluşturur.',
+        solution:
+          'Proje; Patroni ile orkestrasyon ve lider seçimi, etcd ile consensus, HAProxy ile trafik yönlendirmesi kurarak kontrollü failover sunan yüksek erişilebilirlikli bir PostgreSQL yapısı oluşturur.',
+        tools: ['PostgreSQL', 'Patroni', 'etcd', 'HAProxy', 'Yüksek erişilebilirlik'],
         href: 'https://github.com/alitman22/ha-postgres-patroni-etcd-haproxy'
       },
       {
         title: 'Python',
         subtitle: 'Systemd Servis Sağlık İzleme',
-        description:
-          'Python ve D-Bus kullanarak systemd unit durumlarını izleyen, sinyalleri yakalayan ve servis hatalarında uyaran gerçek zamanlı araç geliştirdim.',
+          image: 'assets/projects/systemd-monitoring.png',
+          imageAlt: 'Systemd servis sağlık izleme infografiği',
+        problem:
+          'Kritik Linux servisleri sessizce bozulabilir veya durum değişimleri çok hızlı gerçekleşebilir; bu da gerçek zamanlı görünürlüğü zorlaştırır.',
+        solution:
+          'Araç, systemd durum değişimlerini D-Bus üzerinden dinleyip bunları anlık operasyonel görünürlüğe dönüştürerek ekiplerin servis arızalarını daha hızlı fark etmesine yardımcı olur.',
+        tools: ['Python', 'D-Bus', 'systemd', 'Linux izleme', 'Servis otomasyonu'],
         href: 'https://github.com/alitman22/Systemd-Monitoring-DBUS'
       },
       {
         title: 'Monitoring',
         subtitle: 'Prometheus & Grafana Stack',
-        description:
-          'Prometheus exporterlar ve özel Grafana panelleriyle altyapı metriklerini uçtan uca görünür kılan gözlemlenebilirlik yapısı kurdum.',
+          image: 'assets/projects/prometheus-grafana.png',
+          imageAlt: 'Prometheus ve Grafana ile izleme mimarisi infografiği',
+        problem:
+          'Metrikler dağınık olduğunda ve ekiplerin ortak bir operasyon görünümü olmadığında altyapı sorunlarını teşhis etmek yavaşlar.',
+        solution:
+          'Bu stack, Prometheus exporterlarıyla telemetriyi merkezileştirip Grafana üzerinde anlamlı panolar oluşturarak ekiplerin eğilimleri izlemesine, anormallikleri fark etmesine ve daha hızlı müdahale etmesine imkan tanır.',
+        tools: ['Prometheus', 'Grafana', 'Exporterlar', 'Alerting', 'Observability'],
         href: 'https://github.com/alitman22/full-stack-monitoring'
       },
       {
         title: 'Security',
         subtitle: 'pfSense Cluster Uygulaması',
-        description:
-          'CARP failover, VLAN segmentasyonu ve sık saldırı tespit kurallarıyla yedekli pfSense güvenlik duvarı clusteri kurdum.',
+        image: 'assets/projects/pfsense-security.png',
+        imageAlt: 'pfSense cluster güvenlik uygulaması özet infografiği',
+        problem:
+          'Güvenlik duvarı tarafında zayıf yedeklilik ve yetersiz segmentasyon, ağ kenarında hem erişilebilirlik hem de güvenlik riski yaratır.',
+        solution:
+          'Bu uygulama, CARP failover destekli yedekli pfSense cluster, VLAN segmentasyonu ve sıkı tespit kuralları ile çevre servislerinin sürekliliğini korurken hassas trafiği daha güvenli biçimde izole eder.',
+        tools: ['pfSense', 'CARP', 'VLAN segmentasyonu', 'Firewall policy', 'IDS/IPS'],
         href: 'https://github.com/alitman22/pfsense-ha-enterprise'
+      },
+      {
+        title: 'Tools',
+        subtitle: 'İş Eşleştirme Radarı Tarayıcı Uzantısı',
+        image: 'assets/projects/job-match-radar.png',
+        imageAlt: 'İş arama otomasyon çözümü genel bakış',
+        problem:
+          'İş ilanları veya içerik tarandığında çoğu sayfa sadece kısmen alakalıdır, bu da ekipleri karmaşık kriterler karşısında manuel değerlendirmeye zorlar ve düşük uyumlu fırsatlara zaman kaybettirtir.',
+        solution:
+          'Bu açık kaynak Chrome uzantısı (MV3), grup ve cümle düzeyinde sinyalleri kullanan ağırlıklı anahtar kelime eşleştirmesi modeli ile sayfa uyumluluğunu tutarlı ve açıklanabilir şekilde puanlandırır. Hızlı eylemler için popup ve derin yapılandırma için tam ayarlar arayüzü, isteğe bağlı LLM tabanlı anahtar kelime genişletmesi ve otomasyon iş akışlarına entegrasyon için veri dışa aktarma olanağı sunar.',
+        tools: ['JavaScript', 'Chrome Extension', 'MV3', 'Storage APIs', 'Content Scripts', 'LLM Integration'],
+        href: 'https://github.com/alitman22/job-match-radar-extension'
       }
     ]
   },

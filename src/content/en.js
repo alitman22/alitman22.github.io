@@ -207,57 +207,108 @@ export const en = {
   projectsSection: {
     title: 'Featured Projects',
     kicker: 'Architecture & Automation in Practice',
+    problemLabel: 'Problem',
+    solutionLabel: 'Solution',
+    toolsLabel: 'Toolset used',
+    openLinkLabel: 'Open on GitHub',
     intro:
       'Below is a curated selection of infrastructure designs, automation tools, and CI/CD workflows. These repositories reflect real-world, production-grade scenarios I have architected and navigated throughout my career. They demonstrate my hands-on approach to solving complex operational bottlenecks, enforcing security by design, and building highly available systems from the ground up.',
     items: [
       {
         title: 'Networking',
         subtitle: 'Multi-Layer Secure Network Design',
-        description:
-          'Designed an ultra-low latency network architecture for High Frequency Trading, focusing on kernel bypass, multicast optimization, and microsecond-precision time sync.',
+        image: 'assets/projects/network-hft.png',
+        imageAlt: 'Low-latency networking architecture diagram for HFT project',
+        problem:
+          'High-frequency trading environments lose real advantage when network latency, jitter, and timing drift are not controlled across the full path.',
+        solution:
+          'This project designs a low-latency network architecture around clean traffic paths, kernel-bypass-aware tuning, multicast optimization, and precise time synchronization so market data and order flow stay deterministic.',
+        tools: ['Linux networking', 'Kernel bypass', 'Multicast tuning', 'PTP time sync', 'Low-latency routing'],
         href: 'https://github.com/alitman22/network-architecture-for-HFT'
       },
       {
         title: 'Ansible',
         subtitle: 'Kafka Cluster Installation',
-        description:
-          'Automated the deployment of a multi-node Kafka and Zookeeper cluster with idempotent playbooks for configuration management, monitoring and scaling.',
+        image: 'assets/projects/ansible-kafka.png',
+        imageAlt: 'Ansible Kafka cluster automation overview diagram',
+        problem:
+          'Manual Kafka and Zookeeper cluster setup becomes slow, inconsistent, and fragile as the number of nodes and operational steps grows.',
+        solution:
+          'The project uses idempotent Ansible playbooks to provision nodes, apply consistent configuration, and standardize operational steps for deployment, monitoring, and scale-ready maintenance.',
+        tools: ['Ansible', 'Kafka', 'Zookeeper', 'Linux', 'Configuration automation'],
         href: 'https://github.com/alitman22/kafka-deployment-configuration'
       },
       {
         title: 'Docker',
         subtitle: 'Ray Cluster Deployment',
-        description:
-          'Containerized a distributed Ray computing cluster for AI/ML workloads, ensuring seamless node auto-discovery and resource scaling.',
+        image: 'assets/projects/docker-ray.png',
+        imageAlt: 'Docker Ray cluster deployment overview diagram',
+        problem:
+          'Distributed AI and ML workloads are hard to coordinate when worker discovery, runtime consistency, and scaling are handled manually.',
+        solution:
+          'This deployment packages Ray services into containers and defines a repeatable cluster runtime so nodes can join predictably, share resources cleanly, and scale distributed execution with less operational overhead.',
+        tools: ['Docker', 'Ray', 'Python', 'Container networking', 'Distributed compute'],
         href: 'https://github.com/alitman22/ray-vmware-cluster'
       },
       {
         title: 'Database',
         subtitle: 'HA PostgreSQL with Patroni',
-        description:
-          'Deployed a highly available PostgreSQL cluster using Patroni for leader election and HAProxy for load balancing read/write traffic.',
+        image: 'assets/projects/postgres-patroni.png',
+        imageAlt: 'PostgreSQL and Patroni high-availability architecture diagram',
+        problem:
+          'Single-node PostgreSQL deployments create a failure point for applications that need resilient stateful services and clean failover behavior.',
+        solution:
+          'The project builds a highly available PostgreSQL cluster with Patroni handling orchestration and leader election, etcd providing consensus, and HAProxy routing traffic so failover remains controlled and service interruption stays minimal.',
+        tools: ['PostgreSQL', 'Patroni', 'etcd', 'HAProxy', 'High availability'],
         href: 'https://github.com/alitman22/ha-postgres-patroni-etcd-haproxy'
       },
       {
         title: 'Python',
         subtitle: 'Systemd Services Health Monitoring',
-        description:
-          'Developed a real-time system monitor using Python and D-Bus to track systemd unit states, capture signals, and alert on service failures.',
+          image: 'assets/projects/systemd-monitoring.png',
+          imageAlt: 'Systemd services health monitoring infographic',
+        problem:
+          'Critical Linux services can fail silently or change state quickly, making real-time visibility difficult without direct service-level monitoring.',
+        solution:
+          'This tool listens to systemd state changes over D-Bus and turns service activity into immediate operational visibility, helping teams detect failures faster and react before small issues spread.',
+        tools: ['Python', 'D-Bus', 'systemd', 'Linux monitoring', 'Service automation'],
         href: 'https://github.com/alitman22/Systemd-Monitoring-DBUS'
       },
       {
         title: 'Monitoring',
         subtitle: 'Prometheus & Grafana Stack',
-        description:
-          'Implemented full-stack observability with Prometheus exporters and custom Grafana dashboards for visualizing infrastructure metrics.',
+          image: 'assets/projects/prometheus-grafana.png',
+          imageAlt: 'Monitoring with Prometheus and Grafana architecture infographic',
+        problem:
+          'Infrastructure incidents are harder to diagnose when metrics are fragmented and teams lack a shared operational view of system health.',
+        solution:
+          'The stack centralizes telemetry collection with Prometheus exporters and presents actionable dashboards in Grafana, giving teams a unified way to observe trends, detect anomalies, and respond faster.',
+        tools: ['Prometheus', 'Grafana', 'Exporters', 'Alerting', 'Observability'],
         href: 'https://github.com/alitman22/full-stack-monitoring'
       },
       {
         title: 'Security',
         subtitle: 'pfSense Cluster Implementation',
-        description:
-          'Configured a redundant pfSense firewall cluster with CARP for failover, VLAN segmentation, and strict intrusion detection rules.',
+        image: 'assets/projects/pfsense-security.png',
+        imageAlt: 'pfSense cluster security implementation overview',
+        problem:
+          'Network edges become both a security risk and an availability risk when firewall redundancy and segmentation are weak or inconsistent.',
+        solution:
+          'This implementation uses a redundant pfSense cluster with CARP failover, VLAN segmentation, and strict detection controls so perimeter services stay available while sensitive traffic remains isolated and protected.',
+        tools: ['pfSense', 'CARP', 'VLAN segmentation', 'Firewall policy', 'IDS/IPS'],
         href: 'https://github.com/alitman22/pfsense-ha-enterprise'
+      },
+      {
+        title: 'Tools',
+        subtitle: 'Job Match Radar Browser Extension',
+        image: 'assets/projects/job-match-radar.png',
+        imageAlt: 'Job search automation solution overview',
+        problem:
+          'When scanning large volumes of job listings or content, most pages are only partially relevant, forcing teams to manually evaluate each one against complex criteria and wasting time on low-fit opportunities.',
+        solution:
+          'This open-source Chrome extension (MV3) uses a weighted keyword-matching model with group and phrase-level signals to score page relevance consistently and explainably. It offers a quick popup for fast actions and a full settings UI for deep configuration, optional LLM-assisted keyword expansion, and data export for integration into automation workflows.',
+        tools: ['JavaScript', 'Chrome Extension', 'MV3', 'Storage APIs', 'Content Scripts', 'LLM Integration'],
+        href: 'https://github.com/alitman22/job-match-radar-extension'
       }
     ]
   },
