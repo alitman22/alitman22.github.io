@@ -210,6 +210,7 @@ export const tr = {
     title: 'Öne Çıkan Projeler',
     kicker: 'Sahadan Gerçek Hikayeler',
     problemLabel: 'Problem',
+    challengesLabel: 'Zorluklar',
     solutionLabel: 'Çözüm',
     toolsLabel: 'Kullanılan araç seti',
     openLinkLabel: 'GitHubda Aç',
@@ -223,6 +224,11 @@ export const tr = {
         imageAlt: 'HFT projesi icin dusuk gecikmeli ag mimarisi diyagrami',
         problem:
           'Yüksek frekanslı işlem ortamlarında gecikme, jitter ve zamanlama sapmaları kontrol edilmezse ağ tarafındaki küçük farklar bile ciddi rekabet kaybına dönüşür.',
+        challenges: [
+          'Çok katmanlı yapıda sıkı ağ izolasyonunu düşük gecikmeli trafik akışıyla birlikte korumak.',
+          'Trafik patlamaları ve topoloji değişimlerinde PTP zaman senkronunu kararlı tutmak.',
+          'Multicast davranışı ile kernel bypass ayarlarını gerçekçi yükte uçtan uca doğrulamak.'
+        ],
         solution:
           'Bu çalışma; temiz trafik yolları, kernel bypass uyumlu ayarlar, multicast optimizasyonu ve hassas zaman senkronizasyonu etrafında düşük gecikmeli bir ağ mimarisi tasarlayarak veri ve emir akışını daha deterministik hale getirir.',
         tools: ['Linux ağ yapıları', 'Kernel bypass', 'Multicast tuning', 'PTP zaman senkronu', 'Düşük gecikmeli yönlendirme'],
@@ -235,6 +241,11 @@ export const tr = {
         imageAlt: 'Ansible Kafka cluster otomasyon diyagrami',
         problem:
           'İnternetteki çoğu Kafka kurulum rehberi yalnızca temel bir cluster kurulumunda kalır; fakat üretim ortamında güçlü metrik görünürlüğü, geliştirici dostu yönetim arayüzü ve güvenlik duvarı arkasından kontrollü broker erişimi gibi çevresel ihtiyaçlar kritik hale gelir.',
+        challenges: [
+          'Dış ağ NAT broker erişimini Kafka metadata ve istemci yönlendirmesini bozmadan çalıştırmak.',
+          'JMX Exporter ve Redpanda Consoleu sonradan eklenen değil, dağıtımın doğal parçası yapmak.',
+          'Playbookları idempotent tutarken güvenli cluster genişletmesini ve tekrar çalıştırmayı desteklemek.'
+        ],
         solution:
           'Bu çözüm, vanilla playbookların ötesine geçerek Kafka bean ve metrikleri için JMX Exporter entegrasyonunu, geliştiricilerin görsel olarak daha rahat yönetebilmesi için Redpanda Console kurulumunu ve brokerlara dış ağdan güvenli erişim için NAT tabanlı erişim konfigürasyonunu otomatikleştirir. İdempotent Ansible orkestrasyonu sayesinde cluster; kutudan çıktığı gibi güvenilir, izlenebilir, geliştirici tarafından yönetilebilir ve kolay genişletilebilir şekilde teslim edilir.',
         tools: ['Ansible', 'Kafka', 'Zookeeper', 'JMX Exporter', 'Redpanda Console', 'NAT broker erişimi'],
@@ -247,6 +258,11 @@ export const tr = {
         imageAlt: 'Docker Ray cluster dağıtım genel bakış diyagramı',
         problem:
           'Küçük bir data ekibi, altyapı uzmanı olmadan güvenebileceği bir Ray cluster yapısına ihtiyaç duyuyordu. Klasik kurulumlar yeterli değildi; çünkü gün içinde kaynaklar değiştiğinde veya bazı workerlar cluster dışına çıktığında işlerin kesintisiz devam etmesi gerekiyordu.',
+        challenges: [
+          'Worker kaybı ve kaynak dalgalanmasında dağıtık işlerin çökmeden devam etmesini sağlamak.',
+          'Heterojen düğümlerde ve değişken yüklerde çalışma zamanı tutarlılığını korumak.',
+          'Gün içi kapasite değişimlerinde yarım kalan headless işlerin önüne geçmek.'
+        ],
         solution:
           'Bu dağıtım, şeffaf ama üretime uygun bir Ray çalışma düzeni sunar ve cluster üyeliği ile kaynak değişimlerini zarif şekilde yönetir. Bir düğüm kapasite kaybettiğinde veya erişilemez olduğunda işler çökmeden drain edilip sağlıklı düğümlere yeniden planlanır. Böylece kaynak dalgalanmaları nedeniyle yarım kalan headless işler azalır, iş yükleri daha güvenilir biçimde tamamlanır ve sonuçlar tutarlı şekilde elde edilir.',
         tools: ['Docker', 'Ray', 'Python', 'Container networking', 'Dağıtık hesaplama'],
@@ -259,6 +275,11 @@ export const tr = {
         imageAlt: 'PostgreSQL ve Patroni yüksek erişilebilirlik mimari diyagramı',
         problem:
           'Platform başlangıçta tek düğümlü PostgreSQL ile çalışıyordu ve ilk aşamada yeterliydi; ancak veri öneminin artması ve izleme panellerinin sorgu yükünün büyümesi, yazma performansını etkilemeye başlayarak erişilebilirlik riskini belirgin hale getirdi.',
+        challenges: [
+          'Uygulama davranışını bozmadan okuma ve yazma yollarını güvenli şekilde ayrıştırmak.',
+          'Patroni, etcd ve HAProxy bileşenleri arasında failover deterministikliğini korumak.',
+          'Panel sorgu yükü yükselirken yazma performansını ve sürekliliğini güvenceye almak.'
+        ],
         solution:
           'Çözüm, Patroni tabanlı HA PostgreSQL mimarisine geçiş yaparak etcd ile consensus ve HAProxy ile trafik kontrolü kurdu; böylece okuma/yazma rolleri pratik biçimde ayrıştırıldı ve farklı lokasyonlardaki depolama katmanlarında dayanıklılık artırıldı. Panel ve raporlama sorguları okuma tarafına yönlendirilirken yazma yolu korunarak Grafana yenilemeleri daha akıcı hale geldi ve yoğunluk altında yazma istikrarı korundu.',
         tools: ['PostgreSQL', 'Patroni', 'etcd', 'HAProxy', 'Yüksek erişilebilirlik'],
@@ -271,6 +292,11 @@ export const tr = {
           imageAlt: 'Systemd servis sağlık izleme infografiği',
         problem:
             'Java microservice platformunda servislerin tamamı hafif değildi ve 2 cluster üzerinde toplam 84 systemd servis biriminin durumunu güvenilir izlemek gerekiyordu. Ekip, node_exporter gibi temel pull tabanlı araçlarla restart ve durum değişimlerini yeterince doğru yakalayamıyordu.',
+          challenges: [
+            '2 cluster genelinde 84 Java systemd birimini hızlı durum geçişlerinde veri kaybı olmadan izlemek.',
+            'D-Bus olay akışını güvenilir alarm ve zaman serisi sinyallerine dönüştürmek.',
+            'Restart fırtınalarında ve kararsız dönemlerde kaçırılan state geçişlerini sıfıra indirmek.'
+          ],
         solution:
           'Bu push tabanlı izleme yaklaşımı, D-Bus üzerindeki systemd olaylarına abone olup iki cluster genelindeki servis yaşam döngüsü geçişlerini gerçek zamanlı izler. Kritik olayları Telegram kanalına escalate eder, durum verilerini Prometheus Pushgatewaye göndererek zaman serisi halinde toplar ve Grafana üzerinde görselleştirir. Bu sayede servis durumundaki bilgi kör noktaları ortadan kalkar, durum verisi eksikliği tamamen giderilir ve Java servis birimi için operasyon kararları eksiksiz state verisiyle alınır.',
         tools: ['Python', 'D-Bus', 'systemd', 'Linux izleme', 'Servis otomasyonu'],
@@ -283,6 +309,11 @@ export const tr = {
           imageAlt: 'Prometheus ve Grafana ile izleme mimarisi infografiği',
         problem:
           'Tek bir Prometheus ve Grafana kurmak görece kolaydır; asıl zorluk tüm kaynak ve exporter katmanlarından metrikleri eksiksiz toplamaktır. SSL sertifika sağlığından CPU costop ve disk write latency gibi detaylı kaynak metriklerine kadar geniş kapsamlı veri toplanmadığında ekipler kritik sinyalleri kaçırır.',
+          challenges: [
+            'Birden çok exporter kaynağındaki metrikleri bağlam kaybetmeden normalize etmek.',
+            'Derin metrik kapsamını korurken kardinalite ve scrape maliyetini kontrol altında tutmak.',
+            'Alarmları gerçek operasyon aksiyonlarına bağlayıp tespit süresini kısaltmak.'
+          ],
         solution:
           'Bu çözüm, geniş exporter/gatherer ekosisteminden gelen metrikleri tek bir gözlemlenebilirlik hattında merkezileştirir ve Grafana üzerinde net operasyon panolarıyla görünür hale getirir. Böylece uçtan uca ortam farkındalığı ciddi ölçüde artar, içgörüler daha kesinleşir, alarm kalitesi yükselir ve arıza tespit süresi kısalır.',
         tools: ['Prometheus', 'Grafana', 'Exporterlar', 'Pushgateway', 'Alerting', 'Observability'],
@@ -295,6 +326,11 @@ export const tr = {
         imageAlt: 'pfSense cluster güvenlik uygulaması özet infografiği',
         problem:
           'Altyapı başlangıçta yalnızca tek katman FortiGate güvenlik duvarına dayanıyordu. Multi-VLAN yapısı, çok sayıda erişim kuralı ve cluster genelinde LACP striping karmaşıklığı arttıkça; maliyeti makul tutarken daha esnek bir ikinci güvenlik katmanı ve inter-VLAN yönlendirme ihtiyacı doğdu.',
+        challenges: [
+          'FortiGate dönemindeki karmaşık politikaları sürdürülebilir pfSense inter-VLAN kural setine çevirmek.',
+          'CARP ve LACP tasarımında asimetrik routing ve failover kenar durumlarını yönetmek.',
+          'Maliyet kontrollü donanımda kurumsal HA dayanıklılığını taviz vermeden sunmak.'
+        ],
         solution:
           'Bu çözüm, pfSensei HA modunda ikinci güvenlik katmanı olarak konumlandırıp inter-VLAN routing ve detaylı erişim kural yönetimini yüksek erişilebilirlikle birlikte sağlar. HA yapısı kurulumu belirgin şekilde karmaşıklaştırsa da tasarım, HP DL160 sunucular kullanılarak hem yazılım hem donanım katmanında kurumsal seviyede dayanıklılık sunar.',
         tools: ['pfSense', 'CARP', 'Inter-VLAN yönlendirme', 'LACP', 'Firewall policy', 'HP DL160'],
@@ -307,6 +343,11 @@ export const tr = {
         imageAlt: 'İş arama otomasyon çözümü genel bakış',
         problem:
           'İş ilanları veya içerik tarandığında çoğu sayfa sadece kısmen alakalıdır, bu da ekipleri karmaşık kriterler karşısında manuel değerlendirmeye zorlar ve düşük uyumlu fırsatlara zaman kaybettirtir.',
+        challenges: [
+          'Anahtar kelime grupları büyürken puanlama modelini açıklanabilir ve tutarlı tutmak.',
+          'Hızlı popup deneyimi ile ileri seviye ayar yüzeyini dengeli şekilde sunmak.',
+          'Gürültülü sayfa içeriği ve SPA güncellemelerinde skor oynaklığını azaltmak.'
+        ],
         solution:
           'Bu açık kaynak Chrome uzantısı (MV3), grup ve cümle düzeyinde sinyalleri kullanan ağırlıklı anahtar kelime eşleştirmesi modeli ile sayfa uyumluluğunu tutarlı ve açıklanabilir şekilde puanlandırır. Hızlı eylemler için popup ve derin yapılandırma için tam ayarlar arayüzü, isteğe bağlı LLM tabanlı anahtar kelime genişletmesi ve otomasyon iş akışlarına entegrasyon için veri dışa aktarma olanağı sunar.',
         tools: ['JavaScript', 'Chrome Extension', 'MV3', 'Storage APIs', 'Content Scripts', 'LLM Integration'],

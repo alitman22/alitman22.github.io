@@ -208,6 +208,7 @@ export const en = {
     title: 'Featured Projects',
     kicker: 'Architecture & Automation in Practice',
     problemLabel: 'Problem',
+    challengesLabel: 'Challenges',
     solutionLabel: 'Solution',
     toolsLabel: 'Toolset used',
     openLinkLabel: 'Open on GitHub',
@@ -221,6 +222,11 @@ export const en = {
         imageAlt: 'Low-latency networking architecture diagram for HFT project',
         problem:
           'High-frequency trading environments lose real advantage when network latency, jitter, and timing drift are not controlled across the full path.',
+        challenges: [
+          'Finding compatible hardware across the entire cluster to match target networking and performance capabilities such as LACP support.',
+          'Designing the cluster to be future-proof so it can expand by adding servers and connectivity while keeping acceptable capacity.',
+          'Creating a diagnosis and upgrade plan together with spare-part management for the future.'
+        ],
         solution:
           'This project designs a low-latency network architecture around clean traffic paths, kernel-bypass-aware tuning, multicast optimization, and precise time synchronization so market data and order flow stay deterministic.',
         tools: ['Linux networking', 'Kernel bypass', 'Multicast tuning', 'PTP time sync', 'Low-latency routing'],
@@ -233,6 +239,11 @@ export const en = {
         imageAlt: 'Ansible Kafka cluster automation overview diagram',
         problem:
           'Most Kafka installation tutorials stop at a basic running cluster and miss production surrounding needs like deep metrics visibility, developer-friendly management UI, and controlled external broker access through firewalls.',
+        challenges: [
+          'Making external NAT broker access reliable without breaking Kafka metadata and client routing.',
+          'Bundling JMX Exporter and Redpanda Console as first-class deployment components, not afterthoughts.',
+          'Keeping the playbooks idempotent while supporting safe cluster expansion and repeated runs.'
+        ],
         solution:
           'This implementation extends beyond vanilla playbooks by automating JMX Exporter integration for Kafka beans and metrics, deploying Redpanda Console for visual day-to-day operations, and configuring NAT-based broker access for secure external connectivity. With idempotent Ansible orchestration, the cluster is delivered out of the box as reliable, observable, developer-manageable, and straightforward to expand.',
         tools: ['Ansible', 'Kafka', 'Zookeeper', 'JMX Exporter', 'Redpanda Console', 'NAT broker access'],
@@ -245,6 +256,11 @@ export const en = {
         imageAlt: 'Docker Ray cluster deployment overview diagram',
         problem:
           'A small data team needed a Ray cluster they could trust without becoming infrastructure experts. Standard setups were not enough because jobs had to keep running reliably even when node capacity changed during the day or workers dropped out of the cluster.',
+        challenges: [
+          'Handling worker loss and resource drift without crashing active distributed jobs.',
+          'Maintaining a consistent runtime across heterogeneous nodes and changing workloads.',
+          'Eliminating unfinished headless jobs during daily fluctuations in capacity and scheduling pressure.'
+        ],
         solution:
           'This deployment provides a transparent but production-ready Ray runtime where cluster membership and resource changes are handled gracefully. When a node becomes unavailable or loses capacity, workloads are drained and rescheduled to healthy nodes instead of crashing. The result is robust job execution that finishes with usable outputs, reducing headless unfinished jobs caused by shifting resource allocation.',
         tools: ['Docker', 'Ray', 'Python', 'Container networking', 'Distributed compute'],
@@ -257,6 +273,11 @@ export const en = {
         imageAlt: 'PostgreSQL and Patroni high-availability architecture diagram',
         problem:
           'The platform started with a single-node PostgreSQL setup that worked initially, but growing data importance and heavier dashboard query load began to disrupt write performance and introduced a clear availability risk.',
+        challenges: [
+          'Separating read and write paths without forcing risky changes in application query behavior.',
+          'Keeping failover deterministic across Patroni, etcd, and HAProxy coordination boundaries.',
+          'Protecting write throughput while dashboards and reporting generate bursty read pressure.'
+        ],
         solution:
           'The solution migrates to a Patroni-based HA PostgreSQL topology with etcd consensus and HAProxy traffic control, enabling practical read/write role separation and stronger resilience across separate storage locations. By directing panel and reporting queries toward read paths while protecting write paths, Grafana refreshes remain smooth and write workloads stay stable under load.',
         tools: ['PostgreSQL', 'Patroni', 'etcd', 'HAProxy', 'High availability'],
@@ -269,6 +290,11 @@ export const en = {
           imageAlt: 'Systemd services health monitoring infographic',
         problem:
             'A Java microservices platform with mixed service profiles needed reliable state tracking across 84 systemd service units in 2 clusters. The team could not capture restart and state-change events accurately with basic pull-based tooling like node_exporter.',
+          challenges: [
+            'Making chunks of mass data through Pushgateway to overcome rate limits.',
+            'Finding a visualization approach in Grafana by editing the state storage method.',
+            'Filtering mass service restarts to create awareness and avoid chatty alerting.'
+          ],
         solution:
           'This push-based monitor subscribes to D-Bus systemd events and tracks service lifecycle transitions in real time across both clusters. It escalates important incidents to Telegram, publishes state time series to Prometheus Pushgateway, and enables Grafana visualization for operational trend analysis. This removed service-state blind spots and eliminated missing state information, so all Java service units stay continuously observable and operational actions are based on complete state data.',
         tools: ['Python', 'D-Bus', 'systemd', 'Linux monitoring', 'Service automation'],
@@ -281,6 +307,11 @@ export const en = {
           imageAlt: 'Monitoring with Prometheus and Grafana architecture infographic',
         problem:
           'Installing one Prometheus and one Grafana instance is straightforward, but building complete environment awareness is not. Without broad metric collection across all exporters and sources, teams miss critical signals from SSL certificate health to deep resource indicators like CPU costop and disk write latency.',
+          challenges: [
+            'Normalizing metrics from many exporters without losing context or increasing operational noise.',
+            'Controlling cardinality and scrape overhead while still capturing deep platform signals.',
+            'Mapping alerts to clear responder actions to reduce time to detection in real incidents.'
+          ],
         solution:
           'This solution centralizes metrics from a wide exporter/gatherer ecosystem into a single observability pipeline, then visualizes them in Grafana with clear operational dashboards. It significantly improves end-to-end awareness, provides precise and actionable insights, strengthens alerting quality, and reduces time to detection for production issues.',
         tools: ['Prometheus', 'Grafana', 'Exporters', 'Pushgateway', 'Alerting', 'Observability'],
@@ -293,6 +324,11 @@ export const en = {
         imageAlt: 'pfSense cluster security implementation overview',
         problem:
           'The infrastructure initially relied on a single FortiGate firewall layer. As multi-VLAN segmentation, large rule sets, and LACP striping across the cluster grew in complexity, a more flexible secondary security and inter-VLAN routing layer became necessary without introducing excessive cost.',
+        challenges: [
+          'Translating complex FortiGate-era policies into maintainable inter-VLAN pfSense rule sets.',
+          'Designing CARP and LACP behavior to avoid asymmetric routing and failover edge cases.',
+          'Delivering enterprise-grade HA on cost-controlled hardware without compromising resilience.'
+        ],
         solution:
           'This implementation deploys pfSense in HA mode as a secondary security tier, handling inter-VLAN routing and granular access policy control while preserving high availability. Although HA significantly increases setup complexity, the design uses HP DL160 servers to extend resiliency at both software and hardware layers for enterprise-grade operation.',
         tools: ['pfSense', 'CARP', 'Inter-VLAN routing', 'LACP', 'Firewall policy', 'HP DL160'],
@@ -305,6 +341,11 @@ export const en = {
         imageAlt: 'Job search automation solution overview',
         problem:
           'When scanning large volumes of job listings or content, most pages are only partially relevant, forcing teams to manually evaluate each one against complex criteria and wasting time on low-fit opportunities.',
+        challenges: [
+          'Keeping relevance scoring explainable while keyword groups and weighting logic evolve.',
+          'Balancing a fast popup workflow with a deeper configuration experience for power users.',
+          'Handling noisy page content and SPA updates without producing unstable scoring outputs.'
+        ],
         solution:
           'This open-source Chrome extension (MV3) uses a weighted keyword-matching model with group and phrase-level signals to score page relevance consistently and explainably. It offers a quick popup for fast actions and a full settings UI for deep configuration, optional LLM-assisted keyword expansion, and data export for integration into automation workflows.',
         tools: ['JavaScript', 'Chrome Extension', 'MV3', 'Storage APIs', 'Content Scripts', 'LLM Integration'],

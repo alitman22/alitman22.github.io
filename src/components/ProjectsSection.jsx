@@ -116,31 +116,33 @@ function ProjectsSection({ copy, darkMode }) {
 
                 <div className="project-expanded">
                   <div className="project-layout">
-                    <div className="project-media project-media-inline">
-                      {project.href ? (
-                        <a
-                          href={project.href}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="project-media-link"
-                          aria-label={`Go to ${project.subtitle} project in GitHub`}
-                        >
+                    <div className="project-media-column">
+                      <div className="project-media project-media-inline">
+                        {project.href ? (
+                          <a
+                            href={project.href}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="project-media-link"
+                            aria-label={`Go to ${project.subtitle} project in GitHub`}
+                          >
+                            <ProjectVisual
+                              projectTitle={project.title}
+                              darkMode={darkMode}
+                              image={project.image}
+                              imageAlt={project.imageAlt}
+                            />
+                            <span className="project-media-footnote">Go to project in GitHub</span>
+                          </a>
+                        ) : (
                           <ProjectVisual
                             projectTitle={project.title}
                             darkMode={darkMode}
                             image={project.image}
                             imageAlt={project.imageAlt}
                           />
-                          <span className="project-media-footnote">Go to project in GitHub</span>
-                        </a>
-                      ) : (
-                        <ProjectVisual
-                          projectTitle={project.title}
-                          darkMode={darkMode}
-                          image={project.image}
-                          imageAlt={project.imageAlt}
-                        />
-                      )}
+                        )}
+                      </div>
                     </div>
 
                     <div className="project-copy">
@@ -163,6 +165,20 @@ function ProjectsSection({ copy, darkMode }) {
                           <p className="project-description">{project.problem}</p>
                         </section>
 
+                        {Array.isArray(project.challenges) && project.challenges.length > 0 && (
+                          <section className="project-detail-block">
+                            <h4 className="project-detail-title project-detail-title--challenges">
+                              <i className="fa-solid fa-mountain" aria-hidden="true"></i>
+                              {copy.projectsSection.challengesLabel}
+                            </h4>
+                            <ul className="project-challenges" aria-label={`${project.title} challenges`}>
+                              {project.challenges.map((challenge) => (
+                                <li key={challenge}>{challenge}</li>
+                              ))}
+                            </ul>
+                          </section>
+                        )}
+
                         <section className="project-detail-block">
                           <h4 className="project-detail-title project-detail-title--solution">
                             <i className="fa-solid fa-circle-check" aria-hidden="true"></i>
@@ -171,21 +187,20 @@ function ProjectsSection({ copy, darkMode }) {
                           <p className="project-description">{project.solution}</p>
                         </section>
 
-                        <section className="project-detail-block">
-                          <h4 className="project-detail-title">{copy.projectsSection.toolsLabel}</h4>
-                          <div className="project-tools" aria-label={`${project.title} tools`}>
-                            {project.tools.map((tool) => (
-                              <span key={tool} className="project-tool-badge">
-                                <i className={iconByTool[tool] || 'fa-solid fa-wrench'} aria-hidden="true"></i>
-                                <span>{tool}</span>
-                              </span>
-                            ))}
-                          </div>
-                        </section>
-
                       </div>
                     </div>
                   </div>
+
+                  <section className="project-toolset-bar">
+                    <div className="project-tools" aria-label={`${project.title} tools`}>
+                      {project.tools.map((tool) => (
+                        <span key={tool} className="project-tool-badge">
+                          <i className={iconByTool[tool] || 'fa-solid fa-wrench'} aria-hidden="true"></i>
+                          <span>{tool}</span>
+                        </span>
+                      ))}
+                    </div>
+                  </section>
                 </div>
               </details>
             );
