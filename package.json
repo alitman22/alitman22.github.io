@@ -13,6 +13,7 @@
     "setup-hooks": "node -e \"const{copyFileSync,chmodSync}=require('fs');copyFileSync('scripts/pre-push.sh','.git/hooks/pre-push');try{chmodSync('.git/hooks/pre-push','755')}catch(e){};console.log('Hook installed.')\""
   },
   "dependencies": {
+    "d3": "^7.9.0",
     "framer-motion": "^12.36.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"

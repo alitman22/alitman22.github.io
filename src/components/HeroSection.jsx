@@ -3,6 +3,7 @@ import { resumeMap } from '../content/region';
 function HeroSection({ copy, language, isTurkeyRegion }) {
   const selectedResume = isTurkeyRegion ? resumeMap.TR : resumeMap.GLOBAL;
   const resumeRegionText = language === 'tr' ? selectedResume.regionTextTr : selectedResume.regionTextEn;
+  const regionAvailabilityText = isTurkeyRegion ? copy.hero.availabilityTurkey : copy.hero.availabilityGlobal;
 
   return (
     <header className="hero">
@@ -33,32 +34,35 @@ function HeroSection({ copy, language, isTurkeyRegion }) {
             <p className="hero-terminal-output">
               {copy.hero.summary}
             </p>
+
+            <div className="cta-row hero-terminal-cta">
+              <a href="#contact" className="cta-button">{copy.hero.ctaPrimary}</a>
+              <a href="#projects" className="cta-button">{copy.hero.ctaSecondary}</a>
+            </div>
           </div>
-        </div>
-
-        <div className="cta-row">
-          <a href="#contact" className="cta-button">{copy.hero.ctaPrimary}</a>
-          <a href="#projects" className="cta-button">{copy.hero.ctaSecondary}</a>
-        </div>
-
-        <div className="resume-highlight" aria-live="polite">
-          <strong>{copy.hero.resumeLabel}</strong>
-          <a className="resume-link" href={selectedResume.href} download>
-            <i className="fa-solid fa-download" aria-hidden="true"></i>
-            {copy.hero.resumeDownload}
-          </a>
-          <span className="resume-note">{resumeRegionText}</span>
-        </div>
-
-        <div className="hero-meta">
-          <span><i className="fa-solid fa-map-pin" aria-hidden="true"></i>{copy.hero.location}</span>
-          <a href={`mailto:${copy.hero.email}`}><i className="fa-solid fa-envelope" aria-hidden="true"></i>{copy.hero.email}</a>
-          {isTurkeyRegion && <a href="tel:+905016403103"><i className="fa-solid fa-phone" aria-hidden="true"></i>{copy.hero.phone}</a>}
         </div>
       </div>
 
       <div className="profile-wrapper">
         <img src="assets/profile.jpg" alt="Ali Fattahi - DevOps Engineer" />
+      </div>
+
+      <div className="hero-bottom">
+        <div className="resume-highlight" aria-live="polite">
+          <a className="resume-link" href={selectedResume.href} download>
+            <i className="fa-solid fa-download" aria-hidden="true"></i>
+            {copy.hero.resumeDownload}
+          </a>
+          <span className="resume-note">{resumeRegionText}</span>
+          <span className="resume-availability-sep" aria-hidden="true">|</span>
+          <span className="resume-availability">{regionAvailabilityText}</span>
+        </div>
+
+        <div className="hero-meta">
+          <span><i className="fa-solid fa-location-dot" aria-hidden="true"></i>{copy.hero.location}</span>
+          <a href={`mailto:${copy.hero.email}`}><i className="fa-solid fa-envelope" aria-hidden="true"></i>{copy.hero.email}</a>
+          {isTurkeyRegion && <a href="tel:+905016403103"><i className="fa-solid fa-phone" aria-hidden="true"></i>{copy.hero.phone}</a>}
+        </div>
       </div>
     </header>
   );

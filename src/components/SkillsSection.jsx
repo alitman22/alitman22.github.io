@@ -10,6 +10,12 @@ function SkillsSection({ copy }) {
 
   const iconBySkill = {
     Linux: 'devicon-linux-plain',
+    Ubuntu: 'devicon-ubuntu-plain colored',
+    RedHat: 'devicon-redhat-plain colored',
+    FreeBSD: 'devicon-freebsd-plain colored',
+    'Windows Server': 'fa-brands fa-windows',
+    'Cisco IOS': 'fa-solid fa-network-wired',
+    'Photon OS': 'fa-solid fa-circle-nodes',
     Ansible: 'devicon-ansible-plain colored',
     Terraform: 'devicon-terraform-plain colored',
     Nomad: 'devicon-nomad-plain colored',
@@ -24,24 +30,38 @@ function SkillsSection({ copy }) {
     AWS: 'devicon-amazonwebservices-plain-wordmark colored',
     'HPE/Dell': 'fa-solid fa-server',
     'HPE / Dell Enterprise Servers': 'fa-solid fa-server',
+    HPE: 'fa-solid fa-server',
+    DELL: 'fa-solid fa-server',
+    SuperMicro: 'fa-solid fa-microchip',
+    Cisco: 'fa-solid fa-network-wired',
+    Fiber: 'fa-solid fa-plug',
+    'Rack Design': 'fa-solid fa-layer-group',
     'EMC/TrueNAS': 'fa-solid fa-hard-drive',
     'EMC / TrueNAS Storage': 'fa-solid fa-hard-drive',
+    EMC: 'fa-solid fa-hard-drive',
+    'Cabling Standards': 'fa-solid fa-ethernet',
     Docker: 'devicon-docker-plain colored',
     'Docker Swarm': 'devicon-docker-plain colored',
     OpenStack: 'devicon-openstack-plain colored',
+    DigitalOcean: 'devicon-digitalocean-plain colored',
+    Hetzner: 'fa-solid fa-cloud',
+    LeaseWeb: 'fa-solid fa-server',
     Postgres: 'devicon-postgresql-plain colored',
     PostgreSQL: 'devicon-postgresql-plain colored',
     MySQL: 'devicon-mysql-plain colored',
     MongoDB: 'devicon-mongodb-plain colored',
     Redis: 'devicon-redis-plain colored',
+    ClickHouse: 'devicon-clickhouse-plain colored',
     Patroni: 'fa-solid fa-database',
-    HAProxy: 'devicon-haproxy-plain colored',
+    HAProxy: 'fa-solid fa-route',
     PgBouncer: 'fa-solid fa-network-wired',
     ETCD: 'fa-solid fa-layer-group',
     etcd: 'fa-solid fa-layer-group',
     Grafana: 'devicon-grafana-plain',
     Prometheus: 'devicon-prometheus-original colored',
     'ELK/Graylog': 'devicon-elasticsearch-plain colored',
+    'ELK Stack': 'devicon-elasticsearch-plain colored',
+    Graylog: 'fa-solid fa-file-lines',
     'ELK Stack / Graylog': 'devicon-elasticsearch-plain colored',
     Zabbix: 'fa-solid fa-chart-line',
     Percona: 'fa-solid fa-table',
@@ -75,20 +95,21 @@ function SkillsSection({ copy }) {
 
       <div className="stack-lg">
         <div className="glass-card" data-terminal-file={toTerminalFileName(copy.skillsSection.technicalTitle)}>
-          <h4 className="subheading">{copy.skillsSection.technicalTitle}</h4>
           <div className="skills-grid">
-            {copy.skillsSection.categories.map((category) => (
-              <article key={category.name} className="skills-card">
-                <h5>{category.name}</h5>
-                <div className="badge-wrap">
-                  {category.items.map((item) => (
-                    <span key={item} className="skill-badge">
-                      <i className={iconBySkill[item] || 'fa-solid fa-microchip'} aria-hidden="true"></i>
-                      {item}
+            {copy.skillsSection.categories.map((category, idx) => (
+              <div key={idx} className="skill-category-card">
+                <h5 className="category-title">{category.name}</h5>
+                <div className="skill-badges">
+                  {category.items.map((skill, i) => (
+                    <span key={i} className="skill-badge">
+                      {iconBySkill[skill] && (
+                        <i className={iconBySkill[skill]} aria-hidden="true"></i>
+                      )}
+                      {skill}
                     </span>
                   ))}
                 </div>
-              </article>
+              </div>
             ))}
           </div>
         </div>

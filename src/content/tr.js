@@ -21,6 +21,8 @@ export const tr = {
     location: 'Antalya, Türkiye',
     email: 'alit.fattahi@gmail.com',
     phone: '(+90) 501 640 3103',
+    availabilityGlobal: 'Bu yetkinlikleri Almanya veya Hollanda\'daki yenilikçi ekiplere sunabileceğim yeni fırsatlar arıyorum.',
+    availabilityTurkey: 'Türkiye çalışma izni sahibiyim; derhal transfer olabilirim ve remote-first çalışmaya veya İstanbul ya da Ankara gibi şehirlere taşınarak ofisten çalışmaya hazırım.',
     resumeLabel: 'Özgeçmiş:',
     resumeDownload: 'Özgeçmişi İndir'
   },
@@ -135,7 +137,7 @@ export const tr = {
       },
       {
         name: 'Cloud & Virtualization',
-        items: ['AWS', 'VMware (vSphere/vSAN)', 'OpenStack']
+        items: ['AWS', 'VMware', 'OpenStack', 'DigitalOcean', 'Hetzner', 'LeaseWeb']
       },
       {
         name: 'CI/CD & Version Control',
@@ -143,11 +145,11 @@ export const tr = {
       },
       {
         name: 'Observability, Monitoring & Logging',
-        items: ['Prometheus', 'Grafana', 'ELK Stack / Graylog', 'Loki', 'Alertmanager', 'Zabbix', 'Percona Monitoring']
+        items: ['Prometheus', 'Grafana', 'ELK Stack', 'Graylog', 'Loki', 'Alertmanager', 'Zabbix', 'Percona']
       },
       {
         name: 'Databases & High Availability',
-        items: ['PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'Patroni', 'HAProxy', 'PgBouncer', 'etcd']
+        items: ['PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'ClickHouse', 'Patroni', 'HAProxy', 'PgBouncer', 'etcd']
       },
       {
         name: 'Networking & Security',
@@ -155,11 +157,11 @@ export const tr = {
       },
       {
         name: 'Operating Systems & Scripting',
-        items: ['Linux Architecture', 'Bash', 'Python', 'Systemd']
+        items: ['Ubuntu', 'RedHat', 'FreeBSD', 'Bash', 'Python', 'Windows Server', 'Cisco IOS', 'Photon OS']
       },
       {
         name: 'Datacenter & Hardware Infrastructure',
-        items: ['HPE / Dell Enterprise Servers', 'EMC / TrueNAS Storage']
+        items: ['HPE', 'DELL', 'SuperMicro', 'Cisco', 'EMC', 'Cabling Standards', 'Fiber', 'Rack Design']
       }
     ],
     methodologyTitle: 'Liderlik ve Metodoloji',

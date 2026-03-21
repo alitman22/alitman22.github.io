@@ -15,12 +15,14 @@ export const en = {
     name: 'Ali Fattahi',
     role: 'Senior DevOps Engineer\nIT Infrastructure Architect',
     summary:
-      'Building resilient, scalable infrastructure through automation and DevOps best practices. I transform complex technical challenges into elegant, high-performance solutions that power mission-critical systems.',
+      'I architect and automate high-availability infrastructure, optimize Linux and network performance for low-latency workloads, and build production-grade CI/CD and observability platforms that keep mission-critical systems fast, secure, and resilient at scale.',
     ctaPrimary: 'Get In Touch',
     ctaSecondary: 'View Projects',
     location: 'Antalya, Türkiye',
     email: 'alit.fattahi@gmail.com',
     phone: '(+90) 501 640 3103',
+    availabilityGlobal: 'I am currently seeking new opportunities to bring these skills to innovative teams in Germany or the Netherlands.',
+    availabilityTurkey: "I'm a Turkish Work Permit holder available for immediate transfer and ready for remote-first or to move to cities like Istanbul or Ankara for on-site jobs.",
     resumeLabel: 'Resume:',
     resumeDownload: 'Download Resume'
   },
@@ -133,7 +135,7 @@ export const en = {
       },
       {
         name: 'Cloud & Virtualization',
-        items: ['AWS', 'VMware (vSphere/vSAN)', 'OpenStack']
+        items: ['AWS', 'VMware', 'OpenStack', 'DigitalOcean', 'Hetzner', 'LeaseWeb']
       },
       {
         name: 'CI/CD & Version Control',
@@ -141,11 +143,11 @@ export const en = {
       },
       {
         name: 'Observability, Monitoring & Logging',
-        items: ['Prometheus', 'Grafana', 'ELK Stack / Graylog', 'Loki', 'Alertmanager', 'Zabbix', 'Percona Monitoring']
+        items: ['Prometheus', 'Grafana', 'ELK Stack', 'Graylog', 'Loki', 'Alertmanager', 'Zabbix', 'Percona']
       },
       {
         name: 'Databases & High Availability',
-        items: ['PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'Patroni', 'HAProxy', 'PgBouncer', 'etcd']
+        items: ['PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'ClickHouse', 'Patroni', 'HAProxy', 'PgBouncer', 'etcd']
       },
       {
         name: 'Networking & Security',
@@ -153,11 +155,11 @@ export const en = {
       },
       {
         name: 'Operating Systems & Scripting',
-        items: ['Linux Architecture', 'Bash', 'Python', 'Systemd']
+        items: ['Ubuntu', 'RedHat', 'FreeBSD', 'Bash', 'Python', 'Windows Server', 'Cisco IOS', 'Photon OS']
       },
       {
         name: 'Datacenter & Hardware Infrastructure',
-        items: ['HPE / Dell Enterprise Servers', 'EMC / TrueNAS Storage']
+        items: ['HPE', 'DELL', 'SuperMicro', 'Cisco', 'EMC', 'Cabling Standards', 'Fiber', 'Rack Design']
       }
     ],
     methodologyTitle: 'Leadership & Methodology',
