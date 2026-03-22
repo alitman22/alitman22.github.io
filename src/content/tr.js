@@ -58,7 +58,7 @@ export const tr = {
     }
   },
   experience: {
-    title: 'Profesyonel Yolculuk',
+    title: 'Deneyim',
     jobs: [
       {
         role: 'DevOps ve Linux Sistem Yöneticisi',
@@ -124,7 +124,7 @@ export const tr = {
     ]
   },
   skillsSection: {
-    title: 'Temel Uzmanlık Alanları',
+    title: 'Yetenekler',
     technicalTitle: 'Teknik Yetkinlikler',
     categories: [
       {
@@ -177,7 +177,7 @@ export const tr = {
     ]
   },
   study: {
-    title: 'Güncel Odak ve Sertifikasyonlar',
+    title: 'Çalışma',
     intro:
       'Altyapı alanında yerinde saymak bir risktir. Süregelen teknik gelişimim; bulut tabanlı orkestrasyon, ileri düzey mimari tasarım ve kurumsal ölçeklenebilirliği taşıyan araçlarda ustalaşmaya odaklanır.',
     certificationsTitle: 'Aktif Sertifikasyon Rotaları',
@@ -209,7 +209,7 @@ export const tr = {
     ]
   },
   projectsSection: {
-    title: 'Öne Çıkan Projeler',
+    title: 'Projeler',
     kicker: 'Sahadan Gerçek Hikayeler',
     problemLabel: 'Problem',
     challengesLabel: 'Zorluklar',
@@ -368,7 +368,7 @@ export const tr = {
     linkedin: 'LinkedIn Profili'
   },
   footer: {
-    designed: 'Tasarım ve Özelleştirme: Ali Fattahi',
-    built: '2026 - v2.15.1'
+    designed: 'Ali Fattahi',
+    built: '2026'
   }
 };

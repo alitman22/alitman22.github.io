@@ -27,7 +27,7 @@ export const en = {
     resumeDownload: 'Download Resume'
   },
   about: {
-    title: 'About Me',
+    title: 'About',
     paragraphs: [
       'I am a Senior DevOps Engineer and Infrastructure Architect with over a decade of experience designing, scaling, and securing enterprise IT environments. My expertise bridges the gap between deep physical infrastructure and modern cloud-native orchestration. I approach every challenge with a strict engineering philosophy: understand the core bottleneck, architect for high availability, and automate relentlessly.',
       'Throughout my career, I have navigated the extremes of infrastructure demands, from managing petabytes of storage in premier national datacenters to stripping microsecond latency out of high-frequency trading networks. My foundation in Network Engineering (BSc) allows me to troubleshoot and optimize at the packet level, while my DevOps expertise ensures those systems deploy rapidly, reliably, and consistently at scale.',
@@ -56,7 +56,7 @@ export const en = {
     }
   },
   experience: {
-    title: 'Journey',
+    title: 'Professional Journey',
     jobs: [
       {
         role: 'DevOps & Linux System Administrator',
@@ -122,7 +122,7 @@ export const en = {
     ]
   },
   skillsSection: {
-    title: 'Core Expertise',
+    title: 'Core ToolBox',
     technicalTitle: 'Technical Skills',
     categories: [
       {
@@ -175,7 +175,7 @@ export const en = {
     ]
   },
   study: {
-    title: 'Current Focus & Certifications',
+    title: 'Focus & Certifications',
     intro:
       'In infrastructure, stagnation is a liability. My ongoing technical development focuses strictly on cloud-native orchestration, advanced architectural design, and mastering the tools that drive enterprise scalability.',
     certificationsTitle: 'Active Certification Tracks',
