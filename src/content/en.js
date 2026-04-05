@@ -8,6 +8,7 @@ export const en = {
     skills: 'Skills',
     study: 'Study',
     projects: 'Projects',
+    stories: 'War Stories',
     contact: 'Get In Touch'
   },
   hero: {
@@ -131,7 +132,7 @@ export const en = {
       },
       {
         name: 'Containerization & Orchestration',
-        items: ['Kubernetes (K8s)', 'Docker', 'Docker Swarm', 'Nomad']
+        items: ['Kubernetes (K8s)', 'Docker', 'Docker Swarm', 'Nomad', 'Podman', 'Containerd']
       },
       {
         name: 'Cloud & Virtualization',
@@ -143,15 +144,15 @@ export const en = {
       },
       {
         name: 'Observability, Monitoring & Logging',
-        items: ['Prometheus', 'Grafana', 'ELK Stack', 'Graylog', 'Loki', 'Alertmanager', 'Zabbix', 'Percona']
+        items: ['Prometheus', 'Grafana', 'ELK Stack', 'Graylog', 'Loki', 'Alertmanager', 'Zabbix', 'Percona', 'OpenTelemetry', 'Jaeger', 'Fluentd']
       },
       {
         name: 'Databases & High Availability',
-        items: ['PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'ClickHouse', 'Patroni', 'HAProxy', 'PgBouncer', 'etcd']
+        items: ['PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'ClickHouse', 'Patroni', 'HAProxy', 'PgBouncer', 'etcd', 'GraphQL']
       },
       {
         name: 'Networking & Security',
-        items: ['BGP', 'pfSense', 'Fortinet', 'HashiCorp Vault', 'OpenLDAP', 'WireGuard', 'Elastic SIEM']
+        items: ['BGP', 'pfSense', 'Fortinet', 'HashiCorp Vault', 'OpenLDAP', 'WireGuard', 'Elastic SIEM', 'Istio', 'Linkerd', 'Consul']
       },
       {
         name: 'Operating Systems & Scripting',
@@ -160,6 +161,19 @@ export const en = {
       {
         name: 'Datacenter & Hardware Infrastructure',
         items: ['HPE', 'DELL', 'SuperMicro', 'Cisco', 'EMC', 'Cabling Standards', 'Fiber', 'Rack Design']
+      }
+      ,
+      {
+        name: 'Message Queues & Middlewares',
+        items: ['Kafka', 'RabbitMQ', 'PaceMaker', 'Corosync']
+      },
+      {
+        name: 'Webservers & API tools',
+        items: ['Apache', 'Nginx', 'Traefik', 'Squid', 'Caddy', 'Kong', 'PostMan']
+      },
+      {
+        name: 'MLOps & DataScience Tools',
+        items: ['Apache Airflow', 'Ray Cluster', 'Spark', 'Hazelcast']
       }
     ],
     methodologyTitle: 'Leadership & Methodology',
@@ -352,6 +366,53 @@ export const en = {
           'This open-source Chrome extension (MV3) uses a weighted keyword-matching model with group and phrase-level signals to score page relevance consistently and explainably. It offers a quick popup for fast actions and a full settings UI for deep configuration, optional LLM-assisted keyword expansion, and data export for integration into automation workflows.',
         tools: ['JavaScript', 'Chrome Extension', 'MV3', 'Storage APIs', 'Content Scripts', 'LLM Integration'],
         href: 'https://github.com/alitman22/job-match-radar-extension'
+      }
+    ]
+  },
+  experienceStories: {
+    title: 'War Stories & Case Studies',
+    kicker: 'Battle-Tested Experience',
+    intro:
+      'Real infrastructure challenges demand real solutions. Below are selected case studies from my career—incidents I debugged, architecture decisions I made, and their outcomes. These stories reveal not just technical skills, but resilience, methodology, and the hard lessons that shape production-grade engineering.',
+    items: [
+      {
+        title: '🌑 Midnight Fall: Mitigating a vSAN Thundering Herd',
+        subtitle: 'From blind monitoring to out-of-band observability',
+        severity: 'Critical',
+        background:
+          'After architecting a centralized on-premises environment to migrate from fragmented co-hosted infrastructure, we stood up a VMware vSAN cluster with 120 Ubuntu 20.04 VMs running heavy data services. Hardware compromise forced us to use consumer-grade Samsung 870 EVO SSDs (1TB) for the capacity tier instead of enterprise models—a decision that would later become critical to the incident.',
+        problem:
+          'At exactly 12:00 AM every night, the cluster hit a wall: services stuttered, databases lagged, VMs hung, and the monitoring stack itself failed alongside the application layer, leaving us blind. The outages lasted 30 minutes and happened with perfect predictability, yet no obvious culprit appeared in vCenter.',
+        investigation: [
+          'Checked vCenter for scheduled jobs, DRS migrations, and snapshot consolidations—none found.',
+          'Disabled backup schedules thinking they were the trigger—problem persisted.',
+          'Decoupled observability by migrating monitoring tools out of the cluster, revealing the real issue: IOPS and latency spiked at midnight.',
+          'Isolated workloads by shutting down heavy I/O VMs—problem remained, though less severe.',
+          'Benchmarked the write cliff by custom-scripting disk stress on 10 VMs, reproducing the exact latency curve.'
+        ],
+        rootCause:
+          'Ubuntu 20.04′s default logrotate job (triggered by systemd timer/cron.daily at 12:00 AM) was running simultaneously on all 120 VMs. This synchronized I/O burst exhausted the consumer SSDs′ small SLC write caches, causing them to hit a "write cliff" where latency jumped from microseconds to hundreds of milliseconds. The thundering herd saturated vSAN′s queue depth and cascaded across the entire cluster.',
+        remediationImmediate:
+          'Deployed a fleet-wide shell script to stagger logrotate and cron.daily schedules across a 3-hour window (00:00–03:00) on all existing VMs using Ansible. The next night, the cluster ran smoothly.',
+        remediationPermanent:
+          'Modified the base VM template to inject a bash script that randomizes log rotation timing (between 12:00 AM and 6:00 AM) on first boot. All new VMs now rotate logs at different times, permanently preventing the thundering herd.',
+        learnings: [
+          'Hardware compromise (cost-driven choices) can hide subtle failure modes that only surface under synchronized load.',
+          'Out-of-band observability is critical—move your monitoring infrastructure out of the system you′re monitoring.',
+          'Default OS behaviors at scale require explicit mitigation; do not assume they′ll stay benign.',
+          'Systematic isolation and reproducible benchmarking are far more powerful than guessing at logs.',
+          'First-boot template injection provides durable safeguards against future operational classes of issues.'
+        ],
+        skills: [
+          'VMware vSAN',
+          'Linux Systems Administration',
+          'Observability Design',
+          'Bash Scripting',
+          'Ansible Automation',
+          'Root Cause Analysis',
+          'System Benchmarking'
+        ],
+        repoLink: 'https://github.com/alitman22/midnight-fall'
       }
     ]
   },

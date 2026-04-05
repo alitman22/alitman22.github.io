@@ -106,8 +106,18 @@ function ProjectsSection({ copy, darkMode }) {
               <details className="project-disclosure" open={isLargeScreen || undefined}>
                 <summary className="project-summary">
                   <span className="project-summary-main">
-                    <span className="project-summary-subtitle">{project.subtitle}</span>
-                    <span className="project-summary-text">{toShortDescription(project.problem)}</span>
+                    <span className="project-summary-media" aria-hidden="true">
+                      <ProjectVisual
+                        projectTitle={project.title}
+                        darkMode={darkMode}
+                        image={project.image}
+                        imageAlt={project.imageAlt}
+                      />
+                    </span>
+                    <span className="project-summary-copy">
+                      <span className="project-summary-subtitle">{project.subtitle}</span>
+                      <span className="project-summary-text">{toShortDescription(project.problem)}</span>
+                    </span>
                   </span>
                   <span className="project-summary-toggle" aria-hidden="true">
                     <i className="fa-solid fa-chevron-down"></i>

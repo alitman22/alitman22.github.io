@@ -8,6 +8,7 @@ export const tr = {
     skills: 'Yetenekler',
     study: 'Çalışma',
     projects: 'Projeler',
+    stories: 'Saha Hikayeleri',
     contact: 'İletişime Geç'
   },
   hero: {
@@ -354,6 +355,54 @@ export const tr = {
           'Bu açık kaynak Chrome uzantısı (MV3), grup ve cümle düzeyinde sinyalleri kullanan ağırlıklı anahtar kelime eşleştirmesi modeli ile sayfa uyumluluğunu tutarlı ve açıklanabilir şekilde puanlandırır. Hızlı eylemler için popup ve derin yapılandırma için tam ayarlar arayüzü, isteğe bağlı LLM tabanlı anahtar kelime genişletmesi ve otomasyon iş akışlarına entegrasyon için veri dışa aktarma olanağı sunar.',
         tools: ['JavaScript', 'Chrome Extension', 'MV3', 'Storage APIs', 'Content Scripts', 'LLM Integration'],
         href: 'https://github.com/alitman22/job-match-radar-extension'
+      }
+    ]
+  },
+  experienceStories: {
+    title: 'Saha Hikayeleri ve Vaka Çalışmaları',
+    kicker: 'Sahada Test Edilmiş Deneyim',
+    intro:
+      'Gerçek altyapı sorunları gerçek çözümler ister. Aşağıda kariyerimden seçilmiş vaka hikayeleri yer alıyor: hata ayıklama süreçleri, mimari kararlar ve sonuçlar. Bu bölümler yalnızca teknik beceriyi değil; dayanıklılığı, metodolojiyi ve üretim sistemlerini şekillendiren dersleri gösterir.',
+    items: [
+      {
+        title: 'Midnight Fall: vSAN Thundering Herd Azaltımı',
+        subtitle: 'Kör izleme durumundan out-of-band gözlemlenebilirliğe',
+        severity: 'Critical',
+
+        background:
+          'Parcali altyapidan merkezi on-prem ortama gecis sonrasi, 120 Ubuntu 20.04 VM calistiran bir VMware vSAN yapisi kuruldu. Butce kisitlari nedeniyle kapasite katmaninda kurumsal SSD yerine tuketici sinifi diskler kullanildi; bu teknik borc sonradan kritik bir etki yaratti.',
+        problem:
+          'Her gece tam 00:00 civarinda cluster yavasliyor, servisler takiliyor ve veritabani gecikmeleri olusuyordu. En kritik noktada izleme katmani da etkilendiginden, olay aninda gozlem kabiliyeti ciddi sekilde dusuyordu.',
+        investigation: [
+          'vCenter uzerinden planli isler, DRS hareketleri ve snapshot operasyonlari kontrol edildi; dogrudan tetikleyici bulunamadi.',
+          'Yedekleme zamanlari devre disi birakilarak etkisi test edildi; problem devam etti.',
+          'Izleme bilesenleri cluster disina alinip out-of-band metrik toplandi; gece yarisinda IOPS ve latency zirveleri goruldu.',
+          'Yuksek I/O yukleri kisitlanarak etki ayrisimi yapildi; sorun siddeti azalsa da kok neden suruyordu.',
+          'Yazma ucurumu davranisi benchmark scriptleriyle tekrar uretildi ve gecikme profili dogrulandi.'
+        ],
+        rootCause:
+          'Ubuntu 20.04 varsayilan logrotate zamanlamasinin tum VMlerde ayni anda calismasi eszamanli I/O patlamasi olusturdu. Bu durum kapasite katmanindaki tuketici disklerde write-cliff etkisini tetikleyerek vSAN kuyruk derinligini doyurdu ve zincirleme servis etkisine yol acti.',
+        remediationImmediate:
+          'Mevcut VMlerde logrotate/cron calisma zamanlari 3 saatlik pencereye yayildi ve eszamanli tetiklenme etkisi ortadan kaldirildi.',
+        remediationPermanent:
+          'Template seviyesinde ilk acilista random zaman atayan kalici bir mekanizma eklendi; yeni VMlerde herd etkisi yapisal olarak engellendi.',
+        learnings: [
+          'Butce kaynakli donanim tavizleri, buyuk olcekte gizli ariza modlarini aciga cikarabilir.',
+          'Izleme sistemini izlenen ortamdan bagimsiz tutmak, kriz aninda karar kalitesini belirler.',
+          'Varsayilan OS davranislari buyuk filolarda mutlaka dagitik planlanmalidir.',
+          'Sistematik ayrisim ve tekrar uretilebilir benchmark, tahmine dayali yaklasimdan daha guvenilirdir.',
+          'Template seviyesinde kalici korumalar, benzer olaylarin tekrarini onler.'
+        ],
+        skills: [
+          'VMware vSAN',
+          'Linux Sistem Yonetimi',
+          'Gozlemlenebilirlik Tasarimi',
+          'Bash Scripting',
+          'Ansible Otomasyonu',
+          'Root Cause Analysis',
+          'Benchmark ve Performans Analizi'
+        ],
+        repoLink: 'https://github.com/alitman22/midnight-fall'
       }
     ]
   },

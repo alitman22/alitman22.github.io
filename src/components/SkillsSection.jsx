@@ -87,6 +87,39 @@ function SkillsSection({ copy }) {
     Backups: 'fa-solid fa-floppy-disk',
     Jenkins: 'devicon-jenkins-line colored',
     ArgoCD: 'fa-solid fa-diagram-project'
+    ,
+    // Containerization & Orchestration
+    Podman: 'fa-brands fa-docker',
+    Containerd: 'fa-solid fa-cube',
+    // Observability, Monitoring & Logging
+    OpenTelemetry: 'fa-solid fa-satellite-dish',
+    Jaeger: 'fa-solid fa-bug',
+    Fluentd: 'fa-solid fa-water',
+    // Databases & High Availability
+    GraphQL: 'devicon-graphql-plain colored',
+    // Networking & Security
+    Istio: 'fa-solid fa-water',
+    Linkerd: 'fa-solid fa-link',
+    Consul: 'fa-solid fa-compass'
+    ,
+    // Message Queues & Middlewares
+    Kafka: 'devicon-apachekafka-original colored',
+    RabbitMQ: 'devicon-rabbitmq-original colored',
+    PaceMaker: 'fa-solid fa-heart-pulse',
+    Corosync: 'fa-solid fa-circle-nodes',
+    // Webservers & API tools
+    Apache: 'devicon-apache-plain colored',
+    Nginx: 'devicon-nginx-original colored',
+    Traefik: 'fa-solid fa-road-barrier',
+    Squid: 'fa-solid fa-fish',
+    Caddy: 'fa-solid fa-leaf',
+    Kong: 'fa-solid fa-crown',
+    PostMan: 'fa-solid fa-paper-plane',
+    // MLOps & DataScience Tools
+    'Apache Airflow': 'devicon-apacheairflow-original colored',
+    'Ray Cluster': 'fa-solid fa-bolt',
+    Spark: 'devicon-apachespark-original colored',
+    Hazelcast: 'fa-solid fa-cubes'
   };
 
   return (

@@ -8,6 +8,7 @@ const ExperienceSection = lazy(() => import('./components/ExperienceSection'));
 const SkillsSection = lazy(() => import('./components/SkillsSection'));
 const StudySection = lazy(() => import('./components/StudySection'));
 const ProjectsSection = lazy(() => import('./components/ProjectsSection'));
+const ExperienceStories = lazy(() => import('./components/ExperienceStories'));
 const ContactSection = lazy(() => import('./components/ContactSection'));
 import { useLanguage } from './hooks/useLanguage';
 import { useRegion } from './hooks/useRegion';
@@ -62,6 +63,7 @@ function App() {
               <SkillsSection copy={copy} />
               <StudySection copy={copy} />
               <ProjectsSection copy={copy} darkMode={darkMode} />
+              <ExperienceStories copy={copy} />
               <ContactSection copy={copy} isTurkeyRegion={isTurkeyRegion} />
             </Suspense>
 

@@ -9,15 +9,39 @@
     <link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@600;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-385988489"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
+      (function initAnalytics() {
+        const GA_ID = '%VITE_GA_MEASUREMENT_ID%';
+        const isProdHost = !['localhost', '127.0.0.1'].includes(window.location.hostname);
+        const isValidGaId = /^G-[A-Z0-9]{6,}$/i.test(GA_ID);
 
-      gtag('config', 'G-385988489');
+        if (!isProdHost) {
+          console.info('[analytics] Skipped on local host.');
+          return;
+        }
+
+        if (!isValidGaId) {
+          console.warn('[analytics] Invalid or missing GA4 Measurement ID. Set VITE_GA_MEASUREMENT_ID (example: G-XXXXXXXXXX).');
+          return;
+        }
+
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function gtag() {
+          window.dataLayer.push(arguments);
+        };
+
+        window.gtag('js', new Date());
+        window.gtag('config', GA_ID, {
+          send_page_view: true,
+          anonymize_ip: true,
+          transport_type: 'beacon'
+        });
+
+        const gaScript = document.createElement('script');
+        gaScript.async = true;
+        gaScript.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(GA_ID)}`;
+        document.head.appendChild(gaScript);
+      })();
     </script>
   </head>
   <body>
