@@ -103,7 +103,7 @@ function renderDashboard(summary, daily, recent) {
     .map((row) => `
       <tr>
         <td>${formatDate(row.created_at)}</td>
-        <td>${row.country || '-'}${row.city ? ` / ${row.city}` : ''}</td>
+        <td>${row.country || '-'}${row.region ? ` / ${row.region}` : ''}${row.city ? ` / ${row.city}` : ''}</td>
         <td>${row.device_type || '-'} | ${row.os_name || '-'}</td>
         <td>${row.browser_name || '-'}</td>
         <td>${row.path || '-'}</td>
