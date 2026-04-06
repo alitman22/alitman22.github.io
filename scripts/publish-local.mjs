@@ -1,4 +1,4 @@
-import { cp, mkdir, readdir, rm, stat } from 'node:fs/promises';
+import { cp, mkdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -33,19 +33,9 @@ async function publishToRoot() {
 
   await mkdir(rootAssetsDir, { recursive: true });
 
-  const existingAssetEntries = await readdir(rootAssetsDir, { withFileTypes: true });
-  for (const entry of existingAssetEntries) {
-    if (!entry.isFile()) {
-      continue;
-    }
-
-    // Keep manually-managed static files (e.g., profile image, resumes).
-    if (!entry.name.endsWith('.js') && !entry.name.endsWith('.css')) {
-      continue;
-    }
-
-    await rm(path.join(rootAssetsDir, entry.name), { force: true });
-  }
+  // Keep old hashed JS/CSS bundles to avoid 404s for clients with cached HTML.
+  // GitHub Pages can serve stale HTML briefly, and removing old bundles causes
+  // transient failures (e.g., stats-<old-hash>.js not found).
 
   await cp(distAssetsDir, rootAssetsDir, { recursive: true, force: true });
 
