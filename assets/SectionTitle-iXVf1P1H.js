@@ -1,1 +1,0 @@
-import{j as s}from"./index-BHDl92wh.js";function i({number:e,title:t}){return s.jsxs("h2",{className:"section-title",children:[s.jsxs("span",{className:"section-number",children:[e,"."]}),t]})}export{i as S};
