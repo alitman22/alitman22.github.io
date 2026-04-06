@@ -593,7 +593,16 @@ app.get('/api/stats/daily', requireAuth, async (req, res) => {
 
 app.get('/api/stats/recent', requireAuth, async (req, res) => {
   try {
-    const limit = Math.min(Math.max(Number.parseInt(req.query.limit || '100', 10), 1), 400);
+    const perPage = Math.min(Math.max(Number.parseInt(req.query.perPage || '20', 10), 1), 100);
+    const page = Math.max(Number.parseInt(req.query.page || '1', 10), 1);
+    const offset = (page - 1) * perPage;
+
+    const totalResult = await db.execute('SELECT COUNT(*) AS total FROM events');
+    const total = toNumber(totalResult.rows[0]?.total);
+    const totalPages = Math.max(Math.ceil(total / perPage), 1);
+    const safePage = Math.min(page, totalPages);
+    const safeOffset = (safePage - 1) * perPage;
+
     const result = await db.execute({
       sql: `SELECT
         e.created_at,
@@ -613,11 +622,21 @@ app.get('/api/stats/recent', requireAuth, async (req, res) => {
       FROM events e
       LEFT JOIN visits v ON v.session_id = e.session_id
       ORDER BY e.created_at DESC
-      LIMIT ?`,
-      args: [limit]
+      LIMIT ?
+      OFFSET ?`,
+      args: [perPage, safeOffset]
     });
 
-    res.json({ ok: true, records: result.rows });
+    res.json({
+      ok: true,
+      records: result.rows,
+      paging: {
+        total,
+        page: safePage,
+        perPage,
+        totalPages
+      }
+    });
   } catch (error) {
     console.error('Recent stats error:', error);
     res.status(500).json({ ok: false, message: 'Failed to load recent events.' });

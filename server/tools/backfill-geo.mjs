@@ -34,12 +34,13 @@ async function main() {
 
   const client = createClient({ url: config.tursoUrl, authToken: config.tursoToken });
 
-  // Find visits with missing country but whose session has an IP
+  // Find visits with incomplete geo fields whose session has an IP.
   const result = await client.execute(`
     SELECT v.session_id, s.ip_address
     FROM visits v
     JOIN sessions s ON s.session_id = v.session_id
-    WHERE v.country IS NULL AND s.ip_address IS NOT NULL
+    WHERE (v.country IS NULL OR v.region IS NULL OR v.city IS NULL)
+      AND s.ip_address IS NOT NULL
   `);
 
   console.log(`Found ${result.rows.length} visit(s) with missing geo data.\n`);
@@ -71,7 +72,7 @@ async function main() {
       sql: 'UPDATE visits SET country = ?, city = ?, region = ? WHERE session_id = ?',
       args: [geo.country, geo.city, geo.region, row.session_id]
     });
-    console.log(`  ✅ ${row.session_id}: ${geo.city || '-'}, ${geo.country || '-'}`);
+    console.log(`  ✅ ${row.session_id}: ${geo.country || '-'} / ${geo.region || '-'} / ${geo.city || '-'}`);
     updated++;
   }
 

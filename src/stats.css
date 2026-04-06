@@ -317,6 +317,54 @@ tbody tr:hover td {
   background: transparent;
 }
 
+.recent-events-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+
+.recent-events-header h2 {
+  margin-bottom: 0;
+}
+
+.paging-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.paging-controls label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.per-page-select {
+  border: 1px solid var(--border-color);
+  background: rgba(11, 22, 42, 0.85);
+  color: var(--text-primary);
+  border-radius: 8px;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.85rem;
+}
+
+.paging-meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  min-width: 5.5rem;
+  text-align: center;
+}
+
+.refresh-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 1024px) {
   .stats-container {

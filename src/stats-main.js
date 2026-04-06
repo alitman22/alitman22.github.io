@@ -33,6 +33,17 @@ function formatDate(value) {
   return Number.isNaN(date.getTime()) ? value : date.toLocaleString();
 }
 
+function formatLocation(row) {
+  const country = row.country || '-';
+  const region = row.region || null;
+  const city = row.city || null;
+
+  if (!row.country && !region && !city) return '-';
+  if (region) return `${country} / ${region}`;
+  if (city) return `${country} / ${city}`;
+  return country;
+}
+
 function renderLogin(message = '') {
   root.innerHTML = `
     <main class="stats-container">
@@ -103,14 +114,15 @@ function renderDashboard(summary, daily, recent) {
     .map((row) => `
       <tr>
         <td>${formatDate(row.created_at)}</td>
-        <td>${row.country || '-'}${row.region ? ` / ${row.region}` : ''}${row.city ? ` / ${row.city}` : ''}</td>
+        <td>${formatLocation(row)}</td>
         <td>${row.device_type || '-'} | ${row.os_name || '-'}</td>
         <td>${row.browser_name || '-'}</td>
-        <td>${row.path || '-'}</td>
         <td>${row.referrer || '-'}</td>
       </tr>
     `)
     .join('');
+
+  const paging = recent.paging || { page: 1, perPage: recentPerPage, totalPages: 1, total: 0 };
 
   root.innerHTML = `
     <main class="stats-container">
@@ -165,7 +177,20 @@ function renderDashboard(summary, daily, recent) {
 
       <section class="stats-grid">
         <article class="stats-card">
-          <h2>Recent Events</h2>
+          <div class="recent-events-header">
+            <h2>Recent Events</h2>
+            <div class="paging-controls">
+              <label for="per-page-select">Rows</label>
+              <select id="per-page-select" class="per-page-select">
+                ${[10, 20, 50, 100]
+                  .map((value) => `<option value="${value}" ${paging.perPage === value ? 'selected' : ''}>${value}</option>`)
+                  .join('')}
+              </select>
+              <button id="prev-page-button" class="refresh-button" type="button" ${paging.page <= 1 ? 'disabled' : ''}>Prev</button>
+              <span class="paging-meta">Page ${paging.page} / ${paging.totalPages}</span>
+              <button id="next-page-button" class="refresh-button" type="button" ${paging.page >= paging.totalPages ? 'disabled' : ''}>Next</button>
+            </div>
+          </div>
           <div class="table-wrap">
             <table>
               <thead>
@@ -174,11 +199,10 @@ function renderDashboard(summary, daily, recent) {
                   <th>Location</th>
                   <th>Device</th>
                   <th>Browser</th>
-                  <th>Path</th>
                   <th>Referrer</th>
                 </tr>
               </thead>
-              <tbody>${recentRows || '<tr><td colspan="6">No events yet</td></tr>'}</tbody>
+              <tbody>${recentRows || '<tr><td colspan="5">No events yet</td></tr>'}</tbody>
             </table>
           </div>
         </article>
@@ -195,9 +219,34 @@ function renderDashboard(summary, daily, recent) {
   document.getElementById('refresh-button')?.addEventListener('click', () => {
     loadDashboard();
   });
+
+  document.getElementById('prev-page-button')?.addEventListener('click', () => {
+    if (recentPage > 1) {
+      recentPage -= 1;
+      loadDashboard();
+    }
+  });
+
+  document.getElementById('next-page-button')?.addEventListener('click', () => {
+    if (recentPage < paging.totalPages) {
+      recentPage += 1;
+      loadDashboard();
+    }
+  });
+
+  document.getElementById('per-page-select')?.addEventListener('change', (event) => {
+    const value = Number.parseInt(event.target.value, 10);
+    if (Number.isFinite(value)) {
+      recentPerPage = value;
+      recentPage = 1;
+      loadDashboard();
+    }
+  });
 }
 
 let _refreshTimer = null;
+let recentPage = 1;
+let recentPerPage = 20;
 
 function stopAutoRefresh() {
   if (_refreshTimer) {
@@ -211,8 +260,12 @@ async function loadDashboard() {
     const [summary, daily, recent] = await Promise.all([
       apiRequest('/api/stats/summary'),
       apiRequest('/api/stats/daily?days=30'),
-      apiRequest('/api/stats/recent?limit=120')
+      apiRequest(`/api/stats/recent?page=${recentPage}&perPage=${recentPerPage}`)
     ]);
+
+    if (recent?.paging?.page) {
+      recentPage = recent.paging.page;
+    }
 
     renderDashboard(summary, daily, recent);
   } catch (error) {
