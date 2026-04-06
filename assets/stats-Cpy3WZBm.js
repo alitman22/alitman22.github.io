@@ -1,6 +1,9 @@
-import"./modulepreload-polyfill-B5Qt9EMX.js";const m=document.getElementById("stats-root"),E="https://alitman22-portfolio.onrender.com".replace(/\/$/,"");function T(t){return`${E}${t}`}async function c(t,a={}){const n=await fetch(T(t),{credentials:"include",headers:{"Content-Type":"application/json",...a.headers||{}},...a}),s=await n.text(),i=s?JSON.parse(s):{};if(!n.ok)throw new Error((i==null?void 0:i.message)||`Request failed: ${n.status}`);return i}function D(t){if(!t)return"-";const a=new Date(t);return Number.isNaN(a.getTime())?t:a.toLocaleString()}function N(t){const a=t.country||"-",n=t.region||null,s=t.city||null;return!t.country&&!n&&!s?"-":n?`${a} / ${n}`:s?`${a} / ${s}`:a}function p(t=""){m.innerHTML=`
+import"./modulepreload-polyfill-B5Qt9EMX.js";const E=""+new URL("logo-stats-My1wrg3h.png",import.meta.url).href,m=document.getElementById("stats-root"),T="https://alitman22-portfolio.onrender.com".replace(/\/$/,"");function R(t){return`${T}${t}`}async function c(t,a={}){const n=await fetch(R(t),{credentials:"include",headers:{"Content-Type":"application/json",...a.headers||{}},...a}),s=await n.text(),o=s?JSON.parse(s):{};if(!n.ok)throw new Error((o==null?void 0:o.message)||`Request failed: ${n.status}`);return o}function S(t){if(!t)return"-";const a=new Date(t);return Number.isNaN(a.getTime())?t:a.toLocaleString()}function D(t){const a=t.country||"-",n=t.region||null,s=t.city||null;return!t.country&&!n&&!s?"-":n?`${a} / ${n}`:s?`${a} / ${s}`:a}function p(t=""){m.innerHTML=`
     <main class="stats-container">
       <section class="stats-card login-card">
+        <div class="login-logo-wrap">
+          <img src="${E}" alt="Portfolio Analytics" class="login-logo" />
+        </div>
         <h1>Portfolio Analytics Login</h1>
         <p>Enter your analytics credentials. If 2FA is enabled, provide the current code.</p>
         <form id="login-form" class="stats-form">
@@ -21,15 +24,15 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const m=document.getElementById("st
         </form>
       </section>
     </main>
-  `;const a=document.getElementById("login-form");a==null||a.addEventListener("submit",async n=>{n.preventDefault();const s=new FormData(a),i={username:String(s.get("username")||""),password:String(s.get("password")||""),totpCode:String(s.get("totpCode")||"").trim()};try{await c("/api/auth/login",{method:"POST",body:JSON.stringify(i)}),await l()}catch(u){p(u.message)}})}function R(t,a,n){var b,y,f,$,v;const s=t.countries.map(e=>`<li><span>${e.label}</span><strong>${e.total}</strong></li>`).join(""),i=t.operatingSystems.map(e=>`<li><span>${e.label}</span><strong>${e.total}</strong></li>`).join(""),u=t.devices.map(e=>`<li><span>${e.label}</span><strong>${e.total}</strong></li>`).join(""),w=a.points.map(e=>`<tr><td>${e.day}</td><td>${e.visits}</td></tr>`).join(""),L=n.records.map(e=>`
+  `;const a=document.getElementById("login-form");a==null||a.addEventListener("submit",async n=>{n.preventDefault();const s=new FormData(a),o={username:String(s.get("username")||""),password:String(s.get("password")||""),totpCode:String(s.get("totpCode")||"").trim()};try{await c("/api/auth/login",{method:"POST",body:JSON.stringify(o)}),await l()}catch(g){p(g.message)}})}function N(t,a,n){var b,y,f,$,v;const s=t.countries.map(e=>`<li><span>${e.label}</span><strong>${e.total}</strong></li>`).join(""),o=t.operatingSystems.map(e=>`<li><span>${e.label}</span><strong>${e.total}</strong></li>`).join(""),g=t.devices.map(e=>`<li><span>${e.label}</span><strong>${e.total}</strong></li>`).join(""),P=a.points.map(e=>`<tr><td>${e.day}</td><td>${e.visits}</td></tr>`).join(""),L=n.records.map(e=>`
       <tr>
-        <td>${D(e.created_at)}</td>
-        <td>${N(e)}</td>
+        <td>${S(e.created_at)}</td>
+        <td>${D(e)}</td>
         <td>${e.device_type||"-"} | ${e.os_name||"-"}</td>
         <td>${e.browser_name||"-"}</td>
         <td>${e.referrer||"-"}</td>
       </tr>
-    `).join(""),o=n.paging||{page:1,perPage:g,totalPages:1};m.innerHTML=`
+    `).join(""),i=n.paging||{page:1,perPage:u,totalPages:1};m.innerHTML=`
     <main class="stats-container">
       <header class="stats-header">
         <h1>Portfolio Visitor Analytics</h1>
@@ -62,11 +65,11 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const m=document.getElementById("st
         </article>
         <article class="stats-card">
           <h2>Device Types</h2>
-          <ul class="stats-list">${u||"<li><span>No data</span><strong>0</strong></li>"}</ul>
+          <ul class="stats-list">${g||"<li><span>No data</span><strong>0</strong></li>"}</ul>
         </article>
         <article class="stats-card">
           <h2>Operating Systems</h2>
-          <ul class="stats-list">${i||"<li><span>No data</span><strong>0</strong></li>"}</ul>
+          <ul class="stats-list">${o||"<li><span>No data</span><strong>0</strong></li>"}</ul>
         </article>
       </section>
 
@@ -75,7 +78,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const m=document.getElementById("st
           <h2>Visits by Day (${a.days} days)</h2>
           <table>
             <thead><tr><th>Date</th><th>Visits</th></tr></thead>
-            <tbody>${w||"<tr><td>-</td><td>0</td></tr>"}</tbody>
+            <tbody>${P||"<tr><td>-</td><td>0</td></tr>"}</tbody>
           </table>
         </article>
       </section>
@@ -87,11 +90,11 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const m=document.getElementById("st
             <div class="paging-controls">
               <label for="per-page-select">Rows</label>
               <select id="per-page-select" class="per-page-select">
-                ${[10,20,50,100].map(e=>`<option value="${e}" ${o.perPage===e?"selected":""}>${e}</option>`).join("")}
+                ${[10,20,50,100].map(e=>`<option value="${e}" ${i.perPage===e?"selected":""}>${e}</option>`).join("")}
               </select>
-              <button id="prev-page-button" class="refresh-button" type="button" ${o.page<=1?"disabled":""}>Prev</button>
-              <span class="paging-meta">Page ${o.page} / ${o.totalPages}</span>
-              <button id="next-page-button" class="refresh-button" type="button" ${o.page>=o.totalPages?"disabled":""}>Next</button>
+              <button id="prev-page-button" class="refresh-button" type="button" ${i.page<=1?"disabled":""}>Prev</button>
+              <span class="paging-meta">Page ${i.page} / ${i.totalPages}</span>
+              <button id="next-page-button" class="refresh-button" type="button" ${i.page>=i.totalPages?"disabled":""}>Next</button>
             </div>
           </div>
           <div class="table-wrap">
@@ -111,4 +114,4 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const m=document.getElementById("st
         </article>
       </section>
     </main>
-  `,(b=document.getElementById("logout-button"))==null||b.addEventListener("click",async()=>{h(),await c("/api/auth/logout",{method:"POST"}),p()}),(y=document.getElementById("refresh-button"))==null||y.addEventListener("click",()=>{l()}),(f=document.getElementById("prev-page-button"))==null||f.addEventListener("click",()=>{r>1&&(r-=1,l())}),($=document.getElementById("next-page-button"))==null||$.addEventListener("click",()=>{r<o.totalPages&&(r+=1,l())}),(v=document.getElementById("per-page-select"))==null||v.addEventListener("change",e=>{const P=Number.parseInt(e.target.value,10);Number.isFinite(P)&&(g=P,r=1,l())})}let d=null,r=1,g=20;function h(){d&&(clearInterval(d),d=null)}async function l(){var t;try{const[a,n,s]=await Promise.all([c("/api/stats/summary"),c("/api/stats/daily?days=30"),c(`/api/stats/recent?page=${r}&perPage=${g}`)]);(t=s==null?void 0:s.paging)!=null&&t.page&&(r=s.paging.page),R(a,n,s)}catch(a){h(),p(a.message)}}async function S(){m.innerHTML='<main class="stats-container"><section class="stats-card"><p>Loading analytics dashboard...</p></section></main>';try{await c("/api/auth/me"),await l(),h(),d=setInterval(l,60*1e3)}catch{p()}}S();
+  `,(b=document.getElementById("logout-button"))==null||b.addEventListener("click",async()=>{h(),await c("/api/auth/logout",{method:"POST"}),p()}),(y=document.getElementById("refresh-button"))==null||y.addEventListener("click",()=>{l()}),(f=document.getElementById("prev-page-button"))==null||f.addEventListener("click",()=>{r>1&&(r-=1,l())}),($=document.getElementById("next-page-button"))==null||$.addEventListener("click",()=>{r<i.totalPages&&(r+=1,l())}),(v=document.getElementById("per-page-select"))==null||v.addEventListener("change",e=>{const w=Number.parseInt(e.target.value,10);Number.isFinite(w)&&(u=w,r=1,l())})}let d=null,r=1,u=20;function h(){d&&(clearInterval(d),d=null)}async function l(){var t;try{const[a,n,s]=await Promise.all([c("/api/stats/summary"),c("/api/stats/daily?days=30"),c(`/api/stats/recent?page=${r}&perPage=${u}`)]);(t=s==null?void 0:s.paging)!=null&&t.page&&(r=s.paging.page),N(a,n,s)}catch(a){h(),p(a.message)}}async function I(){m.innerHTML='<main class="stats-container"><section class="stats-card"><p>Loading analytics dashboard...</p></section></main>';try{await c("/api/auth/me"),await l(),h(),d=setInterval(l,60*1e3)}catch{p()}}I();
