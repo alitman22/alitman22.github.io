@@ -83,7 +83,6 @@ function SkillsSection({ copy }) {
     'GitHub Actions': 'devicon-github-original colored',
     Bitbucket: 'devicon-bitbucket-original colored',
     'Linux Architecture': 'devicon-linux-plain',
-    Nginx: 'devicon-nginx-original colored',
     Backups: 'fa-solid fa-floppy-disk',
     Jenkins: 'devicon-jenkins-line colored',
     ArgoCD: 'fa-solid fa-diagram-project'

@@ -44,7 +44,15 @@ function HeroSection({ copy, language, isTurkeyRegion }) {
       </div>
 
       <div className="profile-wrapper">
-        <img src="assets/profile.jpg" alt="Ali Fattahi - DevOps Engineer" />
+        <img
+          src="assets/profile.jpg"
+          alt="Ali Fattahi - DevOps Engineer"
+          width="720"
+          height="720"
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+        />
       </div>
 
       <div className="hero-bottom">

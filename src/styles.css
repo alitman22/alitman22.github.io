@@ -321,6 +321,14 @@ p {
   scroll-margin-top: 104px;
 }
 
+.section-deferred-placeholder {
+  width: min(1120px, 100%);
+  margin: 1.9rem auto 0;
+  content-visibility: auto;
+  contain-intrinsic-size: 420px;
+  pointer-events: none;
+}
+
 #about.section {
   margin-top: clamp(2.8rem, 5vh, 4.25rem);
 }
