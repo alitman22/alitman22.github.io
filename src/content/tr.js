@@ -217,6 +217,7 @@ export const tr = {
     solutionLabel: 'Çözüm',
     toolsLabel: 'Kullanılan araç seti',
     openLinkLabel: 'GitHubda Aç',
+    continueLinkLabel: 'GitHubda Devam Et',
     intro:
       'Aşağıda teknik çalışmalarım, otomasyon scriptlerim ve altyapı projelerimden bir seçki bulunuyor. Geçmişte yoğun iş temposu, şirket gizliliği ve depoları düzgün şekilde dokümante etmeye zaman ayıramamak nedeniyle açık portföyüm sessiz kalmıştı. Artık AIı teknik yazı asistanı olarak kullanıyorum. Biçimlendirme ve düzeni AI üstlenirken ben çekirdek mühendislik kısmına odaklanıyorum. Dokümantasyon yer yer AI yazımı gibi geliyorsa nedeni budur. Ancak her proje, script ve çözüm %100 insan onaylıdır ve kariyerim boyunca karşılaştığım gerçek senaryolara dayanır.',
     items: [

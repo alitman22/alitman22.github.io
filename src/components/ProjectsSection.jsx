@@ -227,13 +227,28 @@ function ProjectsSection({ copy, darkMode }) {
                   </div>
 
                   <section className="project-toolset-bar">
-                    <div className="project-tools" aria-label={`${project.title} tools`}>
-                      {project.tools.map((tool) => (
-                        <span key={tool} className="project-tool-badge">
-                          <i className={iconByTool[tool] || 'fa-solid fa-wrench'} aria-hidden="true"></i>
-                          <span>{tool}</span>
-                        </span>
-                      ))}
+                    <div className="project-toolset-shell">
+                      <div className="project-tools" aria-label={`${project.title} tools`}>
+                        {project.tools.map((tool) => (
+                          <span key={tool} className="project-tool-badge">
+                            <i className={iconByTool[tool] || 'fa-solid fa-wrench'} aria-hidden="true"></i>
+                            <span>{tool}</span>
+                          </span>
+                        ))}
+                      </div>
+
+                      {project.href && (
+                        <a
+                          href={project.href}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="project-continue-link"
+                          aria-label={`Continue to ${project.subtitle} on GitHub`}
+                        >
+                          <span>{copy.projectsSection.continueLinkLabel || copy.projectsSection.openLinkLabel}</span>
+                          <i className="fa-brands fa-github" aria-hidden="true"></i>
+                        </a>
+                      )}
                     </div>
                   </section>
                 </div>

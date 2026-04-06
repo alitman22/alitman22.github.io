@@ -228,6 +228,7 @@ export const en = {
     solutionLabel: 'Solution',
     toolsLabel: 'Toolset used',
     openLinkLabel: 'Open on GitHub',
+    continueLinkLabel: 'Continue on GitHub',
     intro:
       'Below is a curated selection of infrastructure designs, automation tools, and CI/CD workflows. These repositories reflect real-world, production-grade scenarios I have architected and navigated throughout my career. They demonstrate my hands-on approach to solving complex operational bottlenecks, enforcing security by design, and building highly available systems from the ground up.',
     items: [
