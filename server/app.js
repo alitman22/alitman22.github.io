@@ -130,7 +130,9 @@ function authCookieOptions() {
   return {
     httpOnly: true,
     secure: config.isProduction,
-    sameSite: 'strict',
+    // GitHub Pages frontend and Render API are different sites, so production
+    // needs SameSite=None to allow credentialed cross-site requests.
+    sameSite: config.isProduction ? 'none' : 'lax',
     path: '/',
     maxAge: 12 * 60 * 60 * 1000
   };
