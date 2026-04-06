@@ -1,12 +1,12 @@
 import"./modulepreload-polyfill-B5Qt9EMX.js";const E=""+new URL("logo-stats-My1wrg3h.png",import.meta.url).href,h=document.getElementById("stats-root"),S="https://alitman22-portfolio.onrender.com".replace(/\/$/,"");function T(t){return`${S}${t}`}async function c(t,a={}){const n=await fetch(T(t),{credentials:"include",headers:{"Content-Type":"application/json",...a.headers||{}},...a}),s=await n.text(),o=s?JSON.parse(s):{};if(!n.ok)throw new Error((o==null?void 0:o.message)||`Request failed: ${n.status}`);return o}function R(t){if(!t)return"-";const a=new Date(t);return Number.isNaN(a.getTime())?t:a.toLocaleString()}function D(t){const a=t.country||"-",n=t.region||null,s=t.city||null;return!t.country&&!n&&!s?"-":n?`${a} / ${n}`:s?`${a} / ${s}`:a}function p(t=""){h.innerHTML=`
     <main class="stats-container">
       <section class="stats-card login-card">
-        <div class="login-brand">
-          <img src="${E}" alt="Portfolio Analytics" class="login-logo" />
-          <div class="login-brand-copy">
-            <h1>Portfolio Analytics</h1>
-            <p>Secure dashboard access</p>
-          </div>
+        <div class="login-hero">
+          <img src="${E}" alt="Portfolio Analytics" class="login-hero-image" />
+        </div>
+        <div class="login-brand-copy">
+          <h1>Portfolio Analytics</h1>
+          <p>Secure dashboard access</p>
         </div>
         <p class="login-help">Enter your analytics credentials. If 2FA is enabled, provide the current code.</p>
         <form id="login-form" class="stats-form">
