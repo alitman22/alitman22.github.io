@@ -34,6 +34,11 @@ function formatDate(value) {
   return Number.isNaN(date.getTime()) ? value : date.toLocaleString();
 }
 
+function formatPercent(value) {
+  if (!Number.isFinite(value)) return '0%';
+  return `${Math.round(value)}%`;
+}
+
 function formatLocation(row) {
   const country = row.country || '-';
   const region = row.region || null;
@@ -101,6 +106,16 @@ function renderLogin(message = '') {
 }
 
 function renderDashboard(summary, daily, recent) {
+  const totalVisits = Number(summary.totals.visits || 0);
+  const totalVisitors = Number(summary.totals.visitors || 0);
+  const totalPageviews = Number(summary.totals.pageviews || 0);
+
+  const pagesPerVisit = totalVisits > 0 ? totalPageviews / totalVisits : 0;
+  const returningRate = totalVisits > 0 ? ((totalVisits - totalVisitors) / totalVisits) * 100 : 0;
+  const topCountryTotal = summary.countries?.[0]?.total || 0;
+  const topCountryShare = totalVisits > 0 ? (topCountryTotal / totalVisits) * 100 : 0;
+  const geoCoverage = (summary.countries || []).filter((row) => row.label && row.label !== 'Unknown').length;
+
   const countryRows = summary.countries
     .map((row) => `<li><span>${row.label}</span><strong>${row.total}</strong></li>`)
     .join('');
@@ -117,9 +132,41 @@ function renderDashboard(summary, daily, recent) {
     .map((row) => `<tr><td>${row.day}</td><td>${row.visits}</td></tr>`)
     .join('');
 
+  const orderedDaily = [...daily.points].reverse();
+  const maxDailyVisits = Math.max(1, ...orderedDaily.map((row) => Number(row.visits || 0)));
+  const dailyBars = orderedDaily
+    .map((row) => {
+      const visits = Number(row.visits || 0);
+      const width = Math.max(4, Math.round((visits / maxDailyVisits) * 100));
+      return `
+        <div class="bar-row">
+          <span class="bar-label">${row.day}</span>
+          <div class="bar-track"><div class="bar-fill" style="width: ${width}%"></div></div>
+          <strong class="bar-value">${visits}</strong>
+        </div>
+      `;
+    })
+    .join('');
+
+  const totalDevices = Math.max(1, (summary.devices || []).reduce((acc, row) => acc + Number(row.total || 0), 0));
+  const deviceBars = (summary.devices || [])
+    .map((row) => {
+      const ratio = (Number(row.total || 0) / totalDevices) * 100;
+      const width = Math.max(4, Math.round(ratio));
+      return `
+        <div class="bar-row">
+          <span class="bar-label">${row.label}</span>
+          <div class="bar-track"><div class="bar-fill bar-fill-accent" style="width: ${width}%"></div></div>
+          <strong class="bar-value">${formatPercent(ratio)}</strong>
+        </div>
+      `;
+    })
+    .join('');
+
   const recentRows = recent.records
     .map((row) => `
       <tr>
+        <td><input type="checkbox" class="event-check" value="${row.event_id}" /></td>
         <td>${formatDate(row.created_at)}</td>
         <td>${formatLocation(row)}</td>
         <td>${row.device_type || '-'} | ${row.os_name || '-'}</td>
@@ -157,6 +204,25 @@ function renderDashboard(summary, daily, recent) {
         </article>
       </section>
 
+      <section class="stats-grid totals-grid insights-grid">
+        <article class="stats-card insight-card">
+          <h2>Pages / Visit</h2>
+          <p class="big-number">${pagesPerVisit.toFixed(2)}</p>
+        </article>
+        <article class="stats-card insight-card">
+          <h2>Returning Rate</h2>
+          <p class="big-number">${formatPercent(returningRate)}</p>
+        </article>
+        <article class="stats-card insight-card">
+          <h2>Top Country Share</h2>
+          <p class="big-number">${formatPercent(topCountryShare)}</p>
+        </article>
+        <article class="stats-card insight-card">
+          <h2>Geo Coverage</h2>
+          <p class="big-number">${geoCoverage}</p>
+        </article>
+      </section>
+
       <section class="stats-grid">
         <article class="stats-card">
           <h2>Top Countries</h2>
@@ -180,6 +246,14 @@ function renderDashboard(summary, daily, recent) {
             <tbody>${dailyRows || '<tr><td>-</td><td>0</td></tr>'}</tbody>
           </table>
         </article>
+        <article class="stats-card">
+          <h2>Visits Trend</h2>
+          <div class="bar-chart">${dailyBars || '<p>No trend data</p>'}</div>
+        </article>
+        <article class="stats-card">
+          <h2>Device Distribution</h2>
+          <div class="bar-chart">${deviceBars || '<p>No device data</p>'}</div>
+        </article>
       </section>
 
       <section class="stats-grid">
@@ -187,6 +261,7 @@ function renderDashboard(summary, daily, recent) {
           <div class="recent-events-header">
             <h2>Recent Events</h2>
             <div class="paging-controls">
+              <button id="delete-selected-button" class="refresh-button danger-button" type="button">Delete Selected</button>
               <label for="per-page-select">Rows</label>
               <select id="per-page-select" class="per-page-select">
                 ${[10, 20, 50, 100]
@@ -202,6 +277,7 @@ function renderDashboard(summary, daily, recent) {
             <table>
               <thead>
                 <tr>
+                  <th>Select</th>
                   <th>Time</th>
                   <th>Location</th>
                   <th>Device</th>
@@ -209,7 +285,7 @@ function renderDashboard(summary, daily, recent) {
                   <th>Referrer</th>
                 </tr>
               </thead>
-              <tbody>${recentRows || '<tr><td colspan="5">No events yet</td></tr>'}</tbody>
+              <tbody>${recentRows || '<tr><td colspan="6">No events yet</td></tr>'}</tbody>
             </table>
           </div>
         </article>
@@ -247,6 +323,32 @@ function renderDashboard(summary, daily, recent) {
       recentPerPage = value;
       recentPage = 1;
       loadDashboard();
+    }
+  });
+
+  document.getElementById('delete-selected-button')?.addEventListener('click', async () => {
+    const selectedIds = Array.from(document.querySelectorAll('.event-check:checked'))
+      .map((input) => Number.parseInt(input.value, 10))
+      .filter((value) => Number.isInteger(value) && value > 0);
+
+    if (selectedIds.length === 0) {
+      return;
+    }
+
+    const confirmed = window.confirm(`Delete ${selectedIds.length} selected visit row(s)?`);
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      await apiRequest('/api/stats/events', {
+        method: 'DELETE',
+        body: JSON.stringify({ eventIds: selectedIds })
+      });
+
+      await loadDashboard();
+    } catch (error) {
+      window.alert(error.message || 'Failed to delete selected rows.');
     }
   });
 }

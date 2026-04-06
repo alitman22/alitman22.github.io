@@ -605,6 +605,7 @@ app.get('/api/stats/recent', requireAuth, async (req, res) => {
 
     const result = await db.execute({
       sql: `SELECT
+        e.id AS event_id,
         e.created_at,
         e.event_type,
         e.path,
@@ -641,6 +642,75 @@ app.get('/api/stats/recent', requireAuth, async (req, res) => {
   } catch (error) {
     console.error('Recent stats error:', error);
     res.status(500).json({ ok: false, message: 'Failed to load recent events.' });
+  }
+});
+
+app.delete('/api/stats/events', requireAuth, async (req, res) => {
+  try {
+    const rawIds = Array.isArray(req.body?.eventIds) ? req.body.eventIds : [];
+    const eventIds = rawIds
+      .map((value) => Number.parseInt(String(value), 10))
+      .filter((value) => Number.isInteger(value) && value > 0)
+      .slice(0, 200);
+
+    if (eventIds.length === 0) {
+      res.status(400).json({ ok: false, message: 'No valid event IDs provided.' });
+      return;
+    }
+
+    const placeholders = eventIds.map(() => '?').join(', ');
+
+    const affectedSessionsResult = await db.execute({
+      sql: `SELECT DISTINCT session_id
+        FROM events
+        WHERE event_type = 'pageview'
+          AND id IN (${placeholders})`,
+      args: eventIds
+    });
+
+    const affectedSessionIds = affectedSessionsResult.rows
+      .map((row) => row.session_id)
+      .filter(Boolean);
+
+    const deleteEventsResult = await db.execute({
+      sql: `DELETE FROM events
+        WHERE event_type = 'pageview'
+          AND id IN (${placeholders})`,
+      args: eventIds
+    });
+
+    if (affectedSessionIds.length > 0) {
+      const sessionPlaceholders = affectedSessionIds.map(() => '?').join(', ');
+
+      await db.execute({
+        sql: `DELETE FROM visits
+          WHERE session_id IN (${sessionPlaceholders})
+            AND NOT EXISTS (
+              SELECT 1 FROM events e
+              WHERE e.session_id = visits.session_id
+                AND e.event_type = 'pageview'
+            )`,
+        args: affectedSessionIds
+      });
+
+      await db.execute({
+        sql: `DELETE FROM sessions
+          WHERE session_id IN (${sessionPlaceholders})
+            AND NOT EXISTS (
+              SELECT 1 FROM events e
+              WHERE e.session_id = sessions.session_id
+            )`,
+        args: affectedSessionIds
+      });
+    }
+
+    res.json({
+      ok: true,
+      deleted: toNumber(deleteEventsResult.rowsAffected)
+    });
+  } catch (error) {
+    console.error('Delete events error:', error);
+    res.status(500).json({ ok: false, message: 'Failed to delete selected visits.' });
   }
 });
 
