@@ -1,4 +1,4 @@
-import { cp, mkdir, stat } from 'node:fs/promises';
+import { cp, mkdir, readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -38,6 +38,24 @@ async function publishToRoot() {
   // transient failures (e.g., stats-<old-hash>.js not found).
 
   await cp(distAssetsDir, rootAssetsDir, { recursive: true, force: true });
+
+  // Compatibility layer for stale cached stats.html:
+  // overwrite all previously published stats-*.js bundles with the latest
+  // compiled stats chunk so old HTML references still execute new logic.
+  const distAssets = await readdir(distAssetsDir);
+  const latestStatsBundle = distAssets.find((name) => /^stats-.*\.js$/.test(name));
+
+  if (latestStatsBundle) {
+    const rootAssets = await readdir(rootAssetsDir);
+    const historicalStatsBundles = rootAssets.filter((name) => /^stats-.*\.js$/.test(name));
+    for (const bundleName of historicalStatsBundles) {
+      await cp(
+        path.join(distAssetsDir, latestStatsBundle),
+        path.join(rootAssetsDir, bundleName),
+        { force: true }
+      );
+    }
+  }
 
   console.log('Local publish complete: root index.html, root stats.html, and assets/ synced from dist/.');
 }
