@@ -1,4 +1,4 @@
-import"./modulepreload-polyfill-B5Qt9EMX.js";const l=document.getElementById("stats-root"),m="".replace(/\/$/,"");function g(s){return`${m}${s}`}async function o(s,a={}){const e=await fetch(g(s),{credentials:"include",headers:{"Content-Type":"application/json",...a.headers||{}},...a}),n=await e.text(),i=n?JSON.parse(n):{};if(!e.ok)throw new Error((i==null?void 0:i.message)||`Request failed: ${e.status}`);return i}function b(s){if(!s)return"-";const a=new Date(s);return Number.isNaN(a.getTime())?s:a.toLocaleString()}function r(s=""){l.innerHTML=`
+import"./modulepreload-polyfill-B5Qt9EMX.js";const l=document.getElementById("stats-root"),m="https://alitman22-portfolio.onrender.com".replace(/\/$/,"");function g(s){return`${m}${s}`}async function o(s,a={}){const e=await fetch(g(s),{credentials:"include",headers:{"Content-Type":"application/json",...a.headers||{}},...a}),n=await e.text(),i=n?JSON.parse(n):{};if(!e.ok)throw new Error((i==null?void 0:i.message)||`Request failed: ${e.status}`);return i}function b(s){if(!s)return"-";const a=new Date(s);return Number.isNaN(a.getTime())?s:a.toLocaleString()}function r(s=""){l.innerHTML=`
     <main class="stats-container">
       <section class="stats-card login-card">
         <h1>Portfolio Analytics Login</h1>
@@ -21,7 +21,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const l=document.getElementById("st
         </form>
       </section>
     </main>
-  `;const a=document.getElementById("login-form");a==null||a.addEventListener("submit",async e=>{e.preventDefault();const n=new FormData(a),i={username:String(n.get("username")||""),password:String(n.get("password")||""),totpCode:String(n.get("totpCode")||"").trim()};try{await o("/api/auth/login",{method:"POST",body:JSON.stringify(i)}),await p()}catch(c){r(c.message)}})}function y(s,a,e){var d;const n=s.countries.map(t=>`<li><span>${t.label}</span><strong>${t.total}</strong></li>`).join(""),i=s.operatingSystems.map(t=>`<li><span>${t.label}</span><strong>${t.total}</strong></li>`).join(""),c=s.devices.map(t=>`<li><span>${t.label}</span><strong>${t.total}</strong></li>`).join(""),u=a.points.map(t=>`<tr><td>${t.day}</td><td>${t.visits}</td></tr>`).join(""),h=e.records.map(t=>`
+  `;const a=document.getElementById("login-form");a==null||a.addEventListener("submit",async e=>{e.preventDefault();const n=new FormData(a),i={username:String(n.get("username")||""),password:String(n.get("password")||""),totpCode:String(n.get("totpCode")||"").trim()};try{await o("/api/auth/login",{method:"POST",body:JSON.stringify(i)}),await p()}catch(c){r(c.message)}})}function y(s,a,e){var d;const n=s.countries.map(t=>`<li><span>${t.label}</span><strong>${t.total}</strong></li>`).join(""),i=s.operatingSystems.map(t=>`<li><span>${t.label}</span><strong>${t.total}</strong></li>`).join(""),c=s.devices.map(t=>`<li><span>${t.label}</span><strong>${t.total}</strong></li>`).join(""),h=a.points.map(t=>`<tr><td>${t.day}</td><td>${t.visits}</td></tr>`).join(""),u=e.records.map(t=>`
       <tr>
         <td>${b(t.created_at)}</td>
         <td>${t.country||"-"}${t.city?` / ${t.city}`:""}</td>
@@ -72,7 +72,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const l=document.getElementById("st
           <h2>Visits by Day (${a.days} days)</h2>
           <table>
             <thead><tr><th>Date</th><th>Visits</th></tr></thead>
-            <tbody>${u||"<tr><td>-</td><td>0</td></tr>"}</tbody>
+            <tbody>${h||"<tr><td>-</td><td>0</td></tr>"}</tbody>
           </table>
         </article>
       </section>
@@ -92,7 +92,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const l=document.getElementById("st
                   <th>Referrer</th>
                 </tr>
               </thead>
-              <tbody>${h||'<tr><td colspan="6">No events yet</td></tr>'}</tbody>
+              <tbody>${u||'<tr><td colspan="6">No events yet</td></tr>'}</tbody>
             </table>
           </div>
         </article>

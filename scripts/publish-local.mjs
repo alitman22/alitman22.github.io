@@ -9,7 +9,9 @@ const distDir = path.join(rootDir, 'dist');
 const rootAssetsDir = path.join(rootDir, 'assets');
 const distAssetsDir = path.join(distDir, 'assets');
 const distIndexPath = path.join(distDir, 'index.html');
+const distStatsPath = path.join(distDir, 'stats.html');
 const rootIndexPath = path.join(rootDir, 'index.html');
+const rootStatsPath = path.join(rootDir, 'stats.html');
 
 async function ensureDistExists() {
   try {
@@ -27,6 +29,7 @@ async function publishToRoot() {
 
   await mkdir(path.dirname(rootIndexPath), { recursive: true });
   await cp(distIndexPath, rootIndexPath, { force: true });
+  await cp(distStatsPath, rootStatsPath, { force: true });
 
   await mkdir(rootAssetsDir, { recursive: true });
 
@@ -46,7 +49,7 @@ async function publishToRoot() {
 
   await cp(distAssetsDir, rootAssetsDir, { recursive: true, force: true });
 
-  console.log('Local publish complete: root index.html and assets/ synced from dist/.');
+  console.log('Local publish complete: root index.html, root stats.html, and assets/ synced from dist/.');
 }
 
 publishToRoot().catch((error) => {
