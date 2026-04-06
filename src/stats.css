@@ -1,0 +1,149 @@
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: radial-gradient(circle at 20% 20%, #13315c 0%, #0a1223 40%, #05080f 100%);
+  color: #e7eef9;
+}
+
+.stats-shell {
+  min-height: 100vh;
+}
+
+.stats-container {
+  width: min(1200px, 100% - 2rem);
+  margin: 0 auto;
+  padding: 2rem 0 3rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.stats-header h1 {
+  margin: 0;
+  font-size: clamp(1.2rem, 3vw, 2rem);
+}
+
+.logout-button,
+.stats-form button {
+  border: 1px solid rgba(0, 214, 255, 0.45);
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(0, 214, 255, 0.25), rgba(27, 203, 122, 0.18));
+  color: #eaf7ff;
+  padding: 0.55rem 0.9rem;
+  cursor: pointer;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.totals-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.stats-card {
+  background: rgba(11, 22, 42, 0.86);
+  border: 1px solid rgba(0, 214, 255, 0.16);
+  border-radius: 14px;
+  padding: 1rem;
+  backdrop-filter: blur(8px);
+}
+
+.stats-card h2 {
+  margin: 0 0 0.8rem;
+  font-size: 1rem;
+  color: #9ed8ff;
+}
+
+.big-number {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.stats-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.stats-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px dashed rgba(158, 216, 255, 0.2);
+}
+
+.stats-form {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.stats-form label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.stats-form input {
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(158, 216, 255, 0.28);
+  color: #f7fbff;
+  border-radius: 10px;
+  padding: 0.6rem 0.7rem;
+}
+
+.form-message {
+  min-height: 1rem;
+  margin: 0;
+  color: #ffd9d9;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.45rem 0.4rem;
+  border-bottom: 1px solid rgba(158, 216, 255, 0.16);
+  font-size: 0.85rem;
+  vertical-align: top;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+@media (max-width: 640px) {
+  .stats-container {
+    width: min(1200px, 100% - 1rem);
+    padding-top: 1rem;
+  }
+
+  .stats-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

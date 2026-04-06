@@ -4,6 +4,7 @@ import NavBar from './components/NavBar';
 import HeroSection from './components/HeroSection';
 import { useLanguage } from './hooks/useLanguage';
 import { useRegion } from './hooks/useRegion';
+import { useVisitorTracking } from './hooks/useVisitorTracking';
 
 const AboutSection = lazy(() => import('./components/AboutSection'));
 const ExperienceSection = lazy(() => import('./components/ExperienceSection'));
@@ -60,6 +61,8 @@ function App() {
   const isTurkeyRegion = region === 'TR';
   const { language, setLanguage, copy } = useLanguage(isTurkeyRegion);
   const [darkMode, setDarkMode] = useState(true);
+
+  useVisitorTracking();
 
   useEffect(() => {
     document.title = copy.meta.title;

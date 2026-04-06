@@ -5,3 +5,8 @@ dist/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+server/data/
+analytics.db*
+.env
+.env.local
+.env.*.local
