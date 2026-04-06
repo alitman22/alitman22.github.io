@@ -1,11 +1,14 @@
-import"./modulepreload-polyfill-B5Qt9EMX.js";const E=""+new URL("logo-stats-My1wrg3h.png",import.meta.url).href,m=document.getElementById("stats-root"),T="https://alitman22-portfolio.onrender.com".replace(/\/$/,"");function R(t){return`${T}${t}`}async function c(t,a={}){const n=await fetch(R(t),{credentials:"include",headers:{"Content-Type":"application/json",...a.headers||{}},...a}),s=await n.text(),o=s?JSON.parse(s):{};if(!n.ok)throw new Error((o==null?void 0:o.message)||`Request failed: ${n.status}`);return o}function S(t){if(!t)return"-";const a=new Date(t);return Number.isNaN(a.getTime())?t:a.toLocaleString()}function D(t){const a=t.country||"-",n=t.region||null,s=t.city||null;return!t.country&&!n&&!s?"-":n?`${a} / ${n}`:s?`${a} / ${s}`:a}function p(t=""){m.innerHTML=`
+import"./modulepreload-polyfill-B5Qt9EMX.js";const E=""+new URL("logo-stats-My1wrg3h.png",import.meta.url).href,h=document.getElementById("stats-root"),S="https://alitman22-portfolio.onrender.com".replace(/\/$/,"");function T(t){return`${S}${t}`}async function c(t,a={}){const n=await fetch(T(t),{credentials:"include",headers:{"Content-Type":"application/json",...a.headers||{}},...a}),s=await n.text(),o=s?JSON.parse(s):{};if(!n.ok)throw new Error((o==null?void 0:o.message)||`Request failed: ${n.status}`);return o}function R(t){if(!t)return"-";const a=new Date(t);return Number.isNaN(a.getTime())?t:a.toLocaleString()}function D(t){const a=t.country||"-",n=t.region||null,s=t.city||null;return!t.country&&!n&&!s?"-":n?`${a} / ${n}`:s?`${a} / ${s}`:a}function p(t=""){h.innerHTML=`
     <main class="stats-container">
       <section class="stats-card login-card">
-        <div class="login-logo-wrap">
+        <div class="login-brand">
           <img src="${E}" alt="Portfolio Analytics" class="login-logo" />
+          <div class="login-brand-copy">
+            <h1>Portfolio Analytics</h1>
+            <p>Secure dashboard access</p>
+          </div>
         </div>
-        <h1>Portfolio Analytics Login</h1>
-        <p>Enter your analytics credentials. If 2FA is enabled, provide the current code.</p>
+        <p class="login-help">Enter your analytics credentials. If 2FA is enabled, provide the current code.</p>
         <form id="login-form" class="stats-form">
           <label>
             Username
@@ -26,13 +29,13 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const E=""+new URL("logo-stats-My1w
     </main>
   `;const a=document.getElementById("login-form");a==null||a.addEventListener("submit",async n=>{n.preventDefault();const s=new FormData(a),o={username:String(s.get("username")||""),password:String(s.get("password")||""),totpCode:String(s.get("totpCode")||"").trim()};try{await c("/api/auth/login",{method:"POST",body:JSON.stringify(o)}),await l()}catch(g){p(g.message)}})}function N(t,a,n){var b,y,f,$,v;const s=t.countries.map(e=>`<li><span>${e.label}</span><strong>${e.total}</strong></li>`).join(""),o=t.operatingSystems.map(e=>`<li><span>${e.label}</span><strong>${e.total}</strong></li>`).join(""),g=t.devices.map(e=>`<li><span>${e.label}</span><strong>${e.total}</strong></li>`).join(""),P=a.points.map(e=>`<tr><td>${e.day}</td><td>${e.visits}</td></tr>`).join(""),L=n.records.map(e=>`
       <tr>
-        <td>${S(e.created_at)}</td>
+        <td>${R(e.created_at)}</td>
         <td>${D(e)}</td>
         <td>${e.device_type||"-"} | ${e.os_name||"-"}</td>
         <td>${e.browser_name||"-"}</td>
         <td>${e.referrer||"-"}</td>
       </tr>
-    `).join(""),i=n.paging||{page:1,perPage:u,totalPages:1};m.innerHTML=`
+    `).join(""),i=n.paging||{page:1,perPage:u,totalPages:1};h.innerHTML=`
     <main class="stats-container">
       <header class="stats-header">
         <h1>Portfolio Visitor Analytics</h1>
@@ -114,4 +117,4 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const E=""+new URL("logo-stats-My1w
         </article>
       </section>
     </main>
-  `,(b=document.getElementById("logout-button"))==null||b.addEventListener("click",async()=>{h(),await c("/api/auth/logout",{method:"POST"}),p()}),(y=document.getElementById("refresh-button"))==null||y.addEventListener("click",()=>{l()}),(f=document.getElementById("prev-page-button"))==null||f.addEventListener("click",()=>{r>1&&(r-=1,l())}),($=document.getElementById("next-page-button"))==null||$.addEventListener("click",()=>{r<i.totalPages&&(r+=1,l())}),(v=document.getElementById("per-page-select"))==null||v.addEventListener("change",e=>{const w=Number.parseInt(e.target.value,10);Number.isFinite(w)&&(u=w,r=1,l())})}let d=null,r=1,u=20;function h(){d&&(clearInterval(d),d=null)}async function l(){var t;try{const[a,n,s]=await Promise.all([c("/api/stats/summary"),c("/api/stats/daily?days=30"),c(`/api/stats/recent?page=${r}&perPage=${u}`)]);(t=s==null?void 0:s.paging)!=null&&t.page&&(r=s.paging.page),N(a,n,s)}catch(a){h(),p(a.message)}}async function I(){m.innerHTML='<main class="stats-container"><section class="stats-card"><p>Loading analytics dashboard...</p></section></main>';try{await c("/api/auth/me"),await l(),h(),d=setInterval(l,60*1e3)}catch{p()}}I();
+  `,(b=document.getElementById("logout-button"))==null||b.addEventListener("click",async()=>{m(),await c("/api/auth/logout",{method:"POST"}),p()}),(y=document.getElementById("refresh-button"))==null||y.addEventListener("click",()=>{l()}),(f=document.getElementById("prev-page-button"))==null||f.addEventListener("click",()=>{r>1&&(r-=1,l())}),($=document.getElementById("next-page-button"))==null||$.addEventListener("click",()=>{r<i.totalPages&&(r+=1,l())}),(v=document.getElementById("per-page-select"))==null||v.addEventListener("change",e=>{const w=Number.parseInt(e.target.value,10);Number.isFinite(w)&&(u=w,r=1,l())})}let d=null,r=1,u=20;function m(){d&&(clearInterval(d),d=null)}async function l(){var t;try{const[a,n,s]=await Promise.all([c("/api/stats/summary"),c("/api/stats/daily?days=30"),c(`/api/stats/recent?page=${r}&perPage=${u}`)]);(t=s==null?void 0:s.paging)!=null&&t.page&&(r=s.paging.page),N(a,n,s)}catch(a){m(),p(a.message)}}async function I(){h.innerHTML='<main class="stats-container"><section class="stats-card"><p>Loading analytics dashboard...</p></section></main>';try{await c("/api/auth/me"),await l(),m(),d=setInterval(l,60*1e3)}catch{p()}}I();
