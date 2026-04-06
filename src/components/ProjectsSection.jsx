@@ -2,18 +2,43 @@ import { useState, useEffect } from 'react';
 import SectionTitle from './SectionTitle';
 import ProjectThumbnail from './ProjectThumbnail';
 
-function ProjectVisual({ projectTitle, darkMode, image, imageAlt }) {
-  const [useFallback, setUseFallback] = useState(!image);
+function getOptimizedProjectImagePath(image) {
+  if (!image || !image.startsWith('assets/projects/')) {
+    return image;
+  }
 
-  if (!useFallback) {
+  return image
+    .replace('assets/projects/', 'assets/projects/thumbs/')
+    .replace(/\.(png|jpe?g|webp)$/i, '.webp');
+}
+
+function ProjectVisual({ projectTitle, darkMode, image, imageAlt }) {
+  const optimizedImage = getOptimizedProjectImagePath(image);
+  const [imageSource, setImageSource] = useState(optimizedImage || image || '');
+  const [useFallback, setUseFallback] = useState(!optimizedImage && !image);
+
+  useEffect(() => {
+    setImageSource(optimizedImage || image || '');
+    setUseFallback(!optimizedImage && !image);
+  }, [image, optimizedImage]);
+
+  if (!useFallback && imageSource) {
     return (
       <img
-        src={image}
+        src={imageSource}
         alt={imageAlt || `${projectTitle} project visual`}
         className="project-thumb"
         loading="lazy"
         decoding="async"
-        onError={() => setUseFallback(true)}
+        sizes="(max-width: 900px) 100vw, 480px"
+        onError={() => {
+          if (imageSource !== image && image) {
+            setImageSource(image);
+            return;
+          }
+
+          setUseFallback(true);
+        }}
       />
     );
   }
