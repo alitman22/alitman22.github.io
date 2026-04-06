@@ -261,6 +261,46 @@ body {
   color: var(--text-muted);
 }
 
+.login-card {
+  width: min(100%, 760px);
+  margin: clamp(1rem, 3vh, 2rem) auto;
+  padding: clamp(1.25rem, 2vw, 1.75rem);
+}
+
+.login-card h1 {
+  margin: 0 0 0.35rem;
+  font-size: clamp(1.5rem, 2.8vw, 2.1rem);
+  letter-spacing: -0.02em;
+}
+
+.login-card > p {
+  margin: 0 0 1rem;
+  color: var(--text-muted);
+  font-size: clamp(0.9rem, 1.4vw, 1rem);
+}
+
+.login-card .stats-form {
+  gap: 0.85rem;
+  padding: clamp(1rem, 1.8vw, 1.4rem);
+}
+
+.login-card .stats-form label {
+  gap: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.login-card .stats-form input {
+  padding: 0.62rem 0.85rem;
+  font-size: 0.98rem;
+  border-radius: 10px;
+}
+
+.login-card .stats-form button {
+  margin-top: 0.25rem;
+  padding: 0.62rem 1rem;
+  font-size: 0.98rem;
+}
+
 .form-message {
   min-height: clamp(1rem, 2vw, 1.2rem);
   margin: 0;
@@ -490,6 +530,19 @@ tbody tr:hover td {
   .table-wrap {
     margin: 0 -0.75rem;
     width: calc(100% + 1.5rem);
+  }
+
+  .login-card {
+    margin: 0.5rem auto;
+    padding: 1rem;
+  }
+
+  .login-card h1 {
+    font-size: 1.4rem;
+  }
+
+  .login-card .stats-form {
+    padding: 0.9rem;
   }
 }
 
