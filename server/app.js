@@ -597,7 +597,7 @@ app.get('/api/stats/recent', requireAuth, async (req, res) => {
     const page = Math.max(Number.parseInt(req.query.page || '1', 10), 1);
     const offset = (page - 1) * perPage;
 
-    const totalResult = await db.execute('SELECT COUNT(*) AS total FROM events');
+    const totalResult = await db.execute("SELECT COUNT(*) AS total FROM events WHERE event_type = 'pageview'");
     const total = toNumber(totalResult.rows[0]?.total);
     const totalPages = Math.max(Math.ceil(total / perPage), 1);
     const safePage = Math.min(page, totalPages);
@@ -621,6 +621,7 @@ app.get('/api/stats/recent', requireAuth, async (req, res) => {
         e.session_id
       FROM events e
       LEFT JOIN visits v ON v.session_id = e.session_id
+      WHERE e.event_type = 'pageview'
       ORDER BY e.created_at DESC
       LIMIT ?
       OFFSET ?`,
