@@ -5,7 +5,13 @@ dist/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-server/data/
+# Ignore local SQLite/analytics databases, but allow MaxMind GeoLite2 files
+server/data/*.db
+server/data/*.db-shm
+server/data/*.db-wal
+# Allow MaxMind GeoLite2 databases and licenses in server/data/
+!server/data/*.mmdb
+!server/data/*LICENSE*
 analytics.db*
 .env
 .env.local
