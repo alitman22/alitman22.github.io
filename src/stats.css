@@ -267,6 +267,20 @@ body {
   padding: clamp(1.25rem, 2vw, 1.75rem);
 }
 
+.login-logo-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.65rem;
+}
+
+.login-logo {
+  width: clamp(90px, 16vw, 150px);
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 18px rgba(0, 214, 255, 0.2));
+}
+
 .login-card h1 {
   margin: 0 0 0.35rem;
   font-size: clamp(1.5rem, 2.8vw, 2.1rem);
@@ -539,6 +553,10 @@ tbody tr:hover td {
 
   .login-card h1 {
     font-size: 1.4rem;
+  }
+
+  .login-logo {
+    width: clamp(84px, 24vw, 120px);
   }
 
   .login-card .stats-form {
