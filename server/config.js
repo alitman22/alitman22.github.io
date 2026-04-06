@@ -35,5 +35,13 @@ export const config = {
   maxmindDbPath: process.env.MAXMIND_DB_PATH || '',
   trustedProxyHops: Number.parseInt(process.env.ANALYTICS_TRUST_PROXY_HOPS || '1', 10),
   corsOrigins: parseOrigins(process.env.ANALYTICS_CORS_ORIGINS),
-  isProduction: process.env.NODE_ENV === 'production'
+  isProduction: process.env.NODE_ENV === 'production',
+  // Mailgun email configuration (optional)
+  mailgun: {
+    apiKey: process.env.MAILGUN_API_KEY || '',
+    domain: process.env.MAILGUN_DOMAIN || '',
+    fromEmail: process.env.MAILGUN_FROM_EMAIL || 'noreply@portfolio.local'
+  },
+  resetTokenSecret: process.env.ANALYTICS_RESET_TOKEN_SECRET || required('ANALYTICS_JWT_SECRET'),
+  adminEmail: process.env.ANALYTICS_ADMIN_EMAIL || 'admin@localhost'
 };

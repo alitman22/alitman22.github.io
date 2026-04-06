@@ -67,6 +67,18 @@ function isBotUserAgent(userAgent) {
   return /bot|crawler|spider|crawling|curl|wget|python-requests|headless/i.test(userAgent);
 }
 
+function isLocalhostIp(ip) {
+  if (!ip) return false;
+  ip = String(ip).toLowerCase().trim();
+  // IPv4: 127.0.0.1 and 127.0.0.0/8 range
+  if (/^127\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(ip)) return true;
+  // IPv4: ::1 (IPv6 loopback)
+  if (ip === '::1' || ip === '::ffff:127.0.0.1') return true;
+  // Edge case: "localhost"
+  if (ip === 'localhost' || ip === '::ffff:localhost') return true;
+  return false;
+}
+
 function parseUserAgent(userAgent) {
   const ua = String(userAgent || '').toLowerCase();
   const browser = { name: null, version: null };
@@ -206,6 +218,12 @@ app.post('/api/track', trackLimiter, async (req, res) => {
       return;
     }
 
+    // Ignore localhost development traffic
+    if (isLocalhostIp(ipAddress)) {
+      res.json({ ok: true, ignored: 'localhost' });
+      return;
+    }
+
     const geo = lookupGeo(ipAddress);
     const language = normalizeString(req.body?.language, 64);
     const timezone = normalizeString(req.body?.timezone, 128);
@@ -325,6 +343,154 @@ app.get('/api/auth/me', requireAuth, (_req, res) => {
   });
 });
 
+app.post('/api/auth/password-reset-request', loginLimiter, async (req, res) => {
+  try {
+    const username = normalizeString(req.body?.username, 120) || '';
+
+    if (username !== config.adminUsername) {
+      // Don't reveal whether username exists for security
+      res.status(200).json({ ok: true, message: 'If an account exists, a reset link has been sent.' });
+      return;
+    }
+
+    // Generate reset token (valid for 1 hour)
+    const resetToken = jwt.sign(
+      {
+        sub: config.adminUsername,
+        type: 'password-reset'
+      },
+      config.resetTokenSecret,
+      {
+        issuer: 'portfolio-analytics',
+        audience: 'password-reset',
+        expiresIn: '1h'
+      }
+    );
+
+    // Send email with reset link (or log if Mailgun not configured)
+    const resetUrl = `${req.protocol}://${req.get('host')}/reset-password?token=${encodeURIComponent(resetToken)}`;
+
+    if (config.mailgun.apiKey && config.mailgun.domain) {
+      // Queue Mailgun email sending
+      const _mailgunPromise = sendPasswordResetEmail(config.adminEmail, resetUrl);
+      // Fire and forget – don't wait for email to send
+      _mailgunPromise.catch((err) => console.error('Failed to send email:', err));
+    } else {
+      // Development: log to console
+      console.log(`\n📧 PASSWORD RESET REQUEST for ${config.adminUsername}`);
+      console.log(`   To: ${config.adminEmail}`);
+      console.log(`   Reset link: ${resetUrl}`);
+      console.log(`   Token expires in: 1 hour\n`);
+    }
+
+    res.json({ ok: true, message: 'If an account exists, a reset link has been sent.' });
+  } catch (error) {
+    console.error('Password reset request error:', error);
+    res.status(500).json({ ok: false, message: 'Failed to process request.' });
+  }
+});
+
+app.post('/api/auth/reset-password', async (req, res) => {
+  try {
+    const token = normalizeString(req.body?.token, 500) || '';
+    const newPassword = normalizeString(req.body?.password, 500) || '';
+
+    if (!token || !newPassword) {
+      res.status(400).json({ ok: false, message: 'Token and new password are required.' });
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      res.status(400).json({ ok: false, message: 'Password must be at least 8 characters.' });
+      return;
+    }
+
+    let tokenPayload;
+    try {
+      tokenPayload = jwt.verify(token, config.resetTokenSecret, {
+        issuer: 'portfolio-analytics',
+        audience: 'password-reset'
+      });
+    } catch {
+      res.status(401).json({ ok: false, message: 'Invalid or expired reset token.' });
+      return;
+    }
+
+    if (tokenPayload.type !== 'password-reset' || tokenPayload.sub !== config.adminUsername) {
+      res.status(401).json({ ok: false, message: 'Invalid reset token.' });
+      return;
+    }
+
+    // Hash new password
+    const newPasswordHash = await argon2.hash(newPassword, {
+      type: argon2.argon2id,
+      memoryCost: 19456,
+      timeCost: 3,
+      parallelism: 1
+    });
+
+    // Update .env file (in production, use a more secure password manager)
+    console.log(`✅ Password successfully reset for ${config.adminUsername}`);
+    console.log(`⚠️  WARNING: You must manually update ANALYTICS_ADMIN_PASSWORD_HASH in .env:`);
+    console.log(`   ${newPasswordHash}`);
+    console.log(`   After updating, restart the server.\n`);
+
+    res.json({
+      ok: true,
+      message: 'Password reset successful. The server admin must update .env and restart the server.'
+    });
+  } catch (error) {
+    console.error('Password reset error:', error);
+    res.status(500).json({ ok: false, message: 'Failed to reset password.' });
+  }
+});
+
+async function sendPasswordResetEmail(toEmail, resetUrl) {
+  if (!config.mailgun.apiKey || !config.mailgun.domain) {
+    throw new Error('Mailgun not configured');
+  }
+
+  const mailgunUrl = `https://api.mailgun.net/v3/${config.mailgun.domain}/messages`;
+  const auth = `Basic ${Buffer.from(`api:${config.mailgun.apiKey}`).toString('base64')}`;
+
+  const emailBody = `
+Hello,
+
+You requested to reset your portfolio analytics password. Click the link below to continue:
+
+${resetUrl}
+
+This link expires in 1 hour.
+
+If you didn't request this, you can safely ignore this email.
+
+Best regards,
+Portfolio Analytics
+  `.trim();
+
+  const response = await fetch(mailgunUrl, {
+    method: 'POST',
+    headers: {
+      Authorization: auth,
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: new URLSearchParams({
+      from: config.mailgun.fromEmail,
+      to: toEmail,
+      subject: 'Portfolio Analytics - Password Reset',
+      text: emailBody
+    })
+  });
+
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`Mailgun error: ${response.statusText} - ${error}`);
+  }
+
+  return response.json();
+}
+
+
 app.get('/api/stats/summary', requireAuth, async (_req, res) => {
   try {
     const [totalVisitsResult, totalVisitorsResult, totalPageviewsResult, countryResult, deviceResult, osResult] = await Promise.all([
@@ -421,6 +587,101 @@ app.get('/api/stats/recent', requireAuth, async (req, res) => {
     res.status(500).json({ ok: false, message: 'Failed to load recent events.' });
   }
 });
+
+app.get('/api/stats/referrers', requireAuth, async (req, res) => {
+  try {
+    const limit = Math.min(Math.max(Number.parseInt(req.query.limit || '20', 10), 1), 50);
+    const days = Math.min(Math.max(Number.parseInt(req.query.days || '90', 10), 1), 365);
+    const interval = `-${days} days`;
+
+    // Top referrers by visit count
+    const result = await db.execute({
+      sql: `SELECT
+        COALESCE(referrer, 'direct') AS referrer,
+        COUNT(DISTINCT session_id) AS visits,
+        COUNT(DISTINCT visitor_id) AS visitors,
+        COUNT(*) AS events,
+        MIN(created_at) AS first_seen,
+        MAX(created_at) AS last_seen
+      FROM visits
+      WHERE created_at >= datetime('now', ?)
+        AND referrer IS NOT NULL
+      GROUP BY COALESCE(referrer, 'direct')
+      ORDER BY visits DESC
+      LIMIT ?`,
+      args: [interval, limit]
+    });
+
+    // Also fetch direct traffic (no referrer)
+    const directResult = await db.execute({
+      sql: `SELECT COUNT(DISTINCT session_id) AS visits FROM visits
+        WHERE created_at >= datetime('now', ?)
+        AND (referrer IS NULL OR referrer = '')`,
+      args: [interval]
+    });
+
+    const directVisits = toNumber(directResult.rows[0]?.visits) || 0;
+
+    res.json({
+      ok: true,
+      days,
+      directVisits,
+      referrers: result.rows.map((row) => ({
+        referrer: row.referrer,
+        visits: toNumber(row.visits),
+        visitors: toNumber(row.visitors),
+        events: toNumber(row.events),
+        firstSeen: row.first_seen,
+        lastSeen: row.last_seen
+      }))
+    });
+  } catch (error) {
+    console.error('Referrer stats error:', error);
+    res.status(500).json({ ok: false, message: 'Failed to load referrer stats.' });
+  }
+});
+
+app.get('/api/stats/pages', requireAuth, async (req, res) => {
+  try {
+    const limit = Math.min(Math.max(Number.parseInt(req.query.limit || '15', 10), 1), 50);
+    const days = Math.min(Math.max(Number.parseInt(req.query.days || '90', 10), 1), 365);
+    const interval = `-${days} days`;
+
+    const result = await db.execute({
+      sql: `SELECT
+        path,
+        COUNT(DISTINCT session_id) AS visits,
+        COUNT(DISTINCT visitor_id) AS visitors,
+        COUNT(*) AS events,
+        MIN(created_at) AS first_seen,
+        MAX(created_at) AS last_seen
+      FROM events
+      WHERE created_at >= datetime('now', ?)
+        AND event_type = 'pageview'
+      GROUP BY path
+      ORDER BY events DESC
+      LIMIT ?`,
+      args: [interval, limit]
+    });
+
+    res.json({
+      ok: true,
+      days,
+      pages: result.rows.map((row) => ({
+        path: row.path,
+        visits: toNumber(row.visits),
+        visitors: toNumber(row.visitors),
+        pageviews: toNumber(row.events),
+        firstSeen: row.first_seen,
+        lastSeen: row.last_seen
+      }))
+    });
+  } catch (error) {
+    console.error('Page stats error:', error);
+    res.status(500).json({ ok: false, message: 'Failed to load page stats.' });
+  }
+});
+
 
 app.use((error, _req, res, _next) => {
   console.error(error);

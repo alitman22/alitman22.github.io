@@ -13,7 +13,8 @@
     "prerender": "node scripts/prerender.mjs",
     "preview": "vite preview",
     "publish:local": "npm run build && node scripts/publish-local.mjs",
-    "setup-hooks": "node -e \"const{copyFileSync,chmodSync}=require('fs');copyFileSync('scripts/pre-push.sh','.git/hooks/pre-push');try{chmodSync('.git/hooks/pre-push','755')}catch(e){};console.log('Hook installed.')\""
+    "setup-hooks": "node -e \"const{copyFileSync,chmodSync}=require('fs');copyFileSync('scripts/pre-push.sh','.git/hooks/pre-push');try{chmodSync('.git/hooks/pre-push','755')}catch(e){};console.log('Hook installed.')\"",
+    "analytics:cleanup-localhost": "node server/tools/cleanup-localhost-data.mjs"
   },
   "dependencies": {
     "@libsql/client": "^0.17.2",
