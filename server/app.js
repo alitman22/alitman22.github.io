@@ -8,7 +8,7 @@ import jwt from 'jsonwebtoken';
 import speakeasy from 'speakeasy';
 import { config } from './config.js';
 import { db, initDatabase } from './db.js';
-import { lookupGeo } from './geoip.js';
+import { lookupGeo, initGeoIp } from './geoip.js';
 
 const app = express();
 
@@ -690,6 +690,7 @@ app.use((error, _req, res, _next) => {
 
 const start = async () => {
   await initDatabase();
+  await initGeoIp();
 
   app.listen(config.port, () => {
     console.log(`Analytics API listening on http://localhost:${config.port}`);
