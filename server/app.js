@@ -133,6 +133,41 @@ function normalizeInteger(value, min, max) {
   return parsed;
 }
 
+function sanitizeReferrer(referrer) {
+  const normalized = normalizeString(referrer, 600);
+  if (!normalized) return null;
+
+  try {
+    const parsed = new URL(normalized);
+    // Keep only origin + pathname to avoid storing query/hash identifiers.
+    const safePath = parsed.pathname || '/';
+    return `${parsed.origin}${safePath}`.slice(0, 400);
+  } catch {
+    // If parsing fails, store a bounded raw string rather than rejecting event.
+    return normalized.slice(0, 400);
+  }
+}
+
+function anonymizeIp(ipAddress) {
+  const ip = normalizeString(ipAddress, 200);
+  if (!ip) return null;
+
+  const ipv4 = ip.startsWith('::ffff:') ? ip.slice(7) : ip;
+  if (/^\d{1,3}(?:\.\d{1,3}){3}$/.test(ipv4)) {
+    const [a, b, c] = ipv4.split('.');
+    return `${a}.${b}.${c}.0`;
+  }
+
+  if (ip.includes(':')) {
+    const segments = ip.split(':').filter(Boolean).slice(0, 4);
+    if (segments.length > 0) {
+      return `${segments.join(':')}::`;
+    }
+  }
+
+  return null;
+}
+
 function isValidOpaqueId(value) {
   if (typeof value !== 'string') return false;
   return /^[a-zA-Z0-9_-]{12,80}$/.test(value);
@@ -198,7 +233,7 @@ app.post('/api/track', trackLimiter, async (req, res) => {
   try {
     const eventType = normalizeString(req.body?.eventType, 40) || 'pageview';
     const path = normalizeString(req.body?.path, 400) || '/';
-    const referrer = normalizeString(req.body?.referrer, 400);
+    const referrer = sanitizeReferrer(req.body?.referrer);
     const visitorId = normalizeString(req.body?.visitorId, 80);
     const sessionId = normalizeString(req.body?.sessionId, 80);
 
@@ -209,6 +244,7 @@ app.post('/api/track', trackLimiter, async (req, res) => {
 
     const userAgent = normalizeString(req.headers['user-agent'] || '', 600) || 'unknown';
     const ipAddress = readClientIp(req);
+    const anonymizedIp = anonymizeIp(ipAddress);
     const ua = parseUserAgent(userAgent);
     const botVisit = isBotUserAgent(userAgent);
     const now = new Date().toISOString();
@@ -238,7 +274,7 @@ app.post('/api/track', trackLimiter, async (req, res) => {
         last_seen_at = excluded.last_seen_at,
         last_path = excluded.last_path,
         pageview_count = sessions.pageview_count + 1`,
-      args: [sessionId, visitorId, ipAddress, userAgent, path, path, now, now]
+      args: [sessionId, visitorId, anonymizedIp, userAgent, path, path, now, now]
     });
 
     await db.execute({
