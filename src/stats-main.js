@@ -42,7 +42,7 @@ function renderLogin(message = '') {
         <form id="login-form" class="stats-form">
           <label>
             Username
-            <input name="username" type="text" autocomplete="username" required value="admin" />
+            <input name="username" type="text" autocomplete="username" required />
           </label>
           <label>
             Password
@@ -116,7 +116,11 @@ function renderDashboard(summary, daily, recent) {
     <main class="stats-container">
       <header class="stats-header">
         <h1>Portfolio Visitor Analytics</h1>
-        <button id="logout-button" class="logout-button" type="button">Log out</button>
+        <div class="header-actions">
+          <span class="last-updated" id="last-updated">Updated: ${new Date().toLocaleTimeString()}</span>
+          <button id="refresh-button" class="refresh-button" type="button">Refresh</button>
+          <button id="logout-button" class="logout-button" type="button">Log out</button>
+        </div>
       </header>
 
       <section class="stats-grid totals-grid">
@@ -183,9 +187,23 @@ function renderDashboard(summary, daily, recent) {
   `;
 
   document.getElementById('logout-button')?.addEventListener('click', async () => {
+    stopAutoRefresh();
     await apiRequest('/api/auth/logout', { method: 'POST' });
     renderLogin();
   });
+
+  document.getElementById('refresh-button')?.addEventListener('click', () => {
+    loadDashboard();
+  });
+}
+
+let _refreshTimer = null;
+
+function stopAutoRefresh() {
+  if (_refreshTimer) {
+    clearInterval(_refreshTimer);
+    _refreshTimer = null;
+  }
 }
 
 async function loadDashboard() {
@@ -198,6 +216,7 @@ async function loadDashboard() {
 
     renderDashboard(summary, daily, recent);
   } catch (error) {
+    stopAutoRefresh();
     renderLogin(error.message);
   }
 }
@@ -208,6 +227,8 @@ async function boot() {
   try {
     await apiRequest('/api/auth/me');
     await loadDashboard();
+    stopAutoRefresh();
+    _refreshTimer = setInterval(loadDashboard, 60 * 1000);
   } catch {
     renderLogin();
   }

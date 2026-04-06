@@ -29,7 +29,7 @@ async function cleanup() {
     // Step 1: Fetch all localhost session IDs
     console.log('📊 Querying localhost sessions...');
     const sessionsResult = await client.execute({
-      sql: 'SELECT DISTINCT session_id FROM sessions WHERE ip_address LIKE "127.%" OR ip_address = "::1" OR ip_address = "::ffff:127.0.0.1"'
+      sql: "SELECT DISTINCT session_id FROM sessions WHERE ip_address LIKE '127.%' OR ip_address = '::1' OR ip_address = '::ffff:127.0.0.1'"
     });
 
     const localhostSessions = sessionsResult.rows.map(row => row.session_id);
@@ -43,28 +43,28 @@ async function cleanup() {
     // Step 2: Delete events from localhost sessions
     console.log('🗑️  Deleting localhost events...');
     const eventsDelete = await client.execute({
-      sql: 'DELETE FROM events WHERE session_id IN (SELECT session_id FROM sessions WHERE ip_address LIKE "127.%" OR ip_address = "::1" OR ip_address = "::ffff:127.0.0.1")'
+      sql: "DELETE FROM events WHERE session_id IN (SELECT session_id FROM sessions WHERE ip_address LIKE '127.%' OR ip_address = '::1' OR ip_address = '::ffff:127.0.0.1')"
     });
     console.log(`   Deleted ${eventsDelete.rowsAffected} event records\n`);
 
     // Step 3: Delete visits from localhost sessions
     console.log('🗑️  Deleting localhost visits...');
     const visitsDelete = await client.execute({
-      sql: 'DELETE FROM visits WHERE session_id IN (SELECT session_id FROM sessions WHERE ip_address LIKE "127.%" OR ip_address = "::1" OR ip_address = "::ffff:127.0.0.1")'
+      sql: "DELETE FROM visits WHERE session_id IN (SELECT session_id FROM sessions WHERE ip_address LIKE '127.%' OR ip_address = '::1' OR ip_address = '::ffff:127.0.0.1')"
     });
     console.log(`   Deleted ${visitsDelete.rowsAffected} visit records\n`);
 
     // Step 4: Delete sessions from localhost
     console.log('🗑️  Deleting localhost sessions...');
     const sessionsDelete = await client.execute({
-      sql: 'DELETE FROM sessions WHERE ip_address LIKE "127.%" OR ip_address = "::1" OR ip_address = "::ffff:127.0.0.1"'
+      sql: "DELETE FROM sessions WHERE ip_address LIKE '127.%' OR ip_address = '::1' OR ip_address = '::ffff:127.0.0.1'"
     });
     console.log(`   Deleted ${sessionsDelete.rowsAffected} session records\n`);
 
     // Step 5: Verify cleanup
     console.log('✅ Verifying cleanup...');
     const verify = await client.execute({
-      sql: 'SELECT COUNT(*) as count FROM sessions WHERE ip_address LIKE "127.%" OR ip_address = "::1" OR ip_address = "::ffff:127.0.0.1"'
+      sql: "SELECT COUNT(*) as count FROM sessions WHERE ip_address LIKE '127.%' OR ip_address = '::1' OR ip_address = '::ffff:127.0.0.1'"
     });
     const remainingCount = verify.rows[0]?.count || 0;
 

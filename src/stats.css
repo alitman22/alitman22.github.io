@@ -70,6 +70,43 @@ body {
   background-clip: text;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.5rem, 1.5vw, 1rem);
+  flex-wrap: wrap;
+}
+
+.last-updated {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.refresh-button {
+  border: 1.5px solid rgba(27, 203, 122, 0.4);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(27, 203, 122, 0.1), rgba(27, 203, 122, 0.05));
+  color: var(--accent-light);
+  padding: clamp(0.4rem, 0.8vw, 0.6rem) clamp(0.7rem, 1.5vw, 1rem);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.refresh-button:hover {
+  background: linear-gradient(135deg, rgba(27, 203, 122, 0.2), rgba(27, 203, 122, 0.1));
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(27, 203, 122, 0.2);
+}
+
+.refresh-button:active {
+  transform: translateY(0);
+}
+
 .logout-button,
 .stats-form button {
   border: 2px solid var(--border-highlight);
@@ -307,8 +344,18 @@ tbody tr:hover td {
     text-align: center;
   }
 
-  .logout-button {
+  .header-actions {
+    justify-content: center;
     width: 100%;
+  }
+
+  .logout-button {
+    flex: 1;
+    text-align: center;
+  }
+
+  .refresh-button {
+    flex: 1;
     text-align: center;
   }
 
