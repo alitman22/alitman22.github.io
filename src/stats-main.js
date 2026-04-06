@@ -49,12 +49,12 @@ function renderLogin(message = '') {
   root.innerHTML = `
     <main class="stats-container">
       <section class="stats-card login-card">
-        <div class="login-brand">
-          <img src="${logoStats}" alt="Portfolio Analytics" class="login-logo" />
-          <div class="login-brand-copy">
-            <h1>Portfolio Analytics</h1>
-            <p>Secure dashboard access</p>
-          </div>
+        <div class="login-hero">
+          <img src="${logoStats}" alt="Portfolio Analytics" class="login-hero-image" />
+        </div>
+        <div class="login-brand-copy">
+          <h1>Portfolio Analytics</h1>
+          <p>Secure dashboard access</p>
         </div>
         <p class="login-help">Enter your analytics credentials. If 2FA is enabled, provide the current code.</p>
         <form id="login-form" class="stats-form">
