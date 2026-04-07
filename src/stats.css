@@ -750,10 +750,36 @@ tbody tr:hover td {
 .recent-events-table .col-select { width: 56px; }
 .recent-events-table .col-time { width: 170px; }
 .recent-events-table .col-ip { width: 112px; }
-.recent-events-table .col-location { width: 160px; }
+.recent-events-table .col-location { width: 240px; }
 .recent-events-table .col-device { width: 170px; }
-.recent-events-table .col-browser { width: 104px; }
-.recent-events-table .col-referrer { width: auto; }
+.recent-events-table .col-browser { width: 96px; }
+.recent-events-table .col-referrer { width: 190px; }
+
+.mobile-overview-card {
+  display: none;
+}
+
+.mobile-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+
+.mobile-overview-grid h3 {
+  margin: 0 0 0.2rem 0;
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.mobile-overview-grid .stats-list {
+  gap: 0.12rem;
+}
+
+.mobile-overview-grid .stats-list li {
+  font-size: 0.66rem;
+}
 
 .cell-time {
   white-space: nowrap;
@@ -950,7 +976,16 @@ tbody tr:hover td {
   }
 
   .compact-analytics-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .compact-source-card {
+    display: none;
+  }
+
+  .mobile-overview-card {
+    display: block;
+    grid-column: 1 / -1;
   }
 
   .metrics-merged-grid {
@@ -977,6 +1012,19 @@ tbody tr:hover td {
 
   .recent-events-table {
     table-layout: auto;
+  }
+
+  .recent-events-table .col-ip,
+  .recent-events-table .col-browser,
+  .recent-events-table th:nth-child(3),
+  .recent-events-table td:nth-child(3),
+  .recent-events-table th:nth-child(6),
+  .recent-events-table td:nth-child(6) {
+    display: none;
+  }
+
+  .recent-events-table .col-location {
+    width: 230px;
   }
 }
 
@@ -1095,8 +1143,25 @@ tbody tr:hover td {
   }
 
   .stats-list li {
-    flex-direction: column;
     gap: 0.2rem;
+  }
+
+  .compact-analytics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mobile-overview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .recent-events-table .col-referrer,
+  .recent-events-table th:nth-child(7),
+  .recent-events-table td:nth-child(7) {
+    display: none;
+  }
+
+  .recent-events-table .col-location {
+    width: auto;
   }
 
   .metrics-merged-grid {

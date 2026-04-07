@@ -429,13 +429,28 @@ function renderDashboard(summary, daily, recent, yearlyDaily, interactions) {
     .map((row) => `<li><span>${escapeHtml(row.label || 'Unknown')}</span><strong>${row.total}</strong></li>`)
     .join('');
 
+  const mobileCountryRows = (summary.countries || [])
+    .slice(0, 3)
+    .map((row) => `<li><span>${escapeHtml(row.label || 'Unknown')}</span><strong>${row.total}</strong></li>`)
+    .join('');
+
   const osRows = summary.operatingSystems
     .map((row) => {
       return `<li><span class="os-entry">${renderOsIcon(row.label)}<span>${escapeHtml(row.label || 'Unknown')}</span></span><strong>${row.total}</strong></li>`;
     })
     .join('');
 
+  const mobileOsRows = (summary.operatingSystems || [])
+    .slice(0, 3)
+    .map((row) => `<li><span>${escapeHtml(row.label || 'Unknown')}</span><strong>${row.total}</strong></li>`)
+    .join('');
+
   const deviceRows = summary.devices
+    .map((row) => `<li><span>${escapeHtml(row.label || 'Unknown')}</span><strong>${row.total}</strong></li>`)
+    .join('');
+
+  const mobileDeviceRows = (summary.devices || [])
+    .slice(0, 3)
     .map((row) => `<li><span>${escapeHtml(row.label || 'Unknown')}</span><strong>${row.total}</strong></li>`)
     .join('');
 
@@ -617,17 +632,34 @@ function renderDashboard(summary, daily, recent, yearlyDaily, interactions) {
       </section>
 
       <section class="stats-grid compact-analytics-grid">
-        <article class="stats-card">
+        <article class="stats-card compact-source-card">
           <h2>Top Countries</h2>
           <ul class="stats-list">${countryRows || '<li><span>No data</span><strong>0</strong></li>'}</ul>
         </article>
-        <article class="stats-card">
+        <article class="stats-card compact-source-card">
           <h2>Device Types</h2>
           <ul class="stats-list">${deviceRows || '<li><span>No data</span><strong>0</strong></li>'}</ul>
         </article>
-        <article class="stats-card">
+        <article class="stats-card compact-source-card">
           <h2>Operating Systems</h2>
           <ul class="stats-list">${osRows || '<li><span>No data</span><strong>0</strong></li>'}</ul>
+        </article>
+        <article class="stats-card mobile-overview-card">
+          <h2>Traffic Snapshot</h2>
+          <div class="mobile-overview-grid">
+            <section>
+              <h3>Countries</h3>
+              <ul class="stats-list">${mobileCountryRows || '<li><span>No data</span><strong>0</strong></li>'}</ul>
+            </section>
+            <section>
+              <h3>Devices</h3>
+              <ul class="stats-list">${mobileDeviceRows || '<li><span>No data</span><strong>0</strong></li>'}</ul>
+            </section>
+            <section>
+              <h3>OS</h3>
+              <ul class="stats-list">${mobileOsRows || '<li><span>No data</span><strong>0</strong></li>'}</ul>
+            </section>
+          </div>
         </article>
         <article class="stats-card">
           <h2>Visits by Day (${daily.days} days)</h2>
