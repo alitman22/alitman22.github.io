@@ -486,7 +486,7 @@ function renderDashboard(summary, daily, recent, yearlyDaily) {
         </article>
       </section>
 
-      <section class="stats-grid focus-grid">
+      <section class="stats-grid focus-grid compact-focus-grid">
         <article class="stats-card period-card">
           <div class="period-header">
             <h2>Visitors Trend</h2>
@@ -500,9 +500,6 @@ function renderDashboard(summary, daily, recent, yearlyDaily) {
           </div>
           ${periodBars}
         </article>
-      </section>
-
-      <section class="stats-grid">
         <article class="stats-card heatmap-card">
           <div class="heatmap-header">
             <button id="calendar-prev" class="refresh-button" type="button">Prev</button>
@@ -519,7 +516,7 @@ function renderDashboard(summary, daily, recent, yearlyDaily) {
         </article>
       </section>
 
-      <section class="stats-grid taxonomy-grid">
+      <section class="stats-grid compact-analytics-grid">
         <article class="stats-card">
           <h2>Top Countries</h2>
           <ul class="stats-list">${countryRows || '<li><span>No data</span><strong>0</strong></li>'}</ul>
@@ -532,9 +529,6 @@ function renderDashboard(summary, daily, recent, yearlyDaily) {
           <h2>Operating Systems</h2>
           <ul class="stats-list">${osRows || '<li><span>No data</span><strong>0</strong></li>'}</ul>
         </article>
-      </section>
-
-      <section class="stats-grid breakdown-grid">
         <article class="stats-card">
           <h2>Visits by Day (${daily.days} days)</h2>
           <table>
@@ -552,7 +546,7 @@ function renderDashboard(summary, daily, recent, yearlyDaily) {
         </article>
       </section>
 
-      <section class="stats-grid">
+      <section class="stats-grid compact-table-grid">
         <article class="stats-card">
           <div class="recent-events-header">
             <h2>Recent Events</h2>

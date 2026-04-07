@@ -132,7 +132,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const lt=""+new URL("logo-stats-My1
         </article>
       </section>
 
-      <section class="stats-grid focus-grid">
+      <section class="stats-grid focus-grid compact-focus-grid">
         <article class="stats-card period-card">
           <div class="period-header">
             <h2>Visitors Trend</h2>
@@ -146,9 +146,6 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const lt=""+new URL("logo-stats-My1
           </div>
           ${Q}
         </article>
-      </section>
-
-      <section class="stats-grid">
         <article class="stats-card heatmap-card">
           <div class="heatmap-header">
             <button id="calendar-prev" class="refresh-button" type="button">Prev</button>
@@ -165,7 +162,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const lt=""+new URL("logo-stats-My1
         </article>
       </section>
 
-      <section class="stats-grid taxonomy-grid">
+      <section class="stats-grid compact-analytics-grid">
         <article class="stats-card">
           <h2>Top Countries</h2>
           <ul class="stats-list">${Z||"<li><span>No data</span><strong>0</strong></li>"}</ul>
@@ -178,9 +175,6 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const lt=""+new URL("logo-stats-My1
           <h2>Operating Systems</h2>
           <ul class="stats-list">${tt||"<li><span>No data</span><strong>0</strong></li>"}</ul>
         </article>
-      </section>
-
-      <section class="stats-grid breakdown-grid">
         <article class="stats-card">
           <h2>Visits by Day (${e.days} days)</h2>
           <table>
@@ -198,7 +192,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const lt=""+new URL("logo-stats-My1
         </article>
       </section>
 
-      <section class="stats-grid">
+      <section class="stats-grid compact-table-grid">
         <article class="stats-card">
           <div class="recent-events-header">
             <h2>Recent Events</h2>
