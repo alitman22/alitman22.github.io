@@ -67,6 +67,28 @@ function formatReferrer(value) {
   }
 }
 
+function formatEventType(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return 'Unknown';
+  return raw
+    .replaceAll('_', ' ')
+    .replaceAll('-', ' ')
+    .replace(/\b\w/g, (ch) => ch.toUpperCase());
+}
+
+function formatTarget(value) {
+  const raw = String(value || '').trim();
+  if (!raw || raw === '-') return { short: '-', full: '-' };
+
+  try {
+    const parsed = new URL(raw);
+    const short = `${parsed.hostname}${parsed.pathname === '/' ? '' : parsed.pathname}`;
+    return { short: compactText(short, 38), full: raw };
+  } catch {
+    return { short: compactText(raw, 38), full: raw };
+  }
+}
+
 function toIsoDateUTC(date) {
   return date.toISOString().slice(0, 10);
 }
@@ -374,7 +396,7 @@ function renderLogin(message = '') {
   });
 }
 
-function renderDashboard(summary, daily, recent, yearlyDaily) {
+function renderDashboard(summary, daily, recent, yearlyDaily, interactions) {
   const totalVisits = Number(summary.totals.visits || 0);
   const totalVisitors = Number(summary.totals.visitors || 0);
   const totalPageviews = Number(summary.totals.pageviews || 0);
@@ -452,6 +474,28 @@ function renderDashboard(summary, daily, recent, yearlyDaily) {
     })
     .join('');
 
+  const interactionTotals = interactions?.totals || {};
+  const interactionTypeRows = (interactions?.byType || [])
+    .map((row) => `<li><span>${escapeHtml(formatEventType(row.eventType))}</span><strong>${row.total}</strong></li>`)
+    .join('');
+
+  const projectClickRows = (interactions?.topProjectTargets || [])
+    .map((row) => {
+      const target = formatTarget(row.target);
+      const label = compactText(row.label || 'Unknown Project', 26);
+      return `
+        <li>
+          <span title="${escapeHtml(`${row.label || 'Unknown Project'} -> ${target.full}`)}">${escapeHtml(label)}</span>
+          <strong>${row.total}</strong>
+        </li>
+      `;
+    })
+    .join('');
+
+  const topSectionRows = (interactions?.topSections || [])
+    .map((row) => `<li><span>${escapeHtml(row.section || 'unknown')}</span><strong>${row.total}</strong></li>`)
+    .join('');
+
   const recentRows = recent.records
     .map((row) => {
       const deviceType = escapeHtml(row.device_type || '-');
@@ -506,6 +550,21 @@ function renderDashboard(summary, daily, recent, yearlyDaily) {
         <article class="stats-card">
           <h2>Total Pageviews</h2>
           <p class="big-number">${summary.totals.pageviews}</p>
+        </article>
+      </section>
+
+      <section class="stats-grid totals-grid">
+        <article class="stats-card">
+          <h2>Resume Downloads (${interactions?.days || 90}d)</h2>
+          <p class="big-number">${interactionTotals.resumeDownloads || 0}</p>
+        </article>
+        <article class="stats-card">
+          <h2>Project Link Clicks (${interactions?.days || 90}d)</h2>
+          <p class="big-number">${interactionTotals.projectLinkClicks || 0}</p>
+        </article>
+        <article class="stats-card">
+          <h2>Section Views (${interactions?.days || 90}d)</h2>
+          <p class="big-number">${interactionTotals.sectionViews || 0}</p>
         </article>
       </section>
 
@@ -578,6 +637,18 @@ function renderDashboard(summary, daily, recent, yearlyDaily) {
         <article class="stats-card">
           <h2>Device Distribution</h2>
           <div class="bar-chart">${deviceBars || '<p>No device data</p>'}</div>
+        </article>
+        <article class="stats-card">
+          <h2>Interaction Types (${interactions?.days || 90}d)</h2>
+          <ul class="stats-list">${interactionTypeRows || '<li><span>No interactions yet</span><strong>0</strong></li>'}</ul>
+        </article>
+        <article class="stats-card">
+          <h2>Top Clicked Projects</h2>
+          <ul class="stats-list">${projectClickRows || '<li><span>No project clicks yet</span><strong>0</strong></li>'}</ul>
+        </article>
+        <article class="stats-card">
+          <h2>Top Viewed Sections</h2>
+          <ul class="stats-list">${topSectionRows || '<li><span>No section views yet</span><strong>0</strong></li>'}</ul>
         </article>
       </section>
       </div>
@@ -664,17 +735,17 @@ function renderDashboard(summary, daily, recent, yearlyDaily) {
 
   document.getElementById('period-select')?.addEventListener('change', (event) => {
     selectedPeriod = String(event.target.value || 'week');
-    renderDashboard(summary, daily, recent, yearlyDaily);
+    renderDashboard(summary, daily, recent, yearlyDaily, interactions);
   });
 
   document.getElementById('calendar-prev')?.addEventListener('click', () => {
     calendarMonth = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() - 1, 1);
-    renderDashboard(summary, daily, recent, yearlyDaily);
+    renderDashboard(summary, daily, recent, yearlyDaily, interactions);
   });
 
   document.getElementById('calendar-next')?.addEventListener('click', () => {
     calendarMonth = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1, 1);
-    renderDashboard(summary, daily, recent, yearlyDaily);
+    renderDashboard(summary, daily, recent, yearlyDaily, interactions);
   });
 
   document.getElementById('delete-selected-button')?.addEventListener('click', async () => {
@@ -719,18 +790,19 @@ function stopAutoRefresh() {
 
 async function loadDashboard() {
   try {
-    const [summary, daily, recent, yearlyDaily] = await Promise.all([
+    const [summary, daily, recent, yearlyDaily, interactions] = await Promise.all([
       apiRequest('/api/stats/summary'),
       apiRequest('/api/stats/daily?days=30'),
       apiRequest(`/api/stats/recent?page=${recentPage}&perPage=${recentPerPage}`),
-      apiRequest('/api/stats/daily?days=365')
+      apiRequest('/api/stats/daily?days=365'),
+      apiRequest('/api/stats/interactions?days=90')
     ]);
 
     if (recent?.paging?.page) {
       recentPage = recent.paging.page;
     }
 
-    renderDashboard(summary, daily, recent, yearlyDaily);
+    renderDashboard(summary, daily, recent, yearlyDaily, interactions);
   } catch (error) {
     stopAutoRefresh();
     renderLogin(error.message);

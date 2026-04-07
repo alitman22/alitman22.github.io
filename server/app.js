@@ -894,6 +894,103 @@ app.get('/api/stats/pages', requireAuth, async (req, res) => {
   }
 });
 
+app.get('/api/stats/interactions', requireAuth, async (req, res) => {
+  try {
+    const days = Math.min(Math.max(Number.parseInt(req.query.days || '90', 10), 1), 365);
+    const interval = `-${days} days`;
+
+    const [totalsResult, eventTypesResult, topProjectTargetsResult, topSectionsResult] = await Promise.all([
+      db.execute({
+        sql: `SELECT
+          SUM(CASE WHEN event_type = 'resume_download' THEN 1 ELSE 0 END) AS resume_downloads,
+          SUM(CASE WHEN event_type = 'project_link_click' THEN 1 ELSE 0 END) AS project_link_clicks,
+          SUM(CASE WHEN event_type = 'section_view' THEN 1 ELSE 0 END) AS section_views,
+          COUNT(*) AS total
+        FROM events
+        WHERE created_at >= datetime('now', ?)
+          AND (
+            event_category IN ('conversion', 'outbound', 'engagement')
+            OR event_type IN ('resume_download', 'project_link_click', 'section_view')
+          )`,
+        args: [interval]
+      }),
+      db.execute({
+        sql: `SELECT
+          event_type,
+          COUNT(*) AS total
+        FROM events
+        WHERE created_at >= datetime('now', ?)
+          AND (
+            event_category IN ('conversion', 'outbound', 'engagement')
+            OR event_type IN ('resume_download', 'project_link_click', 'section_view')
+          )
+        GROUP BY event_type
+        ORDER BY total DESC
+        LIMIT 12`,
+        args: [interval]
+      }),
+      db.execute({
+        sql: `SELECT
+          COALESCE(event_label, 'Unknown Project') AS label,
+          COALESCE(target_url, path, '-') AS target,
+          COUNT(*) AS total,
+          MAX(created_at) AS last_seen
+        FROM events
+        WHERE created_at >= datetime('now', ?)
+          AND event_type = 'project_link_click'
+        GROUP BY COALESCE(event_label, 'Unknown Project'), COALESCE(target_url, path, '-')
+        ORDER BY total DESC, last_seen DESC
+        LIMIT 10`,
+        args: [interval]
+      }),
+      db.execute({
+        sql: `SELECT
+          COALESCE(event_label, 'unknown') AS section,
+          COUNT(*) AS total,
+          MAX(created_at) AS last_seen
+        FROM events
+        WHERE created_at >= datetime('now', ?)
+          AND event_type = 'section_view'
+        GROUP BY COALESCE(event_label, 'unknown')
+        ORDER BY total DESC, last_seen DESC
+        LIMIT 12`,
+        args: [interval]
+      })
+    ]);
+
+    const totalsRow = totalsResult.rows[0] || {};
+
+    res.json({
+      ok: true,
+      days,
+      totals: {
+        resumeDownloads: toNumber(totalsRow.resume_downloads),
+        projectLinkClicks: toNumber(totalsRow.project_link_clicks),
+        sectionViews: toNumber(totalsRow.section_views),
+        total: toNumber(totalsRow.total)
+      },
+      byType: eventTypesResult.rows.map((row) => ({
+        eventType: row.event_type,
+        total: toNumber(row.total)
+      })),
+      topProjectTargets: topProjectTargetsResult.rows.map((row) => ({
+        label: row.label,
+        target: row.target,
+        total: toNumber(row.total),
+        lastSeen: row.last_seen
+      })),
+      topSections: topSectionsResult.rows.map((row) => ({
+        section: row.section,
+        total: toNumber(row.total),
+        lastSeen: row.last_seen
+      }))
+    });
+  } catch (error) {
+    console.error('Interactions stats error:', error);
+    res.status(500).json({ ok: false, message: 'Failed to load interaction stats.' });
+  }
+});
+
 
 app.use((error, _req, res, _next) => {
   if (String(error?.message || '').includes('Origin not allowed by CORS')) {
