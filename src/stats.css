@@ -40,12 +40,12 @@ body {
 }
 
 .stats-container {
-  width: min(90vw, 1320px);
+  width: min(96vw, 1480px);
   max-width: 100%;
   margin: 0 auto;
-  padding: clamp(1.5rem, 4vw, 3rem) clamp(1rem, 3vw, 2rem);
+  padding: clamp(1rem, 2.6vw, 2rem) clamp(0.85rem, 2vw, 1.5rem);
   display: grid;
-  gap: clamp(1rem, 2vw, 1.5rem);
+  gap: clamp(0.75rem, 1.4vw, 1rem);
   flex: 1;
 }
 
@@ -136,21 +136,34 @@ body {
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(clamp(200px, 25vw, 280px), 1fr));
-  gap: clamp(0.8rem, 2vw, 1.2rem);
+  grid-template-columns: repeat(auto-fit, minmax(clamp(180px, 22vw, 250px), 1fr));
+  gap: clamp(0.65rem, 1.4vw, 0.9rem);
 }
 
 .totals-grid {
-  grid-template-columns: repeat(auto-fit, minmax(clamp(180px, 22vw, 240px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(clamp(160px, 18vw, 220px), 1fr));
+}
+
+.focus-grid {
+  grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.95fr);
+  align-items: start;
+}
+
+.taxonomy-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.breakdown-grid {
+  grid-template-columns: minmax(260px, 0.9fr) minmax(280px, 1.1fr) minmax(260px, 0.9fr);
 }
 
 .stats-card {
   background: rgba(11, 22, 42, 0.7);
   border: 1px solid var(--border-color);
   border-radius: 16px;
-  padding: clamp(1rem, 2vw, 1.5rem);
-  backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  padding: clamp(0.85rem, 1.4vw, 1.1rem);
   transition: var(--transition);
   overflow: hidden;
   position: relative;
@@ -180,8 +193,8 @@ body {
 }
 
 .stats-card h2 {
-  margin: 0 0 clamp(0.5rem, 1vw, 0.8rem) 0;
-  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  margin: 0 0 clamp(0.4rem, 0.7vw, 0.65rem) 0;
+  font-size: clamp(0.82rem, 1.4vw, 1rem);
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -228,6 +241,7 @@ body {
   border: 1px solid var(--border-color);
   border-radius: 16px;
   padding: clamp(1.5rem, 3vw, 2rem);
+  -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
 }
 
@@ -336,24 +350,24 @@ body {
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+  font-size: clamp(0.72rem, 1.1vw, 0.88rem);
 }
 
 th {
   background: rgba(0, 214, 255, 0.05);
   text-align: left;
-  padding: clamp(0.6rem, 1vw, 0.8rem);
+  padding: 0.55rem 0.65rem;
   border-bottom: 2px solid var(--border-highlight);
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.3px;
-  font-size: clamp(0.75rem, 1.2vw, 0.85rem);
+  font-size: clamp(0.68rem, 1vw, 0.78rem);
 }
 
 td {
   text-align: left;
-  padding: clamp(0.5rem, 1vw, 0.8rem);
+  padding: 0.48rem 0.65rem;
   border-bottom: 1px solid var(--border-color);
   vertical-align: middle;
   color: var(--text-primary);
@@ -373,6 +387,7 @@ tbody tr:hover td {
   border-radius: 12px;
   border: 1px solid var(--border-color);
   background: rgba(11, 22, 42, 0.4);
+  -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
 
@@ -384,9 +399,9 @@ tbody tr:hover td {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.55rem;
   flex-wrap: wrap;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.45rem;
 }
 
 .recent-events-header h2 {
@@ -396,7 +411,7 @@ tbody tr:hover td {
 .paging-controls {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
   flex-wrap: wrap;
 }
 
@@ -410,8 +425,8 @@ tbody tr:hover td {
   background: rgba(11, 22, 42, 0.85);
   color: var(--text-primary);
   border-radius: 8px;
-  padding: 0.35rem 0.5rem;
-  font-size: 0.85rem;
+  padding: 0.3rem 0.45rem;
+  font-size: 0.8rem;
 }
 
 .paging-meta {
@@ -449,19 +464,19 @@ tbody tr:hover td {
 }
 
 .metrics-merged-card h2 {
-  margin-bottom: 0.9rem;
+  margin-bottom: 0.65rem;
 }
 
 .metrics-merged-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(120px, 1fr));
-  gap: 0.6rem;
+  gap: 0.45rem;
 }
 
 .metric-item {
   border: 1px solid rgba(0, 214, 255, 0.14);
   border-radius: 10px;
-  padding: 0.55rem 0.7rem;
+  padding: 0.45rem 0.55rem;
   background: rgba(0, 0, 0, 0.18);
 }
 
@@ -475,9 +490,9 @@ tbody tr:hover td {
 
 .metric-item strong {
   display: block;
-  margin-top: 0.2rem;
+  margin-top: 0.12rem;
   color: var(--text-primary);
-  font-size: 1.2rem;
+  font-size: 1.05rem;
 }
 
 .period-charts-grid {
@@ -485,7 +500,7 @@ tbody tr:hover td {
 }
 
 .period-card {
-  min-height: 230px;
+  min-height: 192px;
 }
 
 .period-header {
@@ -493,16 +508,22 @@ tbody tr:hover td {
   justify-content: space-between;
   align-items: center;
   gap: 0.6rem;
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.55rem;
+}
+
+.period-bars-wrap {
+  overflow-x: auto;
+  padding-bottom: 0.2rem;
 }
 
 .period-bars {
-  height: 170px;
+  height: 138px;
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: 1fr;
+  grid-auto-columns: minmax(26px, 1fr);
   align-items: end;
-  gap: 0.35rem;
+  gap: 0.28rem;
+  min-width: max-content;
 }
 
 .period-bar-wrap {
@@ -510,25 +531,25 @@ tbody tr:hover td {
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  gap: 0.25rem;
+  gap: 0.18rem;
   min-width: 0;
 }
 
 .period-bar-value {
-  font-size: 0.72rem;
+  font-size: 0.66rem;
   color: var(--text-secondary);
   line-height: 1;
 }
 
 .period-bar {
   width: 100%;
-  max-width: 24px;
+  max-width: 20px;
   border-radius: 6px 6px 0 0;
   background: linear-gradient(180deg, #2dd8ff, #1f99bc);
 }
 
 .period-bar-label {
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   color: var(--text-muted);
   white-space: nowrap;
 }
@@ -557,7 +578,7 @@ tbody tr:hover td {
   justify-content: space-between;
   align-items: center;
   gap: 0.6rem;
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.45rem;
   flex-wrap: wrap;
 }
 
@@ -577,56 +598,128 @@ tbody tr:hover td {
 .calendar-weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
-  margin-bottom: 4px;
+  gap: 3px;
+  margin-bottom: 3px;
 }
 
 .calendar-weekdays span {
   text-align: center;
   color: var(--text-muted);
-  font-size: 0.78rem;
-  padding: 0.25rem 0;
+  font-size: 0.68rem;
+  padding: 0.12rem 0;
 }
 
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
+  gap: 3px;
 }
 
 .heat-cell-button {
-  aspect-ratio: 1;
+  min-height: 48px;
   border: 1px solid rgba(180, 205, 230, 0.1);
   border-radius: 6px;
   color: var(--text-primary);
-  font-size: 0.82rem;
+  font-size: 0.74rem;
   cursor: default;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0.3rem 0.32rem 0.24rem;
+  line-height: 1;
+  font-weight: 600;
+}
+
+.heat-cell-count {
+  font-size: 0.6rem;
+  color: rgba(231, 238, 249, 0.82);
 }
 
 .heat-cell-muted {
   opacity: 0.5;
 }
 
-.os-chip {
+.os-entry {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+}
+
+.os-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 30px;
-  padding: 0 0.35rem;
-  border-radius: 999px;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  margin-right: 0.25rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 10px;
   border: 1px solid transparent;
+  color: var(--text-primary);
+  flex: 0 0 auto;
 }
 
-.os-win { background: rgba(59, 150, 255, 0.2); border-color: rgba(59, 150, 255, 0.35); }
-.os-lnx { background: rgba(255, 178, 68, 0.2); border-color: rgba(255, 178, 68, 0.35); }
-.os-and { background: rgba(104, 219, 120, 0.2); border-color: rgba(104, 219, 120, 0.35); }
-.os-ios { background: rgba(224, 235, 255, 0.14); border-color: rgba(224, 235, 255, 0.3); }
-.os-mac { background: rgba(214, 214, 255, 0.18); border-color: rgba(214, 214, 255, 0.32); }
-.os-generic { background: rgba(150, 170, 190, 0.2); border-color: rgba(150, 170, 190, 0.35); }
+.os-badge svg {
+  width: 1rem;
+  height: 1rem;
+  fill: currentColor;
+}
+
+.os-win { background: rgba(59, 150, 255, 0.18); border-color: rgba(59, 150, 255, 0.38); color: #82c6ff; }
+.os-lnx { background: rgba(255, 178, 68, 0.16); border-color: rgba(255, 178, 68, 0.38); color: #ffc364; }
+.os-and { background: rgba(104, 219, 120, 0.15); border-color: rgba(104, 219, 120, 0.38); color: #9df1ab; }
+.os-ios { background: rgba(224, 235, 255, 0.14); border-color: rgba(224, 235, 255, 0.28); color: #eef4ff; }
+.os-mac { background: rgba(205, 214, 255, 0.15); border-color: rgba(205, 214, 255, 0.34); color: #dbe2ff; }
+.os-generic { background: rgba(150, 170, 190, 0.16); border-color: rgba(150, 170, 190, 0.34); color: #c8d4df; }
+
+.recent-events-table {
+  table-layout: fixed;
+}
+
+.recent-events-table .col-select { width: 56px; }
+.recent-events-table .col-time { width: 170px; }
+.recent-events-table .col-ip { width: 126px; }
+.recent-events-table .col-location { width: 190px; }
+.recent-events-table .col-device { width: 210px; }
+.recent-events-table .col-browser { width: 126px; }
+.recent-events-table .col-referrer { width: auto; }
+
+.cell-time {
+  white-space: nowrap;
+}
+
+.mono-cell {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.77rem;
+  color: #cceeff;
+  white-space: nowrap;
+}
+
+.truncate-cell {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.device-stack {
+  display: grid;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.device-topline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.device-subline {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  line-height: 1.1;
+}
 
 .heatmap-grid {
   display: grid;
@@ -693,6 +786,12 @@ tbody tr:hover td {
     grid-template-columns: repeat(auto-fit, minmax(clamp(160px, 20vw, 240px), 1fr));
   }
 
+  .focus-grid,
+  .taxonomy-grid,
+  .breakdown-grid {
+    grid-template-columns: 1fr;
+  }
+
   .totals-grid {
     grid-template-columns: repeat(auto-fit, minmax(clamp(140px, 18vw, 200px), 1fr));
   }
@@ -739,7 +838,7 @@ tbody tr:hover td {
   }
 
   .period-bars {
-    height: 150px;
+    height: 126px;
   }
 
   .stats-form {
@@ -750,6 +849,10 @@ tbody tr:hover td {
     margin: 0 -1rem;
     border-radius: 0;
     width: calc(100% + 2rem);
+  }
+
+  .recent-events-table {
+    table-layout: auto;
   }
 }
 
@@ -821,6 +924,21 @@ tbody tr:hover td {
     width: calc(100% + 1.5rem);
   }
 
+  .heat-cell-button {
+    min-height: 42px;
+    padding: 0.22rem 0.26rem 0.18rem;
+  }
+
+  .os-badge {
+    width: 1.45rem;
+    height: 1.45rem;
+  }
+
+  .os-badge svg {
+    width: 0.92rem;
+    height: 0.92rem;
+  }
+
   .login-card {
     margin: 0.5rem auto;
     padding: 1rem;
@@ -881,6 +999,10 @@ tbody tr:hover td {
   th,
   td {
     padding: clamp(0.3rem, 0.6vw, 0.5rem);
+  }
+
+  .mono-cell {
+    font-size: 0.72rem;
   }
 }
 

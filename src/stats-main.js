@@ -39,6 +39,34 @@ function formatPercent(value) {
   return `${Math.round(value)}%`;
 }
 
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
+function compactText(value, max = 42) {
+  const text = String(value || '').trim();
+  if (!text) return '-';
+  return text.length > max ? `${text.slice(0, Math.max(0, max - 1))}…` : text;
+}
+
+function formatReferrer(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return { short: '-', full: '-' };
+
+  try {
+    const parsed = new URL(raw);
+    const short = `${parsed.hostname}${parsed.pathname === '/' ? '' : parsed.pathname}`;
+    return { short: compactText(short, 34), full: raw };
+  } catch {
+    return { short: compactText(raw, 34), full: raw };
+  }
+}
+
 function toIsoDateUTC(date) {
   return date.toISOString().slice(0, 10);
 }
@@ -129,12 +157,61 @@ function formatLocation(row) {
 
 function osMeta(osName) {
   const key = String(osName || '').toLowerCase();
-  if (key.includes('windows')) return { label: 'WIN', className: 'os-win' };
-  if (key.includes('linux')) return { label: 'LNX', className: 'os-lnx' };
-  if (key.includes('android')) return { label: 'AND', className: 'os-and' };
-  if (key.includes('ios')) return { label: 'iOS', className: 'os-ios' };
-  if (key.includes('mac')) return { label: 'MAC', className: 'os-mac' };
-  return { label: 'OS', className: 'os-generic' };
+  if (key.includes('windows')) return { label: 'Windows', className: 'os-win', icon: 'windows' };
+  if (key.includes('linux')) return { label: 'Linux', className: 'os-lnx', icon: 'linux' };
+  if (key.includes('android')) return { label: 'Android', className: 'os-and', icon: 'android' };
+  if (key.includes('ios')) return { label: 'iOS', className: 'os-ios', icon: 'ios' };
+  if (key.includes('mac')) return { label: 'macOS', className: 'os-mac', icon: 'mac' };
+  return { label: 'Other OS', className: 'os-generic', icon: 'generic' };
+}
+
+function renderOsIcon(osName) {
+  const meta = osMeta(osName);
+  let svg = '';
+
+  if (meta.icon === 'windows') {
+    svg = `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3" y="4" width="8" height="7" rx="1"></rect>
+        <rect x="13" y="4" width="8" height="7" rx="1"></rect>
+        <rect x="3" y="13" width="8" height="7" rx="1"></rect>
+        <rect x="13" y="13" width="8" height="7" rx="1"></rect>
+      </svg>`;
+  } else if (meta.icon === 'linux') {
+    svg = `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="7" r="3"></circle>
+        <path d="M8 11.5c0-1.2 1-2.2 2.2-2.2h3.6c1.2 0 2.2 1 2.2 2.2v4.2c0 2.2-1.8 4-4 4s-4-1.8-4-4z"></path>
+        <path d="M8 19.5l-2 1.5M16 19.5l2 1.5M9 14H6.5M15 14h2.5" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"></path>
+      </svg>`;
+  } else if (meta.icon === 'android') {
+    svg = `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M8 9.5A4 4 0 0 1 12 6a4 4 0 0 1 4 3.5z"></path>
+        <rect x="7" y="10" width="10" height="8" rx="2"></rect>
+        <path d="M9 6L7.5 4.5M15 6l1.5-1.5M9 12.5h0M15 12.5h0M9 18v2M15 18v2M7 11.5v5M17 11.5v5" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"></path>
+      </svg>`;
+  } else if (meta.icon === 'ios') {
+    svg = `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="7.5" y="3.5" width="9" height="17" rx="2.4"></rect>
+        <circle cx="12" cy="17.5" r="0.9" fill="currentColor"></circle>
+      </svg>`;
+  } else if (meta.icon === 'mac') {
+    svg = `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="4" y="5.5" width="16" height="10" rx="2"></rect>
+        <path d="M2.8 18h18.4M9 20h6" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"></path>
+      </svg>`;
+  } else {
+    svg = `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="4" y="5" width="16" height="10" rx="2"></rect>
+        <path d="M9 19h6M12 15v4" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"></path>
+      </svg>`;
+  }
+
+  return `<span class="os-badge ${meta.className}" title="${escapeHtml(meta.label)}" aria-label="${escapeHtml(meta.label)}">${svg}</span>`;
 }
 
 function toMonthTitle(dateObj) {
@@ -188,20 +265,22 @@ function renderSelectedPeriodBars(series) {
   if (!series || series.length === 0) return '<p>No data</p>';
   const max = Math.max(1, ...series.map((row) => Number(row.visits || 0)));
   return `
-    <div class="period-bars">
-      ${series
-        .map((row) => {
-          const visits = Number(row.visits || 0);
-          const h = Math.max(10, Math.round((visits / max) * 100));
-          return `
-            <div class="period-bar-wrap" title="${row.label}: ${visits}">
-              <span class="period-bar-value">${visits}</span>
-              <div class="period-bar" style="height:${h}%"></div>
-              <span class="period-bar-label">${row.label}</span>
-            </div>
-          `;
-        })
-        .join('')}
+    <div class="period-bars-wrap">
+      <div class="period-bars">
+        ${series
+          .map((row) => {
+            const visits = Number(row.visits || 0);
+            const h = Math.max(10, Math.round((visits / max) * 100));
+            return `
+              <div class="period-bar-wrap" title="${escapeHtml(row.label)}: ${visits}">
+                <span class="period-bar-value">${visits}</span>
+                <div class="period-bar" style="height:${h}%"></div>
+                <span class="period-bar-label">${escapeHtml(row.label)}</span>
+              </div>
+            `;
+          })
+          .join('')}
+      </div>
     </div>
   `;
 }
@@ -286,23 +365,22 @@ function renderDashboard(summary, daily, recent, yearlyDaily) {
         ? `rgba(45, 217, 138, ${light.toFixed(2)})`
         : 'rgba(140, 160, 180, 0.18)';
       const dimClass = cell.inMonth ? '' : ' heat-cell-muted';
-      return `<button class="heat-cell-button${dimClass}" style="background:${bg}" title="${cell.iso}: ${cell.visits} visitors" type="button">${cell.dayNum}</button>`;
+      return `<button class="heat-cell-button${dimClass}" style="background:${bg}" title="${cell.iso}: ${cell.visits} visitors" type="button">${cell.dayNum}<span class="heat-cell-count">${cell.visits > 0 ? cell.visits : ''}</span></button>`;
     })
     .join('');
 
   const countryRows = summary.countries
-    .map((row) => `<li><span>${row.label}</span><strong>${row.total}</strong></li>`)
+    .map((row) => `<li><span>${escapeHtml(row.label || 'Unknown')}</span><strong>${row.total}</strong></li>`)
     .join('');
 
   const osRows = summary.operatingSystems
     .map((row) => {
-      const os = osMeta(row.label);
-      return `<li><span><span class="os-chip ${os.className}">${os.label}</span> ${row.label}</span><strong>${row.total}</strong></li>`;
+      return `<li><span class="os-entry">${renderOsIcon(row.label)}<span>${escapeHtml(row.label || 'Unknown')}</span></span><strong>${row.total}</strong></li>`;
     })
     .join('');
 
   const deviceRows = summary.devices
-    .map((row) => `<li><span>${row.label}</span><strong>${row.total}</strong></li>`)
+    .map((row) => `<li><span>${escapeHtml(row.label || 'Unknown')}</span><strong>${row.total}</strong></li>`)
     .join('');
 
   const dailyRows = daily.points
@@ -341,17 +419,31 @@ function renderDashboard(summary, daily, recent, yearlyDaily) {
     .join('');
 
   const recentRows = recent.records
-    .map((row) => `
-      <tr>
-        <td><input type="checkbox" class="event-check" value="${row.event_id}" /></td>
-        <td>${formatDate(row.created_at)}</td>
-        <td>${row.ip_address || '-'}</td>
-        <td>${formatLocation(row)}</td>
-        <td>${row.device_type || '-'} | <span class="os-chip ${osMeta(row.os_name).className}">${osMeta(row.os_name).label}</span> ${row.os_name || '-'}</td>
-        <td>${row.browser_name || '-'}</td>
-        <td>${row.referrer || '-'}</td>
-      </tr>
-    `)
+    .map((row) => {
+      const deviceType = escapeHtml(row.device_type || '-');
+      const osName = escapeHtml(row.os_name || 'Unknown');
+      const browserName = escapeHtml(row.browser_name || '-');
+      const location = escapeHtml(formatLocation(row));
+      const ipAddress = escapeHtml(row.ip_address || '-');
+      const referrer = formatReferrer(row.referrer);
+
+      return `
+        <tr>
+          <td><input type="checkbox" class="event-check" value="${row.event_id}" /></td>
+          <td><span class="cell-time">${escapeHtml(formatDate(row.created_at))}</span></td>
+          <td><span class="mono-cell">${ipAddress}</span></td>
+          <td><span class="truncate-cell" title="${location}">${location}</span></td>
+          <td>
+            <span class="device-stack">
+              <span class="device-topline">${renderOsIcon(row.os_name)}<span class="truncate-cell" title="${osName}">${osName}</span></span>
+              <span class="device-subline">${deviceType}</span>
+            </span>
+          </td>
+          <td><span class="truncate-cell" title="${browserName}">${browserName}</span></td>
+          <td><span class="truncate-cell" title="${escapeHtml(referrer.full)}">${escapeHtml(referrer.short)}</span></td>
+        </tr>
+      `;
+    })
     .join('');
 
   const paging = recent.paging || { page: 1, perPage: recentPerPage, totalPages: 1, total: 0 };
@@ -394,7 +486,7 @@ function renderDashboard(summary, daily, recent, yearlyDaily) {
         </article>
       </section>
 
-      <section class="stats-grid">
+      <section class="stats-grid focus-grid">
         <article class="stats-card period-card">
           <div class="period-header">
             <h2>Visitors Trend</h2>
@@ -427,7 +519,7 @@ function renderDashboard(summary, daily, recent, yearlyDaily) {
         </article>
       </section>
 
-      <section class="stats-grid">
+      <section class="stats-grid taxonomy-grid">
         <article class="stats-card">
           <h2>Top Countries</h2>
           <ul class="stats-list">${countryRows || '<li><span>No data</span><strong>0</strong></li>'}</ul>
@@ -442,7 +534,7 @@ function renderDashboard(summary, daily, recent, yearlyDaily) {
         </article>
       </section>
 
-      <section class="stats-grid">
+      <section class="stats-grid breakdown-grid">
         <article class="stats-card">
           <h2>Visits by Day (${daily.days} days)</h2>
           <table>
@@ -478,7 +570,16 @@ function renderDashboard(summary, daily, recent, yearlyDaily) {
             </div>
           </div>
           <div class="table-wrap">
-            <table>
+            <table class="recent-events-table">
+              <colgroup>
+                <col class="col-select" />
+                <col class="col-time" />
+                <col class="col-ip" />
+                <col class="col-location" />
+                <col class="col-device" />
+                <col class="col-browser" />
+                <col class="col-referrer" />
+              </colgroup>
               <thead>
                 <tr>
                   <th>Select</th>

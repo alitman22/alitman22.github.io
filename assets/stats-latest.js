@@ -1,18 +1,48 @@
-import"./modulepreload-polyfill-B5Qt9EMX.js";const nt=""+new URL("logo-stats-My1wrg3h.png",import.meta.url).href,P=document.getElementById("stats-root"),it="https://alitman22-portfolio.onrender.com".replace(/\/$/,"");function ot(t){return`${it}${t}`}async function h(t,s={}){const a=await fetch(ot(t),{credentials:"include",headers:{"Content-Type":"application/json",...s.headers||{}},...s}),n=await a.text(),i=n?JSON.parse(n):{};if(!a.ok)throw new Error((i==null?void 0:i.message)||`Request failed: ${a.status}`);return i}function rt(t){if(!t)return"-";const s=new Date(t);return Number.isNaN(s.getTime())?t:s.toLocaleString()}function S(t){return Number.isFinite(t)?`${Math.round(t)}%`:"0%"}function ct(t){return t.toISOString().slice(0,10)}function lt(t,s){const a=new Map((t||[]).map(r=>[String(r.day),Number(r.visits||0)])),n=[],i=new Date,o=new Date(Date.UTC(i.getUTCFullYear(),i.getUTCMonth(),i.getUTCDate()));for(let r=s-1;r>=0;r-=1){const d=new Date(o);d.setUTCDate(o.getUTCDate()-r);const p=ct(d);n.push({day:p,visits:a.get(p)||0})}return n}function dt(t){return(t||[]).reduce((s,a)=>s+Number(a.visits||0),0)}function pt(t,s,a){const n=[];let i=0;for(let o=0;o<t.length;o+=s){const r=t.slice(o,o+s);n.push({label:`${a}${i+1}`,visits:dt(r)}),i+=1}return n}function Y(t,s){const a=new Map;for(const o of t){const r=String(o.day).slice(0,7);a.set(r,(a.get(r)||0)+Number(o.visits||0))}const n=new Date,i=[];for(let o=s-1;o>=0;o-=1){const r=new Date(Date.UTC(n.getUTCFullYear(),n.getUTCMonth()-o,1)),d=`${r.getUTCFullYear()}-${String(r.getUTCMonth()+1).padStart(2,"0")}`;i.push({label:d,visits:a.get(d)||0})}return i}function ut(t){const s=t.country||"-",a=t.region||null,n=t.city||null;return!t.country&&!a&&!n?"-":a?`${s} / ${a}`:n?`${s} / ${n}`:s}function T(t){const s=String(t||"").toLowerCase();return s.includes("windows")?{label:"WIN",className:"os-win"}:s.includes("linux")?{label:"LNX",className:"os-lnx"}:s.includes("android")?{label:"AND",className:"os-and"}:s.includes("ios")?{label:"iOS",className:"os-ios"}:s.includes("mac")?{label:"MAC",className:"os-mac"}:{label:"OS",className:"os-generic"}}function gt(t){return t.toLocaleString(void 0,{month:"long",year:"numeric"})}function ht(t,s){const a=t.getFullYear(),n=t.getMonth(),o=(new Date(a,n,1).getDay()+6)%7,r=new Date(a,n,1-o),d=[];for(let p=0;p<42;p+=1){const f=new Date(r);f.setDate(r.getDate()+p);const $=f.toISOString().slice(0,10),M=Number(s.get($)||0),y=f.getMonth()===n;d.push({dayNum:f.getDate(),iso:$,visits:M,inMonth:y})}return d}function bt(t,s){return s==="day"?t.slice(-14).map(n=>({label:n.day.slice(5),visits:n.visits})):s==="week"?t.slice(-7).map(n=>({label:n.day.slice(5),visits:n.visits})):s==="month"?pt(t.slice(-30),6,"W"):s==="quarter"?Y(t.slice(-90),3).map(a=>({label:a.label.slice(5),visits:a.visits})):Y(t,12).map(a=>({label:a.label.slice(5),visits:a.visits}))}function mt(t){if(!t||t.length===0)return"<p>No data</p>";const s=Math.max(1,...t.map(a=>Number(a.visits||0)));return`
-    <div class="period-bars">
-      ${t.map(a=>{const n=Number(a.visits||0),i=Math.max(10,Math.round(n/s*100));return`
-            <div class="period-bar-wrap" title="${a.label}: ${n}">
-              <span class="period-bar-value">${n}</span>
-              <div class="period-bar" style="height:${i}%"></div>
-              <span class="period-bar-label">${a.label}</span>
-            </div>
-          `}).join("")}
+import"./modulepreload-polyfill-B5Qt9EMX.js";const lt=""+new URL("logo-stats-My1wrg3h.png",import.meta.url).href,P=document.getElementById("stats-root"),dt="https://alitman22-portfolio.onrender.com".replace(/\/$/,"");function pt(t){return`${dt}${t}`}async function v(t,e={}){const s=await fetch(pt(t),{credentials:"include",headers:{"Content-Type":"application/json",...e.headers||{}},...e}),n=await s.text(),i=n?JSON.parse(n):{};if(!s.ok)throw new Error((i==null?void 0:i.message)||`Request failed: ${s.status}`);return i}function ut(t){if(!t)return"-";const e=new Date(t);return Number.isNaN(e.getTime())?t:e.toLocaleString()}function T(t){return Number.isFinite(t)?`${Math.round(t)}%`:"0%"}function d(t){return String(t??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;")}function H(t,e=42){const s=String(t||"").trim();return s?s.length>e?`${s.slice(0,Math.max(0,e-1))}…`:s:"-"}function gt(t){const e=String(t||"").trim();if(!e)return{short:"-",full:"-"};try{const s=new URL(e),n=`${s.hostname}${s.pathname==="/"?"":s.pathname}`;return{short:H(n,34),full:e}}catch{return{short:H(e,34),full:e}}}function ht(t){return t.toISOString().slice(0,10)}function vt(t,e){const s=new Map((t||[]).map(o=>[String(o.day),Number(o.visits||0)])),n=[],i=new Date,r=new Date(Date.UTC(i.getUTCFullYear(),i.getUTCMonth(),i.getUTCDate()));for(let o=e-1;o>=0;o-=1){const p=new Date(r);p.setUTCDate(r.getUTCDate()-o);const u=ht(p);n.push({day:u,visits:s.get(u)||0})}return n}function mt(t){return(t||[]).reduce((e,s)=>e+Number(s.visits||0),0)}function bt(t,e,s){const n=[];let i=0;for(let r=0;r<t.length;r+=e){const o=t.slice(r,r+e);n.push({label:`${s}${i+1}`,visits:mt(o)}),i+=1}return n}function J(t,e){const s=new Map;for(const r of t){const o=String(r.day).slice(0,7);s.set(o,(s.get(o)||0)+Number(r.visits||0))}const n=new Date,i=[];for(let r=e-1;r>=0;r-=1){const o=new Date(Date.UTC(n.getUTCFullYear(),n.getUTCMonth()-r,1)),p=`${o.getUTCFullYear()}-${String(o.getUTCMonth()+1).padStart(2,"0")}`;i.push({label:p,visits:s.get(p)||0})}return i}function ft(t){const e=t.country||"-",s=t.region||null,n=t.city||null;return!t.country&&!s&&!n?"-":s?`${e} / ${s}`:n?`${e} / ${n}`:e}function yt(t){const e=String(t||"").toLowerCase();return e.includes("windows")?{label:"Windows",className:"os-win",icon:"windows"}:e.includes("linux")?{label:"Linux",className:"os-lnx",icon:"linux"}:e.includes("android")?{label:"Android",className:"os-and",icon:"android"}:e.includes("ios")?{label:"iOS",className:"os-ios",icon:"ios"}:e.includes("mac")?{label:"macOS",className:"os-mac",icon:"mac"}:{label:"Other OS",className:"os-generic",icon:"generic"}}function z(t){const e=yt(t);let s="";return e.icon==="windows"?s=`
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3" y="4" width="8" height="7" rx="1"></rect>
+        <rect x="13" y="4" width="8" height="7" rx="1"></rect>
+        <rect x="3" y="13" width="8" height="7" rx="1"></rect>
+        <rect x="13" y="13" width="8" height="7" rx="1"></rect>
+      </svg>`:e.icon==="linux"?s=`
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="7" r="3"></circle>
+        <path d="M8 11.5c0-1.2 1-2.2 2.2-2.2h3.6c1.2 0 2.2 1 2.2 2.2v4.2c0 2.2-1.8 4-4 4s-4-1.8-4-4z"></path>
+        <path d="M8 19.5l-2 1.5M16 19.5l2 1.5M9 14H6.5M15 14h2.5" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"></path>
+      </svg>`:e.icon==="android"?s=`
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M8 9.5A4 4 0 0 1 12 6a4 4 0 0 1 4 3.5z"></path>
+        <rect x="7" y="10" width="10" height="8" rx="2"></rect>
+        <path d="M9 6L7.5 4.5M15 6l1.5-1.5M9 12.5h0M15 12.5h0M9 18v2M15 18v2M7 11.5v5M17 11.5v5" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"></path>
+      </svg>`:e.icon==="ios"?s=`
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="7.5" y="3.5" width="9" height="17" rx="2.4"></rect>
+        <circle cx="12" cy="17.5" r="0.9" fill="currentColor"></circle>
+      </svg>`:e.icon==="mac"?s=`
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="4" y="5.5" width="16" height="10" rx="2"></rect>
+        <path d="M2.8 18h18.4M9 20h6" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"></path>
+      </svg>`:s=`
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="4" y="5" width="16" height="10" rx="2"></rect>
+        <path d="M9 19h6M12 15v4" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"></path>
+      </svg>`,`<span class="os-badge ${e.className}" title="${d(e.label)}" aria-label="${d(e.label)}">${s}</span>`}function $t(t){return t.toLocaleString(void 0,{month:"long",year:"numeric"})}function wt(t,e){const s=t.getFullYear(),n=t.getMonth(),r=(new Date(s,n,1).getDay()+6)%7,o=new Date(s,n,1-r),p=[];for(let u=0;u<42;u+=1){const y=new Date(o);y.setDate(o.getDate()+u);const $=y.toISOString().slice(0,10),k=Number(e.get($)||0),w=y.getMonth()===n;p.push({dayNum:y.getDate(),iso:$,visits:k,inMonth:w})}return p}function Mt(t,e){return e==="day"?t.slice(-14).map(n=>({label:n.day.slice(5),visits:n.visits})):e==="week"?t.slice(-7).map(n=>({label:n.day.slice(5),visits:n.visits})):e==="month"?bt(t.slice(-30),6,"W"):e==="quarter"?J(t.slice(-90),3).map(s=>({label:s.label.slice(5),visits:s.visits})):J(t,12).map(s=>({label:s.label.slice(5),visits:s.visits}))}function xt(t){if(!t||t.length===0)return"<p>No data</p>";const e=Math.max(1,...t.map(s=>Number(s.visits||0)));return`
+    <div class="period-bars-wrap">
+      <div class="period-bars">
+        ${t.map(s=>{const n=Number(s.visits||0),i=Math.max(10,Math.round(n/e*100));return`
+              <div class="period-bar-wrap" title="${d(s.label)}: ${n}">
+                <span class="period-bar-value">${n}</span>
+                <div class="period-bar" style="height:${i}%"></div>
+                <span class="period-bar-label">${d(s.label)}</span>
+              </div>
+            `}).join("")}
+      </div>
     </div>
   `}function N(t=""){P.innerHTML=`
     <main class="stats-container">
       <section class="stats-card login-card">
         <div class="login-hero">
-          <img src="${nt}" alt="Portfolio Analytics" class="login-hero-image" />
+          <img src="${lt}" alt="Portfolio Analytics" class="login-hero-image" />
         </div>
         <div class="login-brand-copy">
           <h1>Portfolio Analytics</h1>
@@ -37,29 +67,34 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const nt=""+new URL("logo-stats-My1
         </form>
       </section>
     </main>
-  `;const s=document.getElementById("login-form");s==null||s.addEventListener("submit",async a=>{a.preventDefault();const n=new FormData(s),i={username:String(n.get("username")||""),password:String(n.get("password")||""),totpCode:String(n.get("totpCode")||"").trim()};try{await h("/api/auth/login",{method:"POST",body:JSON.stringify(i)}),await g()}catch(o){N(o.message)}})}function w(t,s,a,n){var I,L,B,U,F,R,V,j,A,O,q;const i=Number(t.totals.visits||0),o=Number(t.totals.visitors||0),r=Number(t.totals.pageviews||0),d=i>0?r/i:0,p=i>0?(i-o)/i*100:0,f=((L=(I=t.countries)==null?void 0:I[0])==null?void 0:L.total)||0,$=i>0?f/i*100:0,M=(t.countries||[]).filter(e=>e.label&&e.label!=="Unknown").length,y=lt(n.points||[],365),_=new Map(y.map(e=>[e.day,Number(e.visits||0)])),W=bt(y,m),H=mt(W),k=new Date(u.getFullYear(),u.getMonth(),1),J=ht(k,_).map(e=>{const c=Math.min(e.visits,10)/10,l=c>0?.16+c*.62:0,at=c>0?`rgba(45, 217, 138, ${l.toFixed(2)})`:"rgba(140, 160, 180, 0.18)";return`<button class="heat-cell-button${e.inMonth?"":" heat-cell-muted"}" style="background:${at}" title="${e.iso}: ${e.visits} visitors" type="button">${e.dayNum}</button>`}).join(""),G=t.countries.map(e=>`<li><span>${e.label}</span><strong>${e.total}</strong></li>`).join(""),K=t.operatingSystems.map(e=>{const c=T(e.label);return`<li><span><span class="os-chip ${c.className}">${c.label}</span> ${e.label}</span><strong>${e.total}</strong></li>`}).join(""),Q=t.devices.map(e=>`<li><span>${e.label}</span><strong>${e.total}</strong></li>`).join(""),X=s.points.map(e=>`<tr><td>${e.day}</td><td>${e.visits}</td></tr>`).join(""),x=[...s.points].reverse(),Z=Math.max(1,...x.map(e=>Number(e.visits||0))),z=x.map(e=>{const c=Number(e.visits||0),l=Math.max(4,Math.round(c/Z*100));return`
+  `;const e=document.getElementById("login-form");e==null||e.addEventListener("submit",async s=>{s.preventDefault();const n=new FormData(e),i={username:String(n.get("username")||""),password:String(n.get("password")||""),totpCode:String(n.get("totpCode")||"").trim()};try{await v("/api/auth/login",{method:"POST",body:JSON.stringify(i)}),await h()}catch(r){N(r.message)}})}function x(t,e,s,n){var I,U,R,F,A,O,V,j,q,Y,_;const i=Number(t.totals.visits||0),r=Number(t.totals.visitors||0),o=Number(t.totals.pageviews||0),p=i>0?o/i:0,u=i>0?(i-r)/i*100:0,y=((U=(I=t.countries)==null?void 0:I[0])==null?void 0:U.total)||0,$=i>0?y/i*100:0,k=(t.countries||[]).filter(a=>a.label&&a.label!=="Unknown").length,w=vt(n.points||[],365),G=new Map(w.map(a=>[a.day,Number(a.visits||0)])),K=Mt(w,b),Q=xt(K),L=new Date(g.getFullYear(),g.getMonth(),1),X=wt(L,G).map(a=>{const c=Math.min(a.visits,10)/10,l=c>0?.16+c*.62:0,M=c>0?`rgba(45, 217, 138, ${l.toFixed(2)})`:"rgba(140, 160, 180, 0.18)";return`<button class="heat-cell-button${a.inMonth?"":" heat-cell-muted"}" style="background:${M}" title="${a.iso}: ${a.visits} visitors" type="button">${a.dayNum}<span class="heat-cell-count">${a.visits>0?a.visits:""}</span></button>`}).join(""),Z=t.countries.map(a=>`<li><span>${d(a.label||"Unknown")}</span><strong>${a.total}</strong></li>`).join(""),tt=t.operatingSystems.map(a=>`<li><span class="os-entry">${z(a.label)}<span>${d(a.label||"Unknown")}</span></span><strong>${a.total}</strong></li>`).join(""),et=t.devices.map(a=>`<li><span>${d(a.label||"Unknown")}</span><strong>${a.total}</strong></li>`).join(""),st=e.points.map(a=>`<tr><td>${a.day}</td><td>${a.visits}</td></tr>`).join(""),B=[...e.points].reverse(),at=Math.max(1,...B.map(a=>Number(a.visits||0))),nt=B.map(a=>{const c=Number(a.visits||0),l=Math.max(4,Math.round(c/at*100));return`
         <div class="bar-row">
-          <span class="bar-label">${e.day}</span>
+          <span class="bar-label">${a.day}</span>
           <div class="bar-track"><div class="bar-fill" style="width: ${l}%"></div></div>
           <strong class="bar-value">${c}</strong>
         </div>
-      `}).join(""),tt=Math.max(1,(t.devices||[]).reduce((e,c)=>e+Number(c.total||0),0)),et=(t.devices||[]).map(e=>{const c=Number(e.total||0)/tt*100,l=Math.max(4,Math.round(c));return`
+      `}).join(""),it=Math.max(1,(t.devices||[]).reduce((a,c)=>a+Number(c.total||0),0)),rt=(t.devices||[]).map(a=>{const c=Number(a.total||0)/it*100,l=Math.max(4,Math.round(c));return`
         <div class="bar-row">
-          <span class="bar-label">${e.label}</span>
+          <span class="bar-label">${a.label}</span>
           <div class="bar-track"><div class="bar-fill bar-fill-accent" style="width: ${l}%"></div></div>
-          <strong class="bar-value">${S(c)}</strong>
+          <strong class="bar-value">${T(c)}</strong>
         </div>
-      `}).join(""),st=a.records.map(e=>`
-      <tr>
-        <td><input type="checkbox" class="event-check" value="${e.event_id}" /></td>
-        <td>${rt(e.created_at)}</td>
-        <td>${e.ip_address||"-"}</td>
-        <td>${ut(e)}</td>
-        <td>${e.device_type||"-"} | <span class="os-chip ${T(e.os_name).className}">${T(e.os_name).label}</span> ${e.os_name||"-"}</td>
-        <td>${e.browser_name||"-"}</td>
-        <td>${e.referrer||"-"}</td>
-      </tr>
-    `).join(""),b=a.paging||{page:1,perPage:C,totalPages:1};P.innerHTML=`
+      `}).join(""),ot=s.records.map(a=>{const c=d(a.device_type||"-"),l=d(a.os_name||"Unknown"),M=d(a.browser_name||"-"),S=d(ft(a)),ct=d(a.ip_address||"-"),W=gt(a.referrer);return`
+        <tr>
+          <td><input type="checkbox" class="event-check" value="${a.event_id}" /></td>
+          <td><span class="cell-time">${d(ut(a.created_at))}</span></td>
+          <td><span class="mono-cell">${ct}</span></td>
+          <td><span class="truncate-cell" title="${S}">${S}</span></td>
+          <td>
+            <span class="device-stack">
+              <span class="device-topline">${z(a.os_name)}<span class="truncate-cell" title="${l}">${l}</span></span>
+              <span class="device-subline">${c}</span>
+            </span>
+          </td>
+          <td><span class="truncate-cell" title="${M}">${M}</span></td>
+          <td><span class="truncate-cell" title="${d(W.full)}">${d(W.short)}</span></td>
+        </tr>
+      `}).join(""),m=s.paging||{page:1,perPage:C,totalPages:1};P.innerHTML=`
     <main class="stats-container">
       <header class="stats-header">
         <h1>Portfolio Visitor Analytics</h1>
@@ -89,27 +124,27 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const nt=""+new URL("logo-stats-My1
         <article class="stats-card metrics-merged-card">
           <h2>Performance Insights</h2>
           <div class="metrics-merged-grid">
-            <div class="metric-item"><span>Pages / Visit</span><strong>${d.toFixed(2)}</strong></div>
-            <div class="metric-item"><span>Returning Rate</span><strong>${S(p)}</strong></div>
-            <div class="metric-item"><span>Top Country Share</span><strong>${S($)}</strong></div>
-            <div class="metric-item"><span>Geo Coverage</span><strong>${M}</strong></div>
+            <div class="metric-item"><span>Pages / Visit</span><strong>${p.toFixed(2)}</strong></div>
+            <div class="metric-item"><span>Returning Rate</span><strong>${T(u)}</strong></div>
+            <div class="metric-item"><span>Top Country Share</span><strong>${T($)}</strong></div>
+            <div class="metric-item"><span>Geo Coverage</span><strong>${k}</strong></div>
           </div>
         </article>
       </section>
 
-      <section class="stats-grid">
+      <section class="stats-grid focus-grid">
         <article class="stats-card period-card">
           <div class="period-header">
             <h2>Visitors Trend</h2>
             <select id="period-select" class="per-page-select">
-              <option value="day" ${m==="day"?"selected":""}>Day</option>
-              <option value="week" ${m==="week"?"selected":""}>Week</option>
-              <option value="month" ${m==="month"?"selected":""}>Month</option>
-              <option value="quarter" ${m==="quarter"?"selected":""}>Quarter</option>
-              <option value="year" ${m==="year"?"selected":""}>Year</option>
+              <option value="day" ${b==="day"?"selected":""}>Day</option>
+              <option value="week" ${b==="week"?"selected":""}>Week</option>
+              <option value="month" ${b==="month"?"selected":""}>Month</option>
+              <option value="quarter" ${b==="quarter"?"selected":""}>Quarter</option>
+              <option value="year" ${b==="year"?"selected":""}>Year</option>
             </select>
           </div>
-          ${H}
+          ${Q}
         </article>
       </section>
 
@@ -118,7 +153,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const nt=""+new URL("logo-stats-My1
           <div class="heatmap-header">
             <button id="calendar-prev" class="refresh-button" type="button">Prev</button>
             <div class="calendar-title-wrap">
-              <h2>${gt(k)}</h2>
+              <h2>${$t(L)}</h2>
               <span class="heatmap-legend">0 = grey, 10+ = bright green</span>
             </div>
             <button id="calendar-next" class="refresh-button" type="button">Next</button>
@@ -126,40 +161,40 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const nt=""+new URL("logo-stats-My1
           <div class="calendar-weekdays">
             <span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
           </div>
-          <div class="calendar-grid">${J}</div>
+          <div class="calendar-grid">${X}</div>
         </article>
       </section>
 
-      <section class="stats-grid">
+      <section class="stats-grid taxonomy-grid">
         <article class="stats-card">
           <h2>Top Countries</h2>
-          <ul class="stats-list">${G||"<li><span>No data</span><strong>0</strong></li>"}</ul>
+          <ul class="stats-list">${Z||"<li><span>No data</span><strong>0</strong></li>"}</ul>
         </article>
         <article class="stats-card">
           <h2>Device Types</h2>
-          <ul class="stats-list">${Q||"<li><span>No data</span><strong>0</strong></li>"}</ul>
+          <ul class="stats-list">${et||"<li><span>No data</span><strong>0</strong></li>"}</ul>
         </article>
         <article class="stats-card">
           <h2>Operating Systems</h2>
-          <ul class="stats-list">${K||"<li><span>No data</span><strong>0</strong></li>"}</ul>
+          <ul class="stats-list">${tt||"<li><span>No data</span><strong>0</strong></li>"}</ul>
         </article>
       </section>
 
-      <section class="stats-grid">
+      <section class="stats-grid breakdown-grid">
         <article class="stats-card">
-          <h2>Visits by Day (${s.days} days)</h2>
+          <h2>Visits by Day (${e.days} days)</h2>
           <table>
             <thead><tr><th>Date</th><th>Visits</th></tr></thead>
-            <tbody>${X||"<tr><td>-</td><td>0</td></tr>"}</tbody>
+            <tbody>${st||"<tr><td>-</td><td>0</td></tr>"}</tbody>
           </table>
         </article>
         <article class="stats-card">
           <h2>Visits Trend</h2>
-          <div class="bar-chart">${z||"<p>No trend data</p>"}</div>
+          <div class="bar-chart">${nt||"<p>No trend data</p>"}</div>
         </article>
         <article class="stats-card">
           <h2>Device Distribution</h2>
-          <div class="bar-chart">${et||"<p>No device data</p>"}</div>
+          <div class="bar-chart">${rt||"<p>No device data</p>"}</div>
         </article>
       </section>
 
@@ -171,15 +206,24 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const nt=""+new URL("logo-stats-My1
               <button id="delete-selected-button" class="refresh-button danger-button" type="button">Delete Selected</button>
               <label for="per-page-select">Rows</label>
               <select id="per-page-select" class="per-page-select">
-                ${[10,20,50,100].map(e=>`<option value="${e}" ${b.perPage===e?"selected":""}>${e}</option>`).join("")}
+                ${[10,20,50,100].map(a=>`<option value="${a}" ${m.perPage===a?"selected":""}>${a}</option>`).join("")}
               </select>
-              <button id="prev-page-button" class="refresh-button" type="button" ${b.page<=1?"disabled":""}>Prev</button>
-              <span class="paging-meta">Page ${b.page} / ${b.totalPages}</span>
-              <button id="next-page-button" class="refresh-button" type="button" ${b.page>=b.totalPages?"disabled":""}>Next</button>
+              <button id="prev-page-button" class="refresh-button" type="button" ${m.page<=1?"disabled":""}>Prev</button>
+              <span class="paging-meta">Page ${m.page} / ${m.totalPages}</span>
+              <button id="next-page-button" class="refresh-button" type="button" ${m.page>=m.totalPages?"disabled":""}>Next</button>
             </div>
           </div>
           <div class="table-wrap">
-            <table>
+            <table class="recent-events-table">
+              <colgroup>
+                <col class="col-select" />
+                <col class="col-time" />
+                <col class="col-ip" />
+                <col class="col-location" />
+                <col class="col-device" />
+                <col class="col-browser" />
+                <col class="col-referrer" />
+              </colgroup>
               <thead>
                 <tr>
                   <th>Select</th>
@@ -191,10 +235,10 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const nt=""+new URL("logo-stats-My1
                   <th>Referrer</th>
                 </tr>
               </thead>
-              <tbody>${st||'<tr><td colspan="7">No events yet</td></tr>'}</tbody>
+              <tbody>${ot||'<tr><td colspan="7">No events yet</td></tr>'}</tbody>
             </table>
           </div>
         </article>
       </section>
     </main>
-  `,(B=document.getElementById("logout-button"))==null||B.addEventListener("click",async()=>{E(),await h("/api/auth/logout",{method:"POST"}),N()}),(U=document.getElementById("refresh-button"))==null||U.addEventListener("click",()=>{g()}),(F=document.getElementById("prev-page-button"))==null||F.addEventListener("click",()=>{v>1&&(v-=1,g())}),(R=document.getElementById("next-page-button"))==null||R.addEventListener("click",()=>{v<b.totalPages&&(v+=1,g())}),(V=document.getElementById("per-page-select"))==null||V.addEventListener("change",e=>{const c=Number.parseInt(e.target.value,10);Number.isFinite(c)&&(C=c,v=1,g())}),(j=document.getElementById("period-select"))==null||j.addEventListener("change",e=>{m=String(e.target.value||"week"),w(t,s,a,n)}),(A=document.getElementById("calendar-prev"))==null||A.addEventListener("click",()=>{u=new Date(u.getFullYear(),u.getMonth()-1,1),w(t,s,a,n)}),(O=document.getElementById("calendar-next"))==null||O.addEventListener("click",()=>{u=new Date(u.getFullYear(),u.getMonth()+1,1),w(t,s,a,n)}),(q=document.getElementById("delete-selected-button"))==null||q.addEventListener("click",async()=>{const e=Array.from(document.querySelectorAll(".event-check:checked")).map(l=>Number.parseInt(l.value,10)).filter(l=>Number.isInteger(l)&&l>0);if(!(e.length===0||!window.confirm(`Delete ${e.length} selected visit row(s)?`)))try{await h("/api/stats/events",{method:"DELETE",body:JSON.stringify({eventIds:e})}),await g()}catch(l){window.alert(l.message||"Failed to delete selected rows.")}})}let D=null,v=1,C=20,m="week",u=new Date(new Date().getFullYear(),new Date().getMonth(),1);function E(){D&&(clearInterval(D),D=null)}async function g(){var t;try{const[s,a,n,i]=await Promise.all([h("/api/stats/summary"),h("/api/stats/daily?days=30"),h(`/api/stats/recent?page=${v}&perPage=${C}`),h("/api/stats/daily?days=365")]);(t=n==null?void 0:n.paging)!=null&&t.page&&(v=n.paging.page),w(s,a,n,i)}catch(s){E(),N(s.message)}}async function vt(){P.innerHTML='<main class="stats-container"><section class="stats-card"><p>Loading analytics dashboard...</p></section></main>';try{await h("/api/auth/me"),await g(),E(),D=setInterval(g,60*1e3)}catch{N()}}vt();
+  `,(R=document.getElementById("logout-button"))==null||R.addEventListener("click",async()=>{E(),await v("/api/auth/logout",{method:"POST"}),N()}),(F=document.getElementById("refresh-button"))==null||F.addEventListener("click",()=>{h()}),(A=document.getElementById("prev-page-button"))==null||A.addEventListener("click",()=>{f>1&&(f-=1,h())}),(O=document.getElementById("next-page-button"))==null||O.addEventListener("click",()=>{f<m.totalPages&&(f+=1,h())}),(V=document.getElementById("per-page-select"))==null||V.addEventListener("change",a=>{const c=Number.parseInt(a.target.value,10);Number.isFinite(c)&&(C=c,f=1,h())}),(j=document.getElementById("period-select"))==null||j.addEventListener("change",a=>{b=String(a.target.value||"week"),x(t,e,s,n)}),(q=document.getElementById("calendar-prev"))==null||q.addEventListener("click",()=>{g=new Date(g.getFullYear(),g.getMonth()-1,1),x(t,e,s,n)}),(Y=document.getElementById("calendar-next"))==null||Y.addEventListener("click",()=>{g=new Date(g.getFullYear(),g.getMonth()+1,1),x(t,e,s,n)}),(_=document.getElementById("delete-selected-button"))==null||_.addEventListener("click",async()=>{const a=Array.from(document.querySelectorAll(".event-check:checked")).map(l=>Number.parseInt(l.value,10)).filter(l=>Number.isInteger(l)&&l>0);if(!(a.length===0||!window.confirm(`Delete ${a.length} selected visit row(s)?`)))try{await v("/api/stats/events",{method:"DELETE",body:JSON.stringify({eventIds:a})}),await h()}catch(l){window.alert(l.message||"Failed to delete selected rows.")}})}let D=null,f=1,C=20,b="week",g=new Date(new Date().getFullYear(),new Date().getMonth(),1);function E(){D&&(clearInterval(D),D=null)}async function h(){var t;try{const[e,s,n,i]=await Promise.all([v("/api/stats/summary"),v("/api/stats/daily?days=30"),v(`/api/stats/recent?page=${f}&perPage=${C}`),v("/api/stats/daily?days=365")]);(t=n==null?void 0:n.paging)!=null&&t.page&&(f=n.paging.page),x(e,s,n,i)}catch(e){E(),N(e.message)}}async function Dt(){P.innerHTML='<main class="stats-container"><section class="stats-card"><p>Loading analytics dashboard...</p></section></main>';try{await v("/api/auth/me"),await h(),E(),D=setInterval(h,60*1e3)}catch{N()}}Dt();
