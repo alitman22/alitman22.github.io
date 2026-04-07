@@ -127,6 +127,85 @@ function formatLocation(row) {
   return country;
 }
 
+function osMeta(osName) {
+  const key = String(osName || '').toLowerCase();
+  if (key.includes('windows')) return { label: 'WIN', className: 'os-win' };
+  if (key.includes('linux')) return { label: 'LNX', className: 'os-lnx' };
+  if (key.includes('android')) return { label: 'AND', className: 'os-and' };
+  if (key.includes('ios')) return { label: 'iOS', className: 'os-ios' };
+  if (key.includes('mac')) return { label: 'MAC', className: 'os-mac' };
+  return { label: 'OS', className: 'os-generic' };
+}
+
+function toMonthTitle(dateObj) {
+  return dateObj.toLocaleString(undefined, { month: 'long', year: 'numeric' });
+}
+
+function buildMonthCalendar(dateObj, visitsByDate) {
+  const year = dateObj.getFullYear();
+  const month = dateObj.getMonth();
+  const first = new Date(year, month, 1);
+  const startWeekday = (first.getDay() + 6) % 7; // Monday-first
+  const start = new Date(year, month, 1 - startWeekday);
+  const cells = [];
+
+  for (let i = 0; i < 42; i += 1) {
+    const d = new Date(start);
+    d.setDate(start.getDate() + i);
+    const iso = d.toISOString().slice(0, 10);
+    const visits = Number(visitsByDate.get(iso) || 0);
+    const inMonth = d.getMonth() === month;
+    cells.push({
+      dayNum: d.getDate(),
+      iso,
+      visits,
+      inMonth
+    });
+  }
+
+  return cells;
+}
+
+function periodSeries(yearlySeries, period) {
+  if (period === 'day') {
+    const s = yearlySeries.slice(-14);
+    return s.map((row) => ({ label: row.day.slice(5), visits: row.visits }));
+  }
+  if (period === 'week') {
+    const s = yearlySeries.slice(-7);
+    return s.map((row) => ({ label: row.day.slice(5), visits: row.visits }));
+  }
+  if (period === 'month') {
+    return aggregateByWindow(yearlySeries.slice(-30), 6, 'W');
+  }
+  if (period === 'quarter') {
+    return aggregateByMonth(yearlySeries.slice(-90), 3).map((row) => ({ label: row.label.slice(5), visits: row.visits }));
+  }
+  return aggregateByMonth(yearlySeries, 12).map((row) => ({ label: row.label.slice(5), visits: row.visits }));
+}
+
+function renderSelectedPeriodBars(series) {
+  if (!series || series.length === 0) return '<p>No data</p>';
+  const max = Math.max(1, ...series.map((row) => Number(row.visits || 0)));
+  return `
+    <div class="period-bars">
+      ${series
+        .map((row) => {
+          const visits = Number(row.visits || 0);
+          const h = Math.max(10, Math.round((visits / max) * 100));
+          return `
+            <div class="period-bar-wrap" title="${row.label}: ${visits}">
+              <span class="period-bar-value">${visits}</span>
+              <div class="period-bar" style="height:${h}%"></div>
+              <span class="period-bar-label">${row.label}</span>
+            </div>
+          `;
+        })
+        .join('')}
+    </div>
+  `;
+}
+
 function renderLogin(message = '') {
   root.innerHTML = `
     <main class="stats-container">
@@ -194,20 +273,20 @@ function renderDashboard(summary, daily, recent, yearlyDaily) {
   const geoCoverage = (summary.countries || []).filter((row) => row.label && row.label !== 'Unknown').length;
 
   const yearlySeries = buildDailySeries(yearlyDaily.points || [], 365);
-  const weekSeries = yearlySeries.slice(-7).map((row, idx) => ({ label: `D${idx + 1}`, visits: row.visits }));
-  const monthSeries = aggregateByWindow(yearlySeries.slice(-30), 6, 'W');
-  const quarterSeries = aggregateByMonth(yearlySeries.slice(-90), 3).map((row) => ({ label: row.label.slice(5), visits: row.visits }));
-  const yearSeries = aggregateByMonth(yearlySeries, 12).map((row) => ({ label: row.label.slice(5), visits: row.visits }));
+  const visitsByDate = new Map(yearlySeries.map((row) => [row.day, Number(row.visits || 0)]));
+  const selectedSeries = periodSeries(yearlySeries, selectedPeriod);
+  const periodBars = renderSelectedPeriodBars(selectedSeries);
 
-  const heatmapCells = yearlySeries
-    .map((row) => {
-      const visits = Number(row.visits || 0);
-      const intensity = Math.min(visits, 10) / 10;
+  const monthBase = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth(), 1);
+  const calendarCells = buildMonthCalendar(monthBase, visitsByDate)
+    .map((cell) => {
+      const intensity = Math.min(cell.visits, 10) / 10;
       const light = intensity > 0 ? 0.16 + (intensity * 0.62) : 0;
       const bg = intensity > 0
         ? `rgba(45, 217, 138, ${light.toFixed(2)})`
         : 'rgba(140, 160, 180, 0.18)';
-      return `<div class="heat-cell" style="background:${bg}" title="${row.day}: ${visits} visitors"></div>`;
+      const dimClass = cell.inMonth ? '' : ' heat-cell-muted';
+      return `<button class="heat-cell-button${dimClass}" style="background:${bg}" title="${cell.iso}: ${cell.visits} visitors" type="button">${cell.dayNum}</button>`;
     })
     .join('');
 
@@ -216,7 +295,10 @@ function renderDashboard(summary, daily, recent, yearlyDaily) {
     .join('');
 
   const osRows = summary.operatingSystems
-    .map((row) => `<li><span>${row.label}</span><strong>${row.total}</strong></li>`)
+    .map((row) => {
+      const os = osMeta(row.label);
+      return `<li><span><span class="os-chip ${os.className}">${os.label}</span> ${row.label}</span><strong>${row.total}</strong></li>`;
+    })
     .join('');
 
   const deviceRows = summary.devices
@@ -263,8 +345,9 @@ function renderDashboard(summary, daily, recent, yearlyDaily) {
       <tr>
         <td><input type="checkbox" class="event-check" value="${row.event_id}" /></td>
         <td>${formatDate(row.created_at)}</td>
+        <td>${row.ip_address || '-'}</td>
         <td>${formatLocation(row)}</td>
-        <td>${row.device_type || '-'} | ${row.os_name || '-'}</td>
+        <td>${row.device_type || '-'} | <span class="os-chip ${osMeta(row.os_name).className}">${osMeta(row.os_name).label}</span> ${row.os_name || '-'}</td>
         <td>${row.browser_name || '-'}</td>
         <td>${row.referrer || '-'}</td>
       </tr>
@@ -311,32 +394,37 @@ function renderDashboard(summary, daily, recent, yearlyDaily) {
         </article>
       </section>
 
-      <section class="stats-grid period-charts-grid">
+      <section class="stats-grid">
         <article class="stats-card period-card">
-          <h2>Week Visitors</h2>
-          ${renderMiniBars(weekSeries)}
-        </article>
-        <article class="stats-card period-card">
-          <h2>Month Visitors</h2>
-          ${renderMiniBars(monthSeries, 'mini-bar-accent')}
-        </article>
-        <article class="stats-card period-card">
-          <h2>Quarter Visitors</h2>
-          ${renderMiniBars(quarterSeries)}
-        </article>
-        <article class="stats-card period-card">
-          <h2>Year Visitors</h2>
-          ${renderMiniBars(yearSeries, 'mini-bar-accent')}
+          <div class="period-header">
+            <h2>Visitors Trend</h2>
+            <select id="period-select" class="per-page-select">
+              <option value="day" ${selectedPeriod === 'day' ? 'selected' : ''}>Day</option>
+              <option value="week" ${selectedPeriod === 'week' ? 'selected' : ''}>Week</option>
+              <option value="month" ${selectedPeriod === 'month' ? 'selected' : ''}>Month</option>
+              <option value="quarter" ${selectedPeriod === 'quarter' ? 'selected' : ''}>Quarter</option>
+              <option value="year" ${selectedPeriod === 'year' ? 'selected' : ''}>Year</option>
+            </select>
+          </div>
+          ${periodBars}
         </article>
       </section>
 
       <section class="stats-grid">
         <article class="stats-card heatmap-card">
           <div class="heatmap-header">
-            <h2>Visitor Calendar (1 Year)</h2>
-            <span class="heatmap-legend">0 = grey, 10+ = bright green</span>
+            <button id="calendar-prev" class="refresh-button" type="button">Prev</button>
+            <div class="calendar-title-wrap">
+              <h2>${toMonthTitle(monthBase)}</h2>
+              <span class="heatmap-legend">0 = grey, 10+ = bright green</span>
+            </div>
+            <button id="calendar-next" class="refresh-button" type="button">Next</button>
           </div>
-          <div class="heatmap-grid">${heatmapCells}</div>
+          <div class="calendar-weekdays">
+            <span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
+          </div>
+          <div class="calendar-grid">${calendarCells}</div>
+        </article>
       </section>
 
       <section class="stats-grid">
@@ -395,13 +483,14 @@ function renderDashboard(summary, daily, recent, yearlyDaily) {
                 <tr>
                   <th>Select</th>
                   <th>Time</th>
+                  <th>IP</th>
                   <th>Location</th>
                   <th>Device</th>
                   <th>Browser</th>
                   <th>Referrer</th>
                 </tr>
               </thead>
-              <tbody>${recentRows || '<tr><td colspan="6">No events yet</td></tr>'}</tbody>
+              <tbody>${recentRows || '<tr><td colspan="7">No events yet</td></tr>'}</tbody>
             </table>
           </div>
         </article>
@@ -442,6 +531,21 @@ function renderDashboard(summary, daily, recent, yearlyDaily) {
     }
   });
 
+  document.getElementById('period-select')?.addEventListener('change', (event) => {
+    selectedPeriod = String(event.target.value || 'week');
+    renderDashboard(summary, daily, recent, yearlyDaily);
+  });
+
+  document.getElementById('calendar-prev')?.addEventListener('click', () => {
+    calendarMonth = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() - 1, 1);
+    renderDashboard(summary, daily, recent, yearlyDaily);
+  });
+
+  document.getElementById('calendar-next')?.addEventListener('click', () => {
+    calendarMonth = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1, 1);
+    renderDashboard(summary, daily, recent, yearlyDaily);
+  });
+
   document.getElementById('delete-selected-button')?.addEventListener('click', async () => {
     const selectedIds = Array.from(document.querySelectorAll('.event-check:checked'))
       .map((input) => Number.parseInt(input.value, 10))
@@ -472,6 +576,8 @@ function renderDashboard(summary, daily, recent, yearlyDaily) {
 let _refreshTimer = null;
 let recentPage = 1;
 let recentPerPage = 20;
+let selectedPeriod = 'week';
+let calendarMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
 
 function stopAutoRefresh() {
   if (_refreshTimer) {

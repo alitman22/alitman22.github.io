@@ -485,7 +485,52 @@ tbody tr:hover td {
 }
 
 .period-card {
-  min-height: 170px;
+  min-height: 230px;
+}
+
+.period-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.8rem;
+}
+
+.period-bars {
+  height: 170px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  align-items: end;
+  gap: 0.35rem;
+}
+
+.period-bar-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.period-bar-value {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  line-height: 1;
+}
+
+.period-bar {
+  width: 100%;
+  max-width: 24px;
+  border-radius: 6px 6px 0 0;
+  background: linear-gradient(180deg, #2dd8ff, #1f99bc);
+}
+
+.period-bar-label {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  white-space: nowrap;
 }
 
 .mini-bars {
@@ -520,6 +565,68 @@ tbody tr:hover td {
   color: var(--text-muted);
   font-size: 0.78rem;
 }
+
+.calendar-title-wrap {
+  text-align: center;
+}
+
+.calendar-title-wrap h2 {
+  margin: 0;
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.calendar-weekdays span {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  padding: 0.25rem 0;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.heat-cell-button {
+  aspect-ratio: 1;
+  border: 1px solid rgba(180, 205, 230, 0.1);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  cursor: default;
+}
+
+.heat-cell-muted {
+  opacity: 0.5;
+}
+
+.os-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-right: 0.25rem;
+  border: 1px solid transparent;
+}
+
+.os-win { background: rgba(59, 150, 255, 0.2); border-color: rgba(59, 150, 255, 0.35); }
+.os-lnx { background: rgba(255, 178, 68, 0.2); border-color: rgba(255, 178, 68, 0.35); }
+.os-and { background: rgba(104, 219, 120, 0.2); border-color: rgba(104, 219, 120, 0.35); }
+.os-ios { background: rgba(224, 235, 255, 0.14); border-color: rgba(224, 235, 255, 0.3); }
+.os-mac { background: rgba(214, 214, 255, 0.18); border-color: rgba(214, 214, 255, 0.32); }
+.os-generic { background: rgba(150, 170, 190, 0.2); border-color: rgba(150, 170, 190, 0.35); }
 
 .heatmap-grid {
   display: grid;
@@ -629,6 +736,10 @@ tbody tr:hover td {
 
   .period-charts-grid {
     grid-template-columns: repeat(2, minmax(160px, 1fr));
+  }
+
+  .period-bars {
+    height: 150px;
   }
 
   .stats-form {

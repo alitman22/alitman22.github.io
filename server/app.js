@@ -619,9 +619,11 @@ app.get('/api/stats/recent', requireAuth, async (req, res) => {
         v.timezone,
         v.screen_width,
         v.screen_height,
+        s.ip_address,
         e.session_id
       FROM events e
       LEFT JOIN visits v ON v.session_id = e.session_id
+      LEFT JOIN sessions s ON s.session_id = e.session_id
       WHERE e.event_type = 'pageview'
       ORDER BY e.created_at DESC
       LIMIT ?
