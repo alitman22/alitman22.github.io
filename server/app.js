@@ -899,7 +899,7 @@ app.get('/api/stats/interactions', requireAuth, async (req, res) => {
     const days = Math.min(Math.max(Number.parseInt(req.query.days || '90', 10), 1), 365);
     const interval = `-${days} days`;
 
-    const [totalsResult, eventTypesResult, topProjectTargetsResult, topSectionsResult] = await Promise.all([
+    const [totalsResult, eventTypesResult, topProjectsResult, topSectionsResult, resumeDownloadsResult] = await Promise.all([
       db.execute({
         sql: `SELECT
           SUM(CASE WHEN event_type = 'resume_download' THEN 1 ELSE 0 END) AS resume_downloads,
@@ -931,14 +931,14 @@ app.get('/api/stats/interactions', requireAuth, async (req, res) => {
       }),
       db.execute({
         sql: `SELECT
-          COALESCE(event_label, 'Unknown Project') AS label,
-          COALESCE(target_url, path, '-') AS target,
+          COALESCE(event_label, 'Unknown Project') AS project,
           COUNT(*) AS total,
+          COUNT(DISTINCT visitor_id) AS visitors,
           MAX(created_at) AS last_seen
         FROM events
         WHERE created_at >= datetime('now', ?)
           AND event_type = 'project_link_click'
-        GROUP BY COALESCE(event_label, 'Unknown Project'), COALESCE(target_url, path, '-')
+        GROUP BY COALESCE(event_label, 'Unknown Project')
         ORDER BY total DESC, last_seen DESC
         LIMIT 10`,
         args: [interval]
@@ -955,10 +955,56 @@ app.get('/api/stats/interactions', requireAuth, async (req, res) => {
         ORDER BY total DESC, last_seen DESC
         LIMIT 12`,
         args: [interval]
+      }),
+      db.execute({
+        sql: `SELECT
+          COALESCE(event_label, '-') AS label,
+          COALESCE(target_url, path, '-') AS target,
+          COUNT(*) AS total,
+          MAX(created_at) AS last_seen
+        FROM events
+        WHERE created_at >= datetime('now', ?)
+          AND event_type = 'resume_download'
+        GROUP BY COALESCE(event_label, '-'), COALESCE(target_url, path, '-')
+        ORDER BY total DESC, last_seen DESC
+        LIMIT 20`,
+        args: [interval]
       })
     ]);
 
     const totalsRow = totalsResult.rows[0] || {};
+
+    const resumeByVersionMap = new Map();
+    for (const row of resumeDownloadsResult.rows || []) {
+      let version = String(row.label || '').trim();
+
+      if (!version || version === '-') {
+        const target = String(row.target || '').trim();
+        try {
+          const parsed = new URL(target);
+          version = decodeURIComponent((parsed.pathname.split('/').pop() || '').trim());
+        } catch {
+          version = target.split('/').pop() || target;
+        }
+      }
+
+      version = String(version || '').trim() || 'unknown-resume';
+      const current = resumeByVersionMap.get(version) || { total: 0, lastSeen: null };
+      current.total += toNumber(row.total);
+      if (!current.lastSeen || String(row.last_seen || '') > String(current.lastSeen || '')) {
+        current.lastSeen = row.last_seen;
+      }
+      resumeByVersionMap.set(version, current);
+    }
+
+    const resumeVersions = Array.from(resumeByVersionMap.entries())
+      .map(([version, value]) => ({
+        version,
+        total: toNumber(value.total),
+        lastSeen: value.lastSeen
+      }))
+      .sort((a, b) => b.total - a.total || String(b.lastSeen || '').localeCompare(String(a.lastSeen || '')))
+      .slice(0, 10);
 
     res.json({
       ok: true,
@@ -973,12 +1019,13 @@ app.get('/api/stats/interactions', requireAuth, async (req, res) => {
         eventType: row.event_type,
         total: toNumber(row.total)
       })),
-      topProjectTargets: topProjectTargetsResult.rows.map((row) => ({
-        label: row.label,
-        target: row.target,
+      topProjects: topProjectsResult.rows.map((row) => ({
+        project: row.project,
         total: toNumber(row.total),
+        visitors: toNumber(row.visitors),
         lastSeen: row.last_seen
       })),
+      resumeVersions,
       topSections: topSectionsResult.rows.map((row) => ({
         section: row.section,
         total: toNumber(row.total),

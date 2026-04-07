@@ -4,6 +4,10 @@ function HeroSection({ copy, language, isTurkeyRegion }) {
   const selectedResume = isTurkeyRegion ? resumeMap.TR : resumeMap.GLOBAL;
   const resumeRegionText = language === 'tr' ? selectedResume.regionTextTr : selectedResume.regionTextEn;
   const regionAvailabilityText = isTurkeyRegion ? copy.hero.availabilityTurkey : copy.hero.availabilityGlobal;
+  const resumeHref = String(selectedResume?.href || '');
+  const resumeFileName = decodeURIComponent(
+    (resumeHref.split('/').pop() || 'resume-file').split('?')[0].split('#')[0]
+  );
 
   return (
     <header className="hero">
@@ -63,7 +67,7 @@ function HeroSection({ copy, language, isTurkeyRegion }) {
             download
             data-analytics-event="resume_download"
             data-analytics-category="conversion"
-            data-analytics-label={resumeRegionText}
+            data-analytics-label={resumeFileName}
           >
             <i className="fa-solid fa-download" aria-hidden="true"></i>
             {copy.hero.resumeDownload}

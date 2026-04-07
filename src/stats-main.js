@@ -479,16 +479,22 @@ function renderDashboard(summary, daily, recent, yearlyDaily, interactions) {
     .map((row) => `<li><span>${escapeHtml(formatEventType(row.eventType))}</span><strong>${row.total}</strong></li>`)
     .join('');
 
-  const projectClickRows = (interactions?.topProjectTargets || [])
+  const projectClickRows = (interactions?.topProjects || [])
     .map((row) => {
-      const target = formatTarget(row.target);
-      const label = compactText(row.label || 'Unknown Project', 26);
+      const label = compactText(row.project || 'Unknown Project', 26);
       return `
         <li>
-          <span title="${escapeHtml(`${row.label || 'Unknown Project'} -> ${target.full}`)}">${escapeHtml(label)}</span>
+          <span title="${escapeHtml(row.project || 'Unknown Project')}">${escapeHtml(label)}</span>
           <strong>${row.total}</strong>
         </li>
       `;
+    })
+    .join('');
+
+  const resumeVersionRows = (interactions?.resumeVersions || [])
+    .map((row) => {
+      const version = compactText(row.version || 'unknown-resume', 28);
+      return `<li><span title="${escapeHtml(row.version || 'unknown-resume')}">${escapeHtml(version)}</span><strong>${row.total}</strong></li>`;
     })
     .join('');
 
@@ -645,6 +651,10 @@ function renderDashboard(summary, daily, recent, yearlyDaily, interactions) {
         <article class="stats-card">
           <h2>Top Clicked Projects</h2>
           <ul class="stats-list">${projectClickRows || '<li><span>No project clicks yet</span><strong>0</strong></li>'}</ul>
+        </article>
+        <article class="stats-card">
+          <h2>Resume Versions Downloaded</h2>
+          <ul class="stats-list">${resumeVersionRows || '<li><span>No resume downloads yet</span><strong>0</strong></li>'}</ul>
         </article>
         <article class="stats-card">
           <h2>Top Viewed Sections</h2>
