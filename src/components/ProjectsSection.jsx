@@ -160,6 +160,9 @@ function ProjectsSection({ copy, darkMode }) {
                             rel="noreferrer"
                             className="project-media-link"
                             aria-label={`Go to ${project.subtitle} project in GitHub`}
+                            data-analytics-event="project_link_click"
+                            data-analytics-category="outbound"
+                            data-analytics-label={project.title}
                           >
                             <ProjectVisual
                               projectTitle={project.title}
@@ -244,6 +247,9 @@ function ProjectsSection({ copy, darkMode }) {
                           rel="noreferrer"
                           className="project-continue-link"
                           aria-label={`Continue to ${project.subtitle} on GitHub`}
+                          data-analytics-event="project_link_click"
+                          data-analytics-category="outbound"
+                          data-analytics-label={project.title}
                         >
                           <span>{copy.projectsSection.continueLinkLabel || copy.projectsSection.openLinkLabel}</span>
                           <i className="fa-brands fa-github" aria-hidden="true"></i>

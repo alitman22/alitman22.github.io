@@ -147,6 +147,9 @@ function ExperienceStories({ copy }) {
                       target="_blank"
                       rel="noreferrer"
                       className="story-link-button"
+                      data-analytics-event="project_link_click"
+                      data-analytics-category="outbound"
+                      data-analytics-label={story.title}
                     >
                       <i className="fa-brands fa-github" aria-hidden="true"></i>
                       {ctaLabel}

@@ -57,7 +57,14 @@ function HeroSection({ copy, language, isTurkeyRegion }) {
 
       <div className="hero-bottom">
         <div className="resume-highlight" aria-live="polite">
-          <a className="resume-link" href={selectedResume.href} download>
+          <a
+            className="resume-link"
+            href={selectedResume.href}
+            download
+            data-analytics-event="resume_download"
+            data-analytics-category="conversion"
+            data-analytics-label={resumeRegionText}
+          >
             <i className="fa-solid fa-download" aria-hidden="true"></i>
             {copy.hero.resumeDownload}
           </a>

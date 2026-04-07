@@ -126,6 +126,75 @@ function normalizeString(value, max = 500) {
   return normalized.slice(0, max);
 }
 
+function normalizeEventType(value, fallback = 'pageview') {
+  const normalized = normalizeString(value, 40);
+  if (!normalized) return fallback;
+  if (!/^[a-z0-9_:-]{2,40}$/i.test(normalized)) return fallback;
+  return normalized.toLowerCase();
+}
+
+function normalizeEventCategory(value) {
+  const normalized = normalizeString(value, 40);
+  if (!normalized) return null;
+  if (!/^[a-z0-9_:-]{2,40}$/i.test(normalized)) return null;
+  return normalized.toLowerCase();
+}
+
+function sanitizeTargetUrl(value) {
+  const normalized = normalizeString(value, 600);
+  if (!normalized) return null;
+
+  try {
+    const parsed = new URL(normalized);
+    if (!['http:', 'https:', 'mailto:', 'tel:'].includes(parsed.protocol)) {
+      return null;
+    }
+
+    if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+      return `${parsed.origin}${parsed.pathname || '/'}`.slice(0, 400);
+    }
+
+    return parsed.toString().slice(0, 400);
+  } catch {
+    return null;
+  }
+}
+
+function normalizeMetadata(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+
+  const entries = Object.entries(value).slice(0, 20);
+  const normalized = {};
+
+  for (const [rawKey, rawValue] of entries) {
+    const key = normalizeString(rawKey, 60);
+    if (!key) continue;
+
+    if (rawValue == null) {
+      normalized[key] = null;
+      continue;
+    }
+
+    if (typeof rawValue === 'string') {
+      normalized[key] = rawValue.slice(0, 200);
+      continue;
+    }
+
+    if (typeof rawValue === 'number' || typeof rawValue === 'boolean') {
+      normalized[key] = rawValue;
+      continue;
+    }
+
+    normalized[key] = String(rawValue).slice(0, 200);
+  }
+
+  if (Object.keys(normalized).length === 0) return null;
+
+  const json = JSON.stringify(normalized);
+  if (json.length > 1500) return null;
+  return json;
+}
+
 function normalizeInteger(value, min, max) {
   const parsed = Number.parseInt(value, 10);
   if (!Number.isFinite(parsed)) return null;
@@ -231,7 +300,11 @@ app.get('/api/health', (_req, res) => {
 
 app.post('/api/track', trackLimiter, async (req, res) => {
   try {
-    const eventType = normalizeString(req.body?.eventType, 40) || 'pageview';
+    const eventType = normalizeEventType(req.body?.eventType, 'pageview');
+    const eventCategory = normalizeEventCategory(req.body?.eventCategory);
+    const eventLabel = normalizeString(req.body?.eventLabel, 160);
+    const targetUrl = sanitizeTargetUrl(req.body?.targetUrl);
+    const metadataJson = normalizeMetadata(req.body?.metadata);
     const path = normalizeString(req.body?.path, 400) || '/';
     const referrer = sanitizeReferrer(req.body?.referrer);
     const visitorId = normalizeString(req.body?.visitorId, 80);
@@ -308,8 +381,19 @@ app.post('/api/track', trackLimiter, async (req, res) => {
     });
 
     await db.execute({
-      sql: 'INSERT INTO events (session_id, visitor_id, event_type, path, referrer, created_at) VALUES (?, ?, ?, ?, ?, ?)',
-      args: [sessionId, visitorId, eventType, path, referrer, now]
+      sql: `INSERT INTO events (
+        session_id,
+        visitor_id,
+        event_type,
+        event_category,
+        event_label,
+        target_url,
+        path,
+        referrer,
+        metadata_json,
+        created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      args: [sessionId, visitorId, eventType, eventCategory, eventLabel, targetUrl, path, referrer, metadataJson, now]
     });
 
     res.json({ ok: true });
@@ -812,6 +896,11 @@ app.get('/api/stats/pages', requireAuth, async (req, res) => {
 
 
 app.use((error, _req, res, _next) => {
+  if (String(error?.message || '').includes('Origin not allowed by CORS')) {
+    res.status(403).json({ ok: false, message: 'Origin not allowed by CORS.' });
+    return;
+  }
+
   console.error(error);
   res.status(500).json({ ok: false, message: 'Internal server error.' });
 });
