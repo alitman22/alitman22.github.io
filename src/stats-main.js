@@ -261,26 +261,60 @@ function periodSeries(yearlySeries, period) {
   return aggregateByMonth(yearlySeries, 12).map((row) => ({ label: row.label.slice(5), visits: row.visits }));
 }
 
-function renderSelectedPeriodBars(series) {
+function renderTimeseriesChart(series) {
   if (!series || series.length === 0) return '<p>No data</p>';
-  const max = Math.max(1, ...series.map((row) => Number(row.visits || 0)));
+  
+  const data = series.map(row => Number(row.visits || 0));
+  const maxVal = Math.max(1, ...data);
+  const minVal = 0;
+  const w = 640;
+  const h = 140;
+  const padding = 40;
+  const plotW = w - padding * 2;
+  const plotH = h - padding * 2;
+  
+  const xStep = plotW / (series.length - 1 || 1);
+  const yStep = plotH / (maxVal - minVal || 1);
+  
+  const points = data.map((val, i) => ({
+    x: padding + i * xStep,
+    y: padding + plotH - (val - minVal) * yStep,
+    label: series[i].label,
+    visits: val
+  }));
+  
+  const pathD = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+  const gridLines = [];
+  for (let i = 0; i <= 4; i++) {
+    const y = padding + (plotH / 4) * i;
+    const val = Math.round(maxVal - (maxVal / 4) * i);
+    gridLines.push(`<line x1="${padding}" y1="${y}" x2="${w - padding}" y2="${y}" class="chart-grid-line" />`);
+    gridLines.push(`<text x="${padding - 8}" y="${y + 4}" class="chart-y-label">${val}</text>`);
+  }
+  
+  const xLabels = points.filter((_, i) => i === 0 || i === points.length - 1 || i % Math.ceil(points.length / 4) === 0);
+  const xLabelMarkup = xLabels.map(p => 
+    `<text x="${p.x}" y="${h - 8}" class="chart-x-label" text-anchor="middle">${escapeHtml(p.label)}</text>`
+  ).join('');
+  
+  const dots = points.map(p => 
+    `<circle cx="${p.x}" cy="${p.y}" r="3" class="chart-dot" title="${escapeHtml(p.label)}: ${p.visits}" />`
+  ).join('');
+  
   return `
-    <div class="period-bars-wrap">
-      <div class="period-bars">
-        ${series
-          .map((row) => {
-            const visits = Number(row.visits || 0);
-            const h = Math.max(10, Math.round((visits / max) * 100));
-            return `
-              <div class="period-bar-wrap" title="${escapeHtml(row.label)}: ${visits}">
-                <span class="period-bar-value">${visits}</span>
-                <div class="period-bar" style="height:${h}%"></div>
-                <span class="period-bar-label">${escapeHtml(row.label)}</span>
-              </div>
-            `;
-          })
-          .join('')}
-      </div>
+    <div class="timeseries-chart-wrap">
+      <svg viewBox="0 0 ${w} ${h}" class="timeseries-chart" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#0fc7ff;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#2dd98a;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        ${gridLines.join('\n')}
+        <polyline points="${points.map(p => `${p.x},${p.y}`).join(' ')}" class="chart-line" />
+        ${dots}
+        ${xLabelMarkup}
+      </svg>
     </div>
   `;
 }
@@ -354,7 +388,7 @@ function renderDashboard(summary, daily, recent, yearlyDaily) {
   const yearlySeries = buildDailySeries(yearlyDaily.points || [], 365);
   const visitsByDate = new Map(yearlySeries.map((row) => [row.day, Number(row.visits || 0)]));
   const selectedSeries = periodSeries(yearlySeries, selectedPeriod);
-  const periodBars = renderSelectedPeriodBars(selectedSeries);
+  const periodBars = renderTimeseriesChart(selectedSeries);
 
   const monthBase = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth(), 1);
   const calendarCells = buildMonthCalendar(monthBase, visitsByDate)
