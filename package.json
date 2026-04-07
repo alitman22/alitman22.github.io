@@ -12,7 +12,8 @@
     "build:spa": "npm run images:projects && node -e \"const fs=require('fs');fs.copyFileSync('index.dev.html','index.html');fs.copyFileSync('stats.dev.html','stats.html');\" && vite build",
     "prerender": "node scripts/prerender.mjs",
     "preview": "vite preview",
-    "publish:local": "npm run build && node scripts/publish-local.mjs",
+    "publish:local": "npm run build && node scripts/publish-local.mjs && npm run check:stats-bundle",
+    "check:stats-bundle": "node scripts/_check-stats-bundle.cjs",
     "setup-hooks": "node -e \"const{copyFileSync,chmodSync}=require('fs');copyFileSync('scripts/pre-push.sh','.git/hooks/pre-push');try{chmodSync('.git/hooks/pre-push','755')}catch(e){};console.log('Hook installed.')\"",
     "analytics:cleanup-localhost": "node server/tools/cleanup-localhost-data.mjs"
   },

@@ -15,7 +15,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Stage updated build artifacts so they're included in this push
-git add index.html assets/
+git add index.html stats.html assets/
 
 if ! git diff --cached --quiet; then
   git commit -m "chore: update build artifacts"
