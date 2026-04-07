@@ -448,6 +448,92 @@ tbody tr:hover td {
   font-size: clamp(1.4rem, 3vw, 2rem);
 }
 
+.metrics-merged-card h2 {
+  margin-bottom: 0.9rem;
+}
+
+.metrics-merged-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(120px, 1fr));
+  gap: 0.6rem;
+}
+
+.metric-item {
+  border: 1px solid rgba(0, 214, 255, 0.14);
+  border-radius: 10px;
+  padding: 0.55rem 0.7rem;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.metric-item span {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.metric-item strong {
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--text-primary);
+  font-size: 1.2rem;
+}
+
+.period-charts-grid {
+  grid-template-columns: repeat(4, minmax(180px, 1fr));
+}
+
+.period-card {
+  min-height: 170px;
+}
+
+.mini-bars {
+  height: 110px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  align-items: end;
+  gap: 0.22rem;
+}
+
+.mini-bar {
+  width: 100%;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(180deg, #19d7ff, #0b8db0);
+}
+
+.mini-bar-accent {
+  background: linear-gradient(180deg, #64f2b6, #22b46f);
+}
+
+.heatmap-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.heatmap-legend {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.heatmap-grid {
+  display: grid;
+  grid-template-columns: repeat(53, minmax(8px, 1fr));
+  gap: 3px;
+}
+
+.heat-cell {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 2px;
+  border: 1px solid rgba(180, 205, 230, 0.08);
+}
+
 .bar-chart {
   display: grid;
   gap: 0.5rem;
@@ -535,6 +621,14 @@ tbody tr:hover td {
   .totals-grid {
     grid-template-columns: repeat(auto-fit, minmax(clamp(140px, 40vw, 180px), 1fr));
     gap: 0.8rem;
+  }
+
+  .metrics-merged-grid {
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+  }
+
+  .period-charts-grid {
+    grid-template-columns: repeat(2, minmax(160px, 1fr));
   }
 
   .stats-form {
@@ -650,6 +744,18 @@ tbody tr:hover td {
   .stats-list li {
     flex-direction: column;
     gap: 0.2rem;
+  }
+
+  .metrics-merged-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .period-charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .heatmap-grid {
+    grid-template-columns: repeat(26, minmax(8px, 1fr));
   }
 
   .table-wrap {
