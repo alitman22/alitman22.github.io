@@ -156,7 +156,7 @@ body {
 
 .focus-grid {
   grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.95fr);
-  align-items: start;
+  align-items: stretch;
 }
 
 .compact-focus-grid {
@@ -542,8 +542,9 @@ tbody tr:hover td {
 
 .timeseries-chart-wrap {
   width: 100%;
-  min-height: 160px;
+  min-height: 100%;
   margin: 0.4rem 0 0.2rem 0;
+  flex: 1;
 }
 
 .timeseries-chart {
