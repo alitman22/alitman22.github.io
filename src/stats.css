@@ -31,11 +31,12 @@ body {
   color: var(--text-primary);
   line-height: 1.6;
   font-size: clamp(0.9rem, 2vw, 1rem);
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .stats-shell {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
@@ -43,14 +44,19 @@ body {
 .stats-container {
   width: min(96vw, 1480px);
   max-width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   margin: 0 auto;
   padding: 0.7rem 0.9rem 0.8rem;
   display: grid;
   gap: 0.55rem;
-  grid-template-rows: auto auto auto minmax(0, 1.15fr) minmax(0, 1fr) minmax(0, 1.05fr);
-  align-content: stretch;
-  overflow: hidden;
+  align-content: start;
+}
+
+.stats-overview {
+  min-height: calc(100vh - 5.2rem);
+  display: grid;
+  gap: 0.55rem;
+  align-content: start;
 }
 
 .stats-header {
@@ -171,7 +177,7 @@ body {
 }
 
 .compact-table-grid {
-  min-height: 0;
+  align-items: start;
 }
 
 .stats-card {
@@ -401,7 +407,7 @@ tbody tr:hover td {
 
 .table-wrap {
   overflow-x: auto;
-  overflow-y: auto;
+  overflow-y: visible;
   border-radius: 12px;
   border: 1px solid var(--border-color);
   background: rgba(11, 22, 42, 0.4);
@@ -764,12 +770,7 @@ tbody tr:hover td {
 }
 
 .compact-table-grid .stats-card {
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
-}
-
-.compact-table-grid .table-wrap {
-  max-height: 100%;
+  display: block;
 }
 
 .compact-focus-grid .heatmap-card,
@@ -834,16 +835,16 @@ tbody tr:hover td {
 
 /* Mobile Responsiveness */
 @media (max-width: 1024px) {
-  body {
-    overflow: auto;
-  }
-
   .stats-shell,
   .stats-container {
-    height: auto;
+    min-height: 0;
     width: min(95vw, 100%);
     padding: clamp(1rem, 3vw, 2.5rem) clamp(0.8rem, 2vw, 1.5rem);
     overflow: visible;
+  }
+
+  .stats-overview {
+    min-height: 0;
   }
 
   .stats-grid {

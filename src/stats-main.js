@@ -459,6 +459,7 @@ function renderDashboard(summary, daily, recent, yearlyDaily) {
         </div>
       </header>
 
+        <div class="stats-overview">
       <section class="stats-grid totals-grid">
         <article class="stats-card">
           <h2>Total Visits</h2>
@@ -545,6 +546,7 @@ function renderDashboard(summary, daily, recent, yearlyDaily) {
           <div class="bar-chart">${deviceBars || '<p>No device data</p>'}</div>
         </article>
       </section>
+      </div>
 
       <section class="stats-grid compact-table-grid">
         <article class="stats-card">

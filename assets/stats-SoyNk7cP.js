@@ -105,6 +105,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const lt=""+new URL("logo-stats-My1
         </div>
       </header>
 
+        <div class="stats-overview">
       <section class="stats-grid totals-grid">
         <article class="stats-card">
           <h2>Total Visits</h2>
@@ -191,6 +192,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const lt=""+new URL("logo-stats-My1
           <div class="bar-chart">${rt||"<p>No device data</p>"}</div>
         </article>
       </section>
+      </div>
 
       <section class="stats-grid compact-table-grid">
         <article class="stats-card">
