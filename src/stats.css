@@ -981,6 +981,10 @@ tbody tr:hover td {
     gap: 0.8rem;
   }
 
+  .focus-grid {
+    grid-template-columns: 1fr;
+  }
+
   .totals-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1079,6 +1083,10 @@ tbody tr:hover td {
   .totals-grid {
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: 0.6rem;
+  }
+
+  .focus-grid {
+    grid-template-columns: 1fr;
   }
 
   .stats-list li {
