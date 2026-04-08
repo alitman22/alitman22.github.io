@@ -745,6 +745,7 @@ tbody tr:hover td {
 
 .recent-events-table {
   table-layout: fixed;
+  min-width: 980px;
 }
 
 .recent-events-table .col-select { width: 56px; }
@@ -782,6 +783,11 @@ tbody tr:hover td {
 }
 
 .cell-time {
+  white-space: nowrap;
+}
+
+.recent-events-table th,
+.recent-events-table td {
   white-space: nowrap;
 }
 
@@ -975,6 +981,14 @@ tbody tr:hover td {
     gap: 0.8rem;
   }
 
+  .totals-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .totals-grid > .stats-card:nth-child(3n) {
+    grid-column: 1 / -1;
+  }
+
   .compact-analytics-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1011,20 +1025,25 @@ tbody tr:hover td {
   }
 
   .recent-events-table {
-    table-layout: auto;
+    table-layout: fixed;
+    min-width: 980px;
   }
 
-  .recent-events-table .col-ip,
-  .recent-events-table .col-browser,
-  .recent-events-table th:nth-child(3),
-  .recent-events-table td:nth-child(3),
-  .recent-events-table th:nth-child(6),
-  .recent-events-table td:nth-child(6) {
-    display: none;
+  .paging-controls {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.35rem;
+    width: 100%;
   }
 
-  .recent-events-table .col-location {
-    width: 230px;
+  .paging-controls .danger-button,
+  .paging-controls .paging-meta {
+    grid-column: 1 / -1;
+  }
+
+  .paging-controls .paging-meta {
+    text-align: left;
+    min-width: 0;
   }
 }
 
@@ -1138,6 +1157,17 @@ tbody tr:hover td {
     font-size: clamp(1rem, 2.5vw, 1.4rem);
   }
 
+  .header-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.45rem;
+  }
+
+  .last-updated {
+    grid-column: 1 / -1;
+    text-align: center;
+  }
+
   .big-number {
     font-size: clamp(1.2rem, 2.5vw, 1.8rem);
   }
@@ -1154,14 +1184,8 @@ tbody tr:hover td {
     grid-template-columns: 1fr;
   }
 
-  .recent-events-table .col-referrer,
-  .recent-events-table th:nth-child(7),
-  .recent-events-table td:nth-child(7) {
-    display: none;
-  }
-
-  .recent-events-table .col-location {
-    width: auto;
+  .recent-events-table {
+    min-width: 940px;
   }
 
   .metrics-merged-grid {
