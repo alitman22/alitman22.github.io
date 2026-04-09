@@ -405,7 +405,7 @@ p {
 }
 
 .glass-card:not(.hero-terminal)::before {
-  content: "ali@portfolio$ cat ~/dest/" attr(data-terminal-file);
+  content: "root@portfolio# cat ~/dest/" attr(data-terminal-file);
   position: absolute;
   top: 0.34rem;
   left: 0.8rem;
