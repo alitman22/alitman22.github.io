@@ -23,7 +23,7 @@ export const tr = {
     email: 'alit.fattahi@gmail.com',
     phone: '(+90) 501 640 3103',
     availabilityGlobal: 'Bu yetkinlikleri Almanya veya Hollanda\'daki yenilikçi ekiplere sunabileceğim yeni fırsatlar arıyorum.',
-    availabilityTurkey: 'Türkiye çalışma izni sahibiyim; derhal transfer olabilirim ve remote-first çalışmaya veya İstanbul ya da Ankara gibi şehirlere taşınarak ofisten çalışmaya hazırım.',
+    availabilityTurkey: 'Türkiye çalışma izni sahibiyim; hızlı başlangıç yapabilirim. Remote-first rollerde çalışmaya, ayrıca İstanbul veya Ankara gibi şehirlere taşınarak ofisten çalışmaya hazırım.',
     resumeLabel: 'Özgeçmiş:',
     resumeDownload: 'Özgeçmişi İndir'
   },
@@ -31,9 +31,9 @@ export const tr = {
     title: 'Hakkımda',
     paragraphs: [
       'Merhaba, ben Ali. On yılı aşkın süredir yalnızca çalışan değil, aynı zamanda üstün performans gösteren BT altyapıları tasarlıyor ve hayata geçiriyorum. Tutkum, tasarımı itibarıyla dayanıklı, verimli ve güvenli sistemler kurmaktır. Her zorluğa net bir yaklaşımla ilerlerim: temel problemi doğru tespit etmek, sağlam bir çözüm tasarlamak ve süreçleri kararlılıkla otomatize etmek.',
-      'Üst düzey bir ulusal veri merkezinde altyapı yönetiminden, yüksek frekanslı işlem sistemlerinin optimizasyonuna kadar uzanan kariyerim; bana Linux administration, DevOps practices ve network engineering alanlarında derin bir uzmanlık kazandırdı. Ağ Mühendisliği lisans eğitimim, sahadaki deneyimimi güçlü bir teorik temelle desteklemektedir.',
-      "Open-world technologies alanında daha derin birikim oluşturmak ve global ölçekte çalışabilmek için yakın zamanda İran'dan Türkiye'ye taşındım. Bu adım, regional limitations engellerini aşmamı, uzmanlığımı geliştirmemi ve international tech ecosystem ile doğrudan çalışmamı sağladı.",
-      'En iyi altyapının görünmez olduğuna inanıyorum: sadece sorunsuz çalışır. Operational excellence odaklı bu anlayış, tüm çalışmalarımın merkezindedir ve bu uzmanlığı vizyoner kurumlarda yeni sorumluluklara taşımayı hedefliyorum.',
+      'Üst düzey bir ulusal veri merkezinde altyapı yönetiminden, yüksek frekanslı işlem sistemlerinin optimizasyonuna kadar uzanan kariyerim; bana Linux sistem yönetimi, DevOps pratikleri ve ağ mühendisliği alanlarında derin uzmanlık kazandırdı. Ağ Mühendisliği lisans eğitimim, sahadaki deneyimimi güçlü bir teorik temelle destekliyor.',
+      "Global ölçekte daha fazla proje üretebilmek ve açık teknoloji ekosistemlerinde derinleşmek için yakın zamanda İran'dan Türkiye'ye taşındım. Bu adım; bölgesel kısıtları aşmamı, uzmanlığımı daha da geliştirmemi ve uluslararası teknoloji ekosistemiyle doğrudan çalışmamı sağladı.",
+      'En iyi altyapının görünmez olduğuna inanıyorum: sadece sorunsuz çalışır. Operasyonel mükemmeliyet odaklı bu yaklaşım, tüm çalışmalarımın merkezindedir ve bu uzmanlığı vizyoner kurumlarda daha büyük sorumluluklara taşımayı hedefliyorum.',
       'Teknik yetkinliğin ötesinde, ekipler arasında iş birliği ve netlik kültürünü güçlendirmeye önem veriyorum. Karmaşık altyapı konularını uygulanabilir stratejilere dönüştürmekten keyif alıyorum. Güçlü iletişim ve sürekli iyileştirme zihniyetini birleştirerek, inovasyonun hız kazandığı, güvenilirliğin tavizsiz korunduğu ve ekiplerin gerçek değer üretmeye odaklandığı ortamlar kurmayı hedefliyorum.'
     ],
     cards: {
@@ -49,11 +49,11 @@ export const tr = {
       languages: {
         title: 'Diller',
         items: [
-          'English (Profesyonel)',
-          'Turkish (İleri Seviye)',
-          'Farsi (Ana Dil)',
-          'Azerbaijani (Ana Dil)',
-          'Şu anda öğreniyorum: Dutch (A2)'
+          'İngilizce (Profesyonel)',
+          'Türkçe (İleri Seviye)',
+          'Farsça (Ana Dil)',
+          'Azerbaycan Türkçesi (Ana Dil)',
+          'Şu anda öğreniyorum: Hollandaca (A2)'
         ]
       }
     }
@@ -67,7 +67,7 @@ export const tr = {
         period: 'Kas 2025 - Mar 2026 (Antalya, Türkiye) - Şirket Tasfiyesi',
         bullets: [
           'Dev, staging ve production ortamları genelinde CI/CD sürelerini %40 azalttım; geliştirme ve yayınlama döngülerini hızlandırdım.',
-          'ERP sistemleri ve VMler için kapsamlı monitoring stack kurarak performans darboğazlarını belirledim ve sorun giderme sürelerini kısalttım.',
+          "ERP sistemleri ve VM'ler için kapsamlı bir monitoring stack kurarak performans darboğazlarını belirledim ve sorun giderme sürelerini kısalttım.",
           'Rusya, Litvanya ve Türkiye ofislerini bağlayan multi-region ağ tasarımı ile güvenilir veri iletimini sağladım.',
           'Hibrit altyapı için teknik dokümantasyon ve ağ topolojilerini standartlaştırarak sorun çözüm süreçlerini hızlandırdım.',
           'Türkiye ofisinin ağ modernizasyonuna liderlik ederek IATF standartlarına uyum ve başarılı denetim geçişi sağladım.'
@@ -78,13 +78,13 @@ export const tr = {
         company: 'Hermes Capital',
         period: 'Şub 2021 - Eki 2025 (Tahran, İran)',
         bullets: [
-          '250+ Linux VM ve 200+TB storage içeren yüksek erişilebilirlikli Linux altyapısını orkestre ederek kesintisiz ve yüksek performanslı operasyonlar sağladım.',
+          '250+ Linux VM ve 200+ TB depolama içeren yüksek erişilebilirlikli Linux altyapısını orkestre ederek kesintisiz ve yüksek performanslı operasyonlar sağladım.',
           'Stratejik altyapı iyileştirmeleri ve akıllı kaynak planlamasıyla aylık operasyon maliyetlerini %38 azalttım.',
           '4 junior mühendisin işe alım ve gelişim sürecini yöneterek proje teslim hızını ~%55 artırdım.',
           'BT sistemlerini kamu standartlarıyla uyumlu hale getirerek şirketin 6 kritik güvenlik ve ticaret iznini almasına katkıda bulundum.',
-          'Otomasyonla 41 micro-service deployment sürecini sadeleştirerek süreleri yarıdan fazla azalttım ve manuel hatayı ortadan kaldırdım.',
-          'Tam kapsamlı co-location geçişini yöneterek servis gecikmesini %97 azalttım (yaklaşık 9msden 270usye).',
-          'Linux kernel ayarları ve ağ optimizasyonlarıyla işlem ve emir gerçekleşme gecikmesini %22 düşürdüm.',
+          'Otomasyonla 41 mikroservis deployment sürecini sadeleştirerek süreleri yarıdan fazla azalttım ve manuel hatayı ortadan kaldırdım.',
+          "Tam kapsamlı co-location geçişini yöneterek servis gecikmesini %97 azalttım (yaklaşık 9 ms'den 270 µs'e).",
+          'Linux kernel ayarları ve ağ optimizasyonlarıyla işlem ve emir gerçekleştirme gecikmesini %22 düşürdüm.',
           'Daha hassas sistem alarm mekanizmalarıyla ortalama sorun giderme süresini %18 azalttım.',
           'Yapılandırılmış runbooklar oluşturarak sorun çözüm tutarlılığını artırdım ve yeni otomasyon fırsatları geliştirdim.',
           'Sunucu ve ağ cihazlarının yaşam döngüsünü düzenli bakım ve kontrollerle yöneterek güvenilirliği sürdürdüm.'
@@ -107,7 +107,7 @@ export const tr = {
         period: 'Şub 2016 - May 2017 (Tahran, İran)',
         bullets: [
           '5 ülkede multi-region sunucu ortamını ölçeklendirip yönettim; uluslararası medikal platformları ve 7 kişilik geliştirme ekibini destekledim.',
-          'Dağıtık LeaseWeb co-hosting yapısını ve 14TB in-house backup altyapısını yöneterek 5 uluslararası bölgede %99.8 uptime sağladım.',
+          'Dağıtık LeaseWeb co-hosting yapısını ve 14 TB in-house backup altyapısını yöneterek 5 uluslararası bölgede %99.8 uptime sağladım.',
           '12-node Docker Swarm cluster üzerinde 25+ servisin orkestrasyonunu yönettim; deployment ve ölçekleme sürelerini %40 azalttım.',
           'Tek sysadmin olarak Redmine üzerinden 300+ altyapı talebini yönettim; ortalama geri dönüş süresini 12 saatin altında tuttum.'
         ]
@@ -216,16 +216,16 @@ export const tr = {
     challengesLabel: 'Zorluklar',
     solutionLabel: 'Çözüm',
     toolsLabel: 'Kullanılan araç seti',
-    openLinkLabel: 'GitHubda Aç',
-    continueLinkLabel: 'GitHubda Devam Et',
+    openLinkLabel: "GitHub'da Aç",
+    continueLinkLabel: "GitHub'da Devam Et",
     intro:
-      'Aşağıda teknik çalışmalarım, otomasyon scriptlerim ve altyapı projelerimden bir seçki bulunuyor. Geçmişte yoğun iş temposu, şirket gizliliği ve depoları düzgün şekilde dokümante etmeye zaman ayıramamak nedeniyle açık portföyüm sessiz kalmıştı. Artık AIı teknik yazı asistanı olarak kullanıyorum. Biçimlendirme ve düzeni AI üstlenirken ben çekirdek mühendislik kısmına odaklanıyorum. Dokümantasyon yer yer AI yazımı gibi geliyorsa nedeni budur. Ancak her proje, script ve çözüm %100 insan onaylıdır ve kariyerim boyunca karşılaştığım gerçek senaryolara dayanır.',
+      "Aşağıda teknik çalışmalarım, otomasyon scriptlerim ve altyapı projelerimden bir seçki bulunuyor. Geçmişte yoğun iş temposu, şirket gizliliği ve depoları düzgün şekilde dokümante etmeye zaman ayıramamak nedeniyle açık portföyüm sessiz kalmıştı. Artık AI'ı teknik yazı asistanı olarak kullanıyorum. Biçimlendirme ve düzeni AI üstlenirken ben çekirdek mühendislik kısmına odaklanıyorum. Dokümantasyon yer yer AI yazımı gibi geliyorsa nedeni budur. Ancak her proje, script ve çözüm %100 insan onaylıdır ve kariyerim boyunca karşılaştığım gerçek senaryolara dayanır.",
     items: [
       {
         title: 'Networking',
         subtitle: 'Çok Katmanlı Güvenli Ağ Tasarımı',
         image: 'assets/projects/network-hft.png',
-        imageAlt: 'HFT projesi icin dusuk gecikmeli ag mimarisi diyagrami',
+        imageAlt: 'HFT projesi için düşük gecikmeli ağ mimarisi diyagramı',
         problem:
           'Yüksek frekanslı işlem ortamlarında gecikme, jitter ve zamanlama sapmaları kontrol edilmezse ağ tarafındaki küçük farklar bile ciddi rekabet kaybına dönüşür.',
         challenges: [
@@ -247,8 +247,8 @@ export const tr = {
           'İnternetteki çoğu Kafka kurulum rehberi yalnızca temel bir cluster kurulumunda kalır; fakat üretim ortamında güçlü metrik görünürlüğü, geliştirici dostu yönetim arayüzü ve güvenlik duvarı arkasından kontrollü broker erişimi gibi çevresel ihtiyaçlar kritik hale gelir.',
         challenges: [
           'Dış ağ NAT broker erişimini Kafka metadata ve istemci yönlendirmesini bozmadan çalıştırmak.',
-          'JMX Exporter ve Redpanda Consoleu sonradan eklenen değil, dağıtımın doğal parçası yapmak.',
-          'Playbookları idempotent tutarken güvenli cluster genişletmesini ve tekrar çalıştırmayı desteklemek.'
+          "JMX Exporter ve Redpanda Console'u sonradan eklenen değil, dağıtımın doğal parçası yapmak.",
+          "Playbook'ları idempotent tutarken güvenli cluster genişletmesini ve tekrar çalıştırmayı desteklemek."
         ],
         solution:
           'Bu çözüm, vanilla playbookların ötesine geçerek Kafka bean ve metrikleri için JMX Exporter entegrasyonunu, geliştiricilerin görsel olarak daha rahat yönetebilmesi için Redpanda Console kurulumunu ve brokerlara dış ağdan güvenli erişim için NAT tabanlı erişim konfigürasyonunu otomatikleştirir. İdempotent Ansible orkestrasyonu sayesinde cluster; kutudan çıktığı gibi güvenilir, izlenebilir, geliştirici tarafından yönetilebilir ve kolay genişletilebilir şekilde teslim edilir.',
@@ -261,7 +261,7 @@ export const tr = {
         image: 'assets/projects/docker-ray.png',
         imageAlt: 'Docker Ray cluster dağıtım genel bakış diyagramı',
         problem:
-          'Küçük bir data ekibi, altyapı uzmanı olmadan güvenebileceği bir Ray cluster yapısına ihtiyaç duyuyordu. Klasik kurulumlar yeterli değildi; çünkü gün içinde kaynaklar değiştiğinde veya bazı workerlar cluster dışına çıktığında işlerin kesintisiz devam etmesi gerekiyordu.',
+          'Küçük bir veri ekibi, altyapı uzmanı olmadan güvenebileceği bir Ray cluster yapısına ihtiyaç duyuyordu. Klasik kurulumlar yeterli değildi; çünkü gün içinde kaynaklar değiştiğinde veya bazı worker nodelar cluster dışına çıktığında işlerin kesintisiz devam etmesi gerekiyordu.',
         challenges: [
           'Worker kaybı ve kaynak dalgalanmasında dağıtık işlerin çökmeden devam etmesini sağlamak.',
           'Heterojen düğümlerde ve değişken yüklerde çalışma zamanı tutarlılığını korumak.',
@@ -285,7 +285,7 @@ export const tr = {
           'Panel sorgu yükü yükselirken yazma performansını ve sürekliliğini güvenceye almak.'
         ],
         solution:
-          'Çözüm, Patroni tabanlı HA PostgreSQL mimarisine geçiş yaparak etcd ile consensus ve HAProxy ile trafik kontrolü kurdu; böylece okuma/yazma rolleri pratik biçimde ayrıştırıldı ve farklı lokasyonlardaki depolama katmanlarında dayanıklılık artırıldı. Panel ve raporlama sorguları okuma tarafına yönlendirilirken yazma yolu korunarak Grafana yenilemeleri daha akıcı hale geldi ve yoğunluk altında yazma istikrarı korundu.',
+          'Çözüm, Patroni tabanlı HA PostgreSQL mimarisine geçiş yaparak etcd ile konsensüs ve HAProxy ile trafik kontrolü kurdu; böylece okuma/yazma rolleri pratik biçimde ayrıştırıldı ve farklı lokasyonlardaki depolama katmanlarında dayanıklılık artırıldı. Panel ve raporlama sorguları okuma tarafına yönlendirilirken yazma yolu korunarak Grafana yenilemeleri daha akıcı hale geldi ve yoğunluk altında yazma istikrarı korundu.',
         tools: ['PostgreSQL', 'Patroni', 'etcd', 'HAProxy', 'Yüksek erişilebilirlik'],
         href: 'https://github.com/alitman22/ha-postgres-patroni-etcd-haproxy'
       },
@@ -295,14 +295,14 @@ export const tr = {
           image: 'assets/projects/systemd-monitoring.png',
           imageAlt: 'Systemd servis sağlık izleme infografiği',
         problem:
-            'Java microservice platformunda servislerin tamamı hafif değildi ve 2 cluster üzerinde toplam 84 systemd servis biriminin durumunu güvenilir izlemek gerekiyordu. Ekip, node_exporter gibi temel pull tabanlı araçlarla restart ve durum değişimlerini yeterince doğru yakalayamıyordu.',
+            'Java mikroservis platformunda servislerin tamamı hafif değildi ve 2 cluster üzerinde toplam 84 systemd servis biriminin durumunu güvenilir biçimde izlemek gerekiyordu. Ekip, node_exporter gibi temel pull tabanlı araçlarla restart ve durum değişimlerini yeterince doğru yakalayamıyordu.',
           challenges: [
             '2 cluster genelinde 84 Java systemd birimini hızlı durum geçişlerinde veri kaybı olmadan izlemek.',
             'D-Bus olay akışını güvenilir alarm ve zaman serisi sinyallerine dönüştürmek.',
             'Restart fırtınalarında ve kararsız dönemlerde kaçırılan state geçişlerini sıfıra indirmek.'
           ],
         solution:
-          'Bu push tabanlı izleme yaklaşımı, D-Bus üzerindeki systemd olaylarına abone olup iki cluster genelindeki servis yaşam döngüsü geçişlerini gerçek zamanlı izler. Kritik olayları Telegram kanalına escalate eder, durum verilerini Prometheus Pushgatewaye göndererek zaman serisi halinde toplar ve Grafana üzerinde görselleştirir. Bu sayede servis durumundaki bilgi kör noktaları ortadan kalkar, durum verisi eksikliği tamamen giderilir ve Java servis birimi için operasyon kararları eksiksiz state verisiyle alınır.',
+          "Bu push tabanlı izleme yaklaşımı, D-Bus üzerindeki systemd olaylarına abone olup iki cluster genelindeki servis yaşam döngüsü geçişlerini gerçek zamanlı izler. Kritik olayları Telegram kanalına eskale eder, durum verilerini Prometheus Pushgateway'e göndererek zaman serisi halinde toplar ve Grafana üzerinde görselleştirir. Bu sayede servis durumundaki kör noktalar ortadan kalkar, durum verisi eksikliği giderilir ve Java servis birimleri için operasyon kararları eksiksiz state verisiyle alınır.",
         tools: ['Python', 'D-Bus', 'systemd', 'Linux izleme', 'Servis otomasyonu'],
         href: 'https://github.com/alitman22/Systemd-Monitoring-DBUS'
       },
@@ -312,7 +312,7 @@ export const tr = {
           image: 'assets/projects/prometheus-grafana.png',
           imageAlt: 'Prometheus ve Grafana ile izleme mimarisi infografiği',
         problem:
-          'Tek bir Prometheus ve Grafana kurmak görece kolaydır; asıl zorluk tüm kaynak ve exporter katmanlarından metrikleri eksiksiz toplamaktır. SSL sertifika sağlığından CPU costop ve disk write latency gibi detaylı kaynak metriklerine kadar geniş kapsamlı veri toplanmadığında ekipler kritik sinyalleri kaçırır.',
+          'Tek bir Prometheus ve Grafana kurmak görece kolaydır; asıl zorluk tüm kaynak ve exporter katmanlarından metrikleri eksiksiz toplamaktır. SSL sertifika sağlığından CPU co-stop ve disk write latency gibi detaylı kaynak metriklerine kadar geniş kapsamlı veri toplanmadığında ekipler kritik sinyalleri kaçırır.',
           challenges: [
             'Birden çok exporter kaynağındaki metrikleri bağlam kaybetmeden normalize etmek.',
             'Derin metrik kapsamını korurken kardinalite ve scrape maliyetini kontrol altında tutmak.',
@@ -320,7 +320,7 @@ export const tr = {
           ],
         solution:
           'Bu çözüm, geniş exporter/gatherer ekosisteminden gelen metrikleri tek bir gözlemlenebilirlik hattında merkezileştirir ve Grafana üzerinde net operasyon panolarıyla görünür hale getirir. Böylece uçtan uca ortam farkındalığı ciddi ölçüde artar, içgörüler daha kesinleşir, alarm kalitesi yükselir ve arıza tespit süresi kısalır.',
-        tools: ['Prometheus', 'Grafana', 'Exporterlar', 'Pushgateway', 'Alerting', 'Observability'],
+        tools: ['Prometheus', 'Grafana', "Exporter'lar", 'Pushgateway', 'Alerting', 'Observability'],
         href: 'https://github.com/alitman22/full-stack-monitoring'
       },
       {
@@ -336,7 +336,7 @@ export const tr = {
           'Maliyet kontrollü donanımda kurumsal HA dayanıklılığını taviz vermeden sunmak.'
         ],
         solution:
-          'Bu çözüm, pfSensei HA modunda ikinci güvenlik katmanı olarak konumlandırıp inter-VLAN routing ve detaylı erişim kural yönetimini yüksek erişilebilirlikle birlikte sağlar. HA yapısı kurulumu belirgin şekilde karmaşıklaştırsa da tasarım, HP DL160 sunucular kullanılarak hem yazılım hem donanım katmanında kurumsal seviyede dayanıklılık sunar.',
+          "Bu çözüm, pfSense'i HA modunda ikinci güvenlik katmanı olarak konumlandırıp inter-VLAN routing ve detaylı erişim kural yönetimini yüksek erişilebilirlikle birlikte sağlar. HA yapısı kurulumu belirgin şekilde karmaşıklaştırsa da tasarım, HP DL160 sunucular kullanılarak hem yazılım hem donanım katmanında kurumsal seviyede dayanıklılık sunar.",
         tools: ['pfSense', 'CARP', 'Inter-VLAN yönlendirme', 'LACP', 'Firewall policy', 'HP DL160'],
         href: 'https://github.com/alitman22/pfsense-ha-enterprise'
       },
@@ -371,33 +371,33 @@ export const tr = {
         severity: 'Critical',
 
         background:
-          'Parcali altyapidan merkezi on-prem ortama gecis sonrasi, 120 Ubuntu 20.04 VM calistiran bir VMware vSAN yapisi kuruldu. Butce kisitlari nedeniyle kapasite katmaninda kurumsal SSD yerine tuketici sinifi diskler kullanildi; bu teknik borc sonradan kritik bir etki yaratti.',
+          'Parçalı altyapıdan merkezi on-prem ortama geçiş sonrası, 120 Ubuntu 20.04 VM çalıştıran bir VMware vSAN yapısı kuruldu. Bütçe kısıtları nedeniyle kapasite katmanında kurumsal SSD yerine tüketici sınıfı diskler kullanıldı; bu teknik borç sonradan kritik bir etki yarattı.',
         problem:
-          'Her gece tam 00:00 civarinda cluster yavasliyor, servisler takiliyor ve veritabani gecikmeleri olusuyordu. En kritik noktada izleme katmani da etkilendiginden, olay aninda gozlem kabiliyeti ciddi sekilde dusuyordu.',
+          'Her gece tam 00:00 civarında cluster yavaşlıyor, servisler takılıyor ve veritabanı gecikmeleri oluşuyordu. En kritik noktada izleme katmanı da etkilendiğinden, olay anında gözlem kabiliyeti ciddi şekilde düşüyordu.',
         investigation: [
-          'vCenter uzerinden planli isler, DRS hareketleri ve snapshot operasyonlari kontrol edildi; dogrudan tetikleyici bulunamadi.',
-          'Yedekleme zamanlari devre disi birakilarak etkisi test edildi; problem devam etti.',
-          'Izleme bilesenleri cluster disina alinip out-of-band metrik toplandi; gece yarisinda IOPS ve latency zirveleri goruldu.',
-          'Yuksek I/O yukleri kisitlanarak etki ayrisimi yapildi; sorun siddeti azalsa da kok neden suruyordu.',
-          'Yazma ucurumu davranisi benchmark scriptleriyle tekrar uretildi ve gecikme profili dogrulandi.'
+          'vCenter üzerinden planlı işler, DRS hareketleri ve snapshot operasyonları kontrol edildi; doğrudan tetikleyici bulunamadı.',
+          'Yedekleme zamanları devre dışı bırakılarak etkisi test edildi; problem devam etti.',
+          'İzleme bileşenleri cluster dışına alınıp out-of-band metrik toplandı; gece yarısında IOPS ve latency zirveleri görüldü.',
+          'Yüksek I/O yükleri kısıtlanarak etki ayrışımı yapıldı; sorun şiddeti azalsa da kök neden sürüyordu.',
+          'Yazma uçurumu davranışı benchmark scriptleriyle tekrar üretildi ve gecikme profili doğrulandı.'
         ],
         rootCause:
-          'Ubuntu 20.04 varsayilan logrotate zamanlamasinin tum VMlerde ayni anda calismasi eszamanli I/O patlamasi olusturdu. Bu durum kapasite katmanindaki tuketici disklerde write-cliff etkisini tetikleyerek vSAN kuyruk derinligini doyurdu ve zincirleme servis etkisine yol acti.',
+          "Ubuntu 20.04 varsayılan logrotate zamanlamasının tüm VM'lerde aynı anda çalışması eşzamanlı I/O patlaması oluşturdu. Bu durum kapasite katmanındaki tüketici disklerde write-cliff etkisini tetikleyerek vSAN kuyruk derinliğini doyurdu ve zincirleme servis etkisine yol açtı.",
         remediationImmediate:
-          'Mevcut VMlerde logrotate/cron calisma zamanlari 3 saatlik pencereye yayildi ve eszamanli tetiklenme etkisi ortadan kaldirildi.',
+          "Mevcut VM'lerde logrotate/cron çalışma zamanları 3 saatlik pencereye yayıldı ve eşzamanlı tetiklenme etkisi ortadan kaldırıldı.",
         remediationPermanent:
-          'Template seviyesinde ilk acilista random zaman atayan kalici bir mekanizma eklendi; yeni VMlerde herd etkisi yapisal olarak engellendi.',
+          "Template seviyesinde ilk açılışta rastgele zaman atayan kalıcı bir mekanizma eklendi; yeni VM'lerde herd etkisi yapısal olarak engellendi.",
         learnings: [
-          'Butce kaynakli donanim tavizleri, buyuk olcekte gizli ariza modlarini aciga cikarabilir.',
-          'Izleme sistemini izlenen ortamdan bagimsiz tutmak, kriz aninda karar kalitesini belirler.',
-          'Varsayilan OS davranislari buyuk filolarda mutlaka dagitik planlanmalidir.',
-          'Sistematik ayrisim ve tekrar uretilebilir benchmark, tahmine dayali yaklasimdan daha guvenilirdir.',
-          'Template seviyesinde kalici korumalar, benzer olaylarin tekrarini onler.'
+          'Bütçe kaynaklı donanım tavizleri, büyük ölçekte gizli arıza modlarını açığa çıkarabilir.',
+          'İzleme sistemini izlenen ortamdan bağımsız tutmak, kriz anında karar kalitesini belirler.',
+          'Varsayılan OS davranışları büyük filolarda mutlaka dağıtık planlanmalıdır.',
+          'Sistematik ayrışım ve tekrar üretilebilir benchmark, tahmine dayalı yaklaşımdan daha güvenilirdir.',
+          'Template seviyesinde kalıcı korumalar, benzer olayların tekrarını önler.'
         ],
         skills: [
           'VMware vSAN',
-          'Linux Sistem Yonetimi',
-          'Gozlemlenebilirlik Tasarimi',
+          'Linux Sistem Yönetimi',
+          'Gözlemlenebilirlik Tasarımı',
           'Bash Scripting',
           'Ansible Otomasyonu',
           'Root Cause Analysis',

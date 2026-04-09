@@ -5,12 +5,20 @@ function ExperienceStories({ copy }) {
   const isTurkish = copy?.nav?.about === 'Hakkımda';
 
   const ctaLabel = isTurkish
-    ? 'GitHubda Tum Vaka ve Scriptleri Ac'
+    ? "GitHub'da Tüm Vaka ve Scriptleri Aç"
     : 'Open Full Case Study on GitHub';
 
   const hookLabel = isTurkish
-    ? 'Postmortem + Scriptler + Cozum Adimlari'
+    ? 'Postmortem + Scriptler + Çözüm Adımları'
     : 'Postmortem + Scripts + Remediation Steps';
+
+  const troubleshootingLabel = isTurkish
+    ? 'Tam Troubleshooting Yolculuğu:'
+    : 'Full Troubleshooting Journey:';
+
+  const investigationLabel = isTurkish ? 'İnceleme' : 'Investigation';
+  const immediateFixLabel = isTurkish ? 'Acil Müdahale' : 'Immediate Fix';
+  const futureProofingLabel = isTurkish ? 'Kalıcı Önlem' : 'Future Proofing';
 
   const getSeverityColor = (severity) => {
     switch (severity?.toLowerCase()) {
@@ -83,7 +91,7 @@ function ExperienceStories({ copy }) {
 
                 {story.investigation && story.investigation.length > 0 && (
                   <div className="story-troubleshoot-path">
-                    <div className="tshooting-label">Full Troubleshooting Journey:</div>
+                    <div className="tshooting-label">{troubleshootingLabel}</div>
                     <div className="tshooting-flowchart">
                       <div className="flowchart-investigation">
                         {story.investigation.map((step, idx) => (
@@ -93,7 +101,7 @@ function ExperienceStories({ copy }) {
                             </div>
                             <div className="flowchart-content">
                               <div className="step-box">
-                                <div className="step-phase">Investigation</div>
+                                <div className="step-phase">{investigationLabel}</div>
                                 <p className="step-description">{toShort(step, 75)}</p>
                               </div>
                             </div>
@@ -110,7 +118,7 @@ function ExperienceStories({ copy }) {
                               </div>
                               <div className="flowchart-content">
                                 <div className="step-box remediation-box">
-                                  <div className="step-phase">Immediate Fix</div>
+                                  <div className="step-phase">{immediateFixLabel}</div>
                                   <p className="step-description">{toShort(story.remediationImmediate, 85)}</p>
                                 </div>
                               </div>
@@ -124,7 +132,7 @@ function ExperienceStories({ copy }) {
                               </div>
                               <div className="flowchart-content">
                                 <div className="step-box permanent-box">
-                                  <div className="step-phase">Future Proofing</div>
+                                  <div className="step-phase">{futureProofingLabel}</div>
                                   <p className="step-description">{toShort(story.remediationPermanent, 85)}</p>
                                 </div>
                               </div>
