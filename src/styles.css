@@ -987,10 +987,6 @@ p {
   border-bottom: none;
 }
 
-.skill-category-card:hover {
-  /* no box, just subtle badge highlights */
-}
-
 .category-title {
   color: var(--text-secondary);
   margin: 0 0 0.55rem 0;
@@ -1084,6 +1080,30 @@ p {
 [data-theme="light"] .soft-card,
 [data-theme="light"] .source-item {
   background: rgba(15, 95, 191, 0.06);
+}
+
+[data-theme="light"] .skill-category-card {
+  border-bottom-color: rgba(15, 95, 191, 0.18);
+}
+
+[data-theme="light"] .category-title {
+  color: #334155;
+}
+
+[data-theme="light"] .skill-badge {
+  border-color: rgba(15, 95, 191, 0.42);
+  background: rgba(15, 95, 191, 0.12);
+  color: #0b4f84;
+}
+
+[data-theme="light"] .skill-badge:hover {
+  background: rgba(15, 95, 191, 0.18);
+  border-color: rgba(15, 95, 191, 0.58);
+  color: #083c66;
+}
+
+[data-theme="light"] .skill-badge i {
+  color: #0d766e;
 }
 
 [data-theme="light"] .methodology-badge {
