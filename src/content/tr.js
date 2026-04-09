@@ -134,7 +134,7 @@ export const tr = {
       },
       {
         name: 'Containerization & Orchestration',
-        items: ['Kubernetes (K8s)', 'Docker', 'Docker Swarm', 'Nomad']
+        items: ['Kubernetes (K8s)', 'Docker', 'Docker Swarm', 'Nomad', 'Podman', 'Containerd']
       },
       {
         name: 'Cloud & Virtualization',
@@ -146,15 +146,15 @@ export const tr = {
       },
       {
         name: 'Observability, Monitoring & Logging',
-        items: ['Prometheus', 'Grafana', 'ELK Stack', 'Graylog', 'Loki', 'Alertmanager', 'Zabbix', 'Percona']
+        items: ['Prometheus', 'Grafana', 'ELK Stack', 'Graylog', 'Loki', 'Alertmanager', 'Zabbix', 'Percona', 'OpenTelemetry', 'Jaeger', 'Fluentd']
       },
       {
         name: 'Databases & High Availability',
-        items: ['PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'ClickHouse', 'Patroni', 'HAProxy', 'PgBouncer', 'etcd']
+        items: ['PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'ClickHouse', 'Patroni', 'HAProxy', 'PgBouncer', 'etcd', 'GraphQL']
       },
       {
         name: 'Networking & Security',
-        items: ['BGP', 'pfSense', 'Fortinet', 'HashiCorp Vault', 'OpenLDAP', 'WireGuard', 'Elastic SIEM']
+        items: ['BGP', 'pfSense', 'Fortinet', 'HashiCorp Vault', 'OpenLDAP', 'WireGuard', 'Elastic SIEM', 'Istio', 'Linkerd', 'Consul']
       },
       {
         name: 'Operating Systems & Scripting',
@@ -163,6 +163,18 @@ export const tr = {
       {
         name: 'Datacenter & Hardware Infrastructure',
         items: ['HPE', 'DELL', 'SuperMicro', 'Cisco', 'EMC', 'Cabling Standards', 'Fiber', 'Rack Design']
+      },
+      {
+        name: 'Message Queues & Middlewares',
+        items: ['Kafka', 'RabbitMQ', 'PaceMaker', 'Corosync']
+      },
+      {
+        name: 'Webservers & API tools',
+        items: ['Apache', 'Nginx', 'Traefik', 'Squid', 'Caddy', 'Kong', 'PostMan']
+      },
+      {
+        name: 'MLOps & DataScience Tools',
+        items: ['Apache Airflow', 'Ray Cluster', 'Spark', 'Hazelcast']
       }
     ],
     methodologyTitle: 'Liderlik ve Metodoloji',
