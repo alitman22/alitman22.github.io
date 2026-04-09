@@ -416,6 +416,30 @@ export const tr = {
           'Benchmark ve Performans Analizi'
         ],
         repoLink: 'https://github.com/alitman22/midnight-fall'
+      },
+      {
+        title: 'Boring Is Beautiful: Ölçekte İsimlendirme Standardı',
+        subtitle: 'Otomasyonla büyüyen net bir isimlendirme kontratı',
+        severity: 'High',
+        background:
+          'Bu vaka, ölçek büyüdüğünde sık görülen bir soruna odaklanıyor: isimlendirme standartları yazılı olsa bile zorunlu denetim yoksa zamanla ekipler arasında drift oluşuyor.',
+        problem:
+          'Ortam büyüdükçe tutarsız isimlendirme günlük operasyonu doğrudan zorlaştırır. Bu repo, sorunu özetleyip tek bir uygulanabilir isimlendirme kontratıyla operasyonel tutarlılığı nasıl geri kazandığını gösteriyor.',
+        bullets: [
+          'Okunabilirlik: servis amacı, ortam ve kapsam isim üzerinden hızlıca anlaşılır.',
+          'Sürdürülebilirlik: regex tabanlı izleme ve otomasyon kuralları kırılgan istisnalar olmadan çalışır.',
+          'Ekip işbirliği: incident ve devir süreçlerinde sahiplik daha hızlı netleşir.',
+          'Ölçeklenebilirlik: OPA/Conftest kontrolleri, Terraform doğrulaması ve CI kapıları gelecekteki naming driftini engeller.'
+        ],
+        skills: [
+          'Policy as Code (OPA/Rego)',
+          'Conftest CI Gates',
+          'Terraform Validation',
+          'Infrastructure Taxonomy',
+          'Observability Automation',
+          'Platform Governance'
+        ],
+        repoLink: 'https://github.com/alitman22/naming-convention'
       }
     ]
   },

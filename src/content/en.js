@@ -414,6 +414,30 @@ export const en = {
           'System Benchmarking'
         ],
         repoLink: 'https://github.com/alitman22/midnight-fall'
+      },
+      {
+        title: '🧭 Boring Is Beautiful: Enforcing Naming at Scale',
+        subtitle: 'A concise naming contract that scales with automation',
+        severity: 'High',
+        background:
+          'This case study focuses on a common scaling issue: naming conventions are documented, but not enforced, so resource names drift across teams and tools over time.',
+        problem:
+          'As environments grow, inconsistent naming starts to break practical workflows. This repository summarizes the issue and shows how one enforceable naming contract restores operational consistency.',
+        bullets: [
+          'Readability: service purpose, environment, and scope are immediately clear from the name.',
+          'Maintainability: regex-driven monitoring and automation rules work without fragile exceptions.',
+          'Team collaboration: ownership and handoff become faster during incidents and reviews.',
+          'Scalability: OPA/Conftest policy checks, Terraform validation, and CI gates prevent future naming drift.'
+        ],
+        skills: [
+          'Policy as Code (OPA/Rego)',
+          'Conftest CI Gates',
+          'Terraform Validation',
+          'Infrastructure Taxonomy',
+          'Observability Automation',
+          'Platform Governance'
+        ],
+        repoLink: 'https://github.com/alitman22/naming-convention'
       }
     ]
   },

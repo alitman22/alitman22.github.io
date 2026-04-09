@@ -85,7 +85,16 @@ function ExperienceStories({ copy }) {
                     </span>
                     <h3 className="story-title">{story.title}</h3>
                     <p className="story-subtitle">{story.subtitle}</p>
-                    <p className="story-teaser">{toShort(story.problem || story.background)}</p>
+                    <p className="story-teaser">
+                      {toShort(story.problem || story.background, story.investigation?.length ? 170 : 320)}
+                    </p>
+                    {story.bullets && story.bullets.length > 0 && (
+                      <ul className="story-bullets" aria-label="Case study summary points">
+                        {story.bullets.map((point, idx) => (
+                          <li key={`bullet-${idx}`}>{point}</li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
                 </div>
 
