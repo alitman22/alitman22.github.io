@@ -1396,11 +1396,6 @@ p {
   z-index: 2;
 }
 
-.project-card {
-  content-visibility: auto;
-  contain-intrinsic-size: 880px;
-}
-
 .project-card-link:hover {
   transform: translateY(-4px);
 }

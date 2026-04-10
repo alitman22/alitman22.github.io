@@ -13,39 +13,16 @@ function NavBar({ copy, language, setLanguage, showLanguageSwitch, darkMode, set
     event.preventDefault();
 
     const targetId = href.replace('#', '');
-    const getTop = () => {
-      const target = document.getElementById(targetId);
-      if (!target) {
-        return null;
-      }
-
-      const navbar = document.querySelector('.navbar');
-      const navbarHeight = navbar ? Math.ceil(navbar.getBoundingClientRect().height) : 80;
-      return Math.max(0, target.getBoundingClientRect().top + window.scrollY - (navbarHeight + 8));
-    };
-
-    const firstTop = getTop();
-    if (firstTop === null) {
+    const target = document.getElementById(targetId);
+    if (!target) {
       return;
     }
 
-    window.scrollTo({ top: firstTop, behavior: 'smooth' });
+    const navbar = document.querySelector('.navbar');
+    const navbarHeight = navbar ? Math.ceil(navbar.getBoundingClientRect().height) : 80;
+    const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - (navbarHeight + 8));
 
-    // Correct once image/layout shifts settle to keep section title alignment exact.
-    window.setTimeout(() => {
-      const correctedTop = getTop();
-      if (correctedTop !== null) {
-        window.scrollTo({ top: correctedTop, behavior: 'auto' });
-      }
-    }, 280);
-
-    // Final correction for slower image decoding/network conditions.
-    window.setTimeout(() => {
-      const finalTop = getTop();
-      if (finalTop !== null) {
-        window.scrollTo({ top: finalTop, behavior: 'auto' });
-      }
-    }, 900);
+    window.scrollTo({ top, behavior: 'smooth' });
   };
 
   const socialLinks = [
