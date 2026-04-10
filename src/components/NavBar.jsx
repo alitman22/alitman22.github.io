@@ -6,7 +6,7 @@ function NavBar({ copy, language, setLanguage, showLanguageSwitch, darkMode, set
     { key: 'skills', href: '#skills' },
     { key: 'study', href: '#study' },
     { key: 'projects', href: '#projects' },
-    { key: 'stories', href: '#experience-stories' }
+    { key: 'stories', href: '#case-studies-anchor' }
   ];
 
   const handleInternalNav = (event, href) => {

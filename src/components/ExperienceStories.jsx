@@ -55,7 +55,9 @@ function ExperienceStories({ copy }) {
 
   return (
     <section id="experience-stories" className="section reveal">
-      <SectionTitle number="06" title={copy.experienceStories.title} />
+      <div id="case-studies-anchor">
+        <SectionTitle number="06" title={copy.experienceStories.title} />
+      </div>
 
       <div className="stack-lg">
         <div className="glass-card" data-terminal-file="experience-stories.txt">

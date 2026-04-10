@@ -196,6 +196,12 @@ p {
   padding-bottom: 1.4rem;
 }
 
+.container::after {
+  content: "";
+  display: block;
+  height: clamp(120px, 18vh, 220px);
+}
+
 .navbar {
   position: fixed;
   top: 0;
@@ -318,6 +324,10 @@ p {
 
 .section {
   margin-top: 1.9rem;
+  scroll-margin-top: 104px;
+}
+
+#case-studies-anchor {
   scroll-margin-top: 104px;
 }
 
