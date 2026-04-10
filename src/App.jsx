@@ -19,43 +19,9 @@ function SectionPlaceholder({ minHeight }) {
 }
 
 function DeferredSection({ minHeight, children, anchorId }) {
-  const containerRef = useRef(null);
-  const [shouldRender, setShouldRender] = useState(false);
-
-  useEffect(() => {
-    if (shouldRender) {
-      return undefined;
-    }
-
-    if (typeof window === 'undefined' || typeof IntersectionObserver === 'undefined') {
-      setShouldRender(true);
-      return undefined;
-    }
-
-    const node = containerRef.current;
-    if (!node) {
-      return undefined;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) {
-          return;
-        }
-
-        setShouldRender(true);
-        observer.disconnect();
-      },
-      { rootMargin: '320px 0px' }
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [shouldRender]);
-
   return (
-    <div id={anchorId} className="deferred-anchor" ref={containerRef}>
-      {shouldRender ? children : <SectionPlaceholder minHeight={minHeight} />}
+    <div id={anchorId} className="deferred-anchor">
+      {children}
     </div>
   );
 }
@@ -83,30 +49,28 @@ function App() {
         const anchorId = hash.slice(1); // Remove '#'
         const element = document.getElementById(anchorId);
         if (element) {
-          // Use setTimeout to ensure the element is ready
-          window.setTimeout(() => {
+          // Ensure scroll happens after render
+          requestAnimationFrame(() => {
             const navbarHeight = 80;
             const elementPos = element.getBoundingClientRect().top + window.scrollY;
             window.scrollTo({
               top: elementPos - navbarHeight,
               behavior: 'smooth'
             });
-          }, 50);
+          });
         }
       }
     };
 
-    // Scroll on initial load
-    window.addEventListener('load', scrollToAnchor);
-    
-    // Handle hash change (when user clicks a menu link)
+    // Scroll on hash change (when user clicks a menu link)
     window.addEventListener('hashchange', scrollToAnchor);
 
-    // Try initial scroll in case page is already loaded
-    scrollToAnchor();
+    // Try scroll on mount
+    if (window.location.hash) {
+      scrollToAnchor();
+    }
 
     return () => {
-      window.removeEventListener('load', scrollToAnchor);
       window.removeEventListener('hashchange', scrollToAnchor);
     };
   }, []);
