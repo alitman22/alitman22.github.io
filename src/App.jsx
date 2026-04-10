@@ -75,6 +75,42 @@ function App() {
     document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
   }, [copy.meta.title, language, region, darkMode]);
 
+  // Handle anchor navigation with proper scroll offset
+  useEffect(() => {
+    const scrollToAnchor = () => {
+      const hash = window.location.hash;
+      if (hash) {
+        const anchorId = hash.slice(1); // Remove '#'
+        const element = document.getElementById(anchorId);
+        if (element) {
+          // Use setTimeout to ensure the element is ready
+          window.setTimeout(() => {
+            const navbarHeight = 80;
+            const elementPos = element.getBoundingClientRect().top + window.scrollY;
+            window.scrollTo({
+              top: elementPos - navbarHeight,
+              behavior: 'smooth'
+            });
+          }, 50);
+        }
+      }
+    };
+
+    // Scroll on initial load
+    window.addEventListener('load', scrollToAnchor);
+    
+    // Handle hash change (when user clicks a menu link)
+    window.addEventListener('hashchange', scrollToAnchor);
+
+    // Try initial scroll in case page is already loaded
+    scrollToAnchor();
+
+    return () => {
+      window.removeEventListener('load', scrollToAnchor);
+      window.removeEventListener('hashchange', scrollToAnchor);
+    };
+  }, []);
+
   return (
     <div className={`app-root${darkMode ? ' dark' : ' light'}`}>
       <AnimatePresence>
