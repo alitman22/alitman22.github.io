@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import NavBar from './components/NavBar';
 import HeroSection from './components/HeroSection';
@@ -28,8 +28,8 @@ function App() {
     document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
   }, [copy.meta.title, language, region, darkMode]);
 
-  // Always start at top after reload/navigation restore.
-  useEffect(() => {
+  // Prevent browser-native hash/restore jumps before first paint.
+  useLayoutEffect(() => {
     if (typeof window === 'undefined') {
       return;
     }
@@ -39,6 +39,11 @@ function App() {
       window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
     }
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+
+    // Guard against late layout shifts on initial load.
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    });
   }, []);
 
   return (
