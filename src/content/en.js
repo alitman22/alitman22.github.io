@@ -5,10 +5,10 @@ export const en = {
   nav: {
     about: 'About',
     experience: 'Experience',
-    skills: 'Skills',
+    skills: 'Toolbox',
     study: 'Study',
     projects: 'Projects',
-    stories: 'War Stories',
+    stories: 'Case Studies',
     contact: 'Get In Touch'
   },
   hero: {

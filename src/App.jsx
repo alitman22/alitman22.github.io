@@ -59,7 +59,7 @@ function DeferredSection({ minHeight, children }) {
 function App() {
   const { region } = useRegion();
   const isTurkeyRegion = region === 'TR';
-  const { language, setLanguage, copy } = useLanguage(isTurkeyRegion);
+  const { language, setLanguage, copy } = useLanguage();
   const [darkMode, setDarkMode] = useState(true);
 
   useVisitorTracking();
@@ -85,7 +85,7 @@ function App() {
             copy={copy}
             language={language}
             setLanguage={setLanguage}
-            isTurkeyRegion={isTurkeyRegion}
+            showLanguageSwitch
             darkMode={darkMode}
             setDarkMode={setDarkMode}
           />

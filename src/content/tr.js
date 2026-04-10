@@ -5,10 +5,10 @@ export const tr = {
   nav: {
     about: 'Hakkımda',
     experience: 'Deneyim',
-    skills: 'Yetenekler',
+    skills: 'Toolbox',
     study: 'Çalışma',
     projects: 'Projeler',
-    stories: 'Saha Hikayeleri',
+    stories: 'Vaka Çalışmaları',
     contact: 'İletişime Geç'
   },
   hero: {

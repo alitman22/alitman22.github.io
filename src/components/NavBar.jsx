@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-function NavBar({ copy, language, setLanguage, isTurkeyRegion, darkMode, setDarkMode }) {
+function NavBar({ copy, language, setLanguage, showLanguageSwitch, darkMode, setDarkMode }) {
   const socialLinks = [
     {
       name: 'GitHub',
@@ -25,16 +25,23 @@ function NavBar({ copy, language, setLanguage, isTurkeyRegion, darkMode, setDark
     <nav className="navbar">
       <motion.a href="#" className="brand terminal-prompt" initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1, duration: 0.5 }}>~$ ali.sh</motion.a>
       <div className="nav-links">
-        {["about", "experience", "skills", "study", "projects"].map((section, i) => (
+        {[
+          { key: 'about', href: '#about' },
+          { key: 'experience', href: '#experience' },
+          { key: 'skills', href: '#skills' },
+          { key: 'study', href: '#study' },
+          { key: 'projects', href: '#projects' },
+          { key: 'stories', href: '#experience-stories' }
+        ].map((item, i) => (
           <motion.a
-            key={section}
-            href={`#${section}`}
+            key={item.key}
+            href={item.href}
             className="nav-link"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.18 + i * 0.07, duration: 0.45 }}
           >
-            {copy.nav[section]}
+            {copy.nav[item.key]}
           </motion.a>
         ))}
       </div>
@@ -76,7 +83,7 @@ function NavBar({ copy, language, setLanguage, isTurkeyRegion, darkMode, setDark
             )}
           </motion.span>
         </button>
-        {isTurkeyRegion && (
+        {showLanguageSwitch && (
           <div className="lang-switch" aria-label="Language selector">
             <button
               className={language === 'en' ? 'lang-btn active' : 'lang-btn'}
