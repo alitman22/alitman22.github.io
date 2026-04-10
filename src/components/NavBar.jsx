@@ -26,12 +26,12 @@ function NavBar({ copy, language, setLanguage, showLanguageSwitch, darkMode, set
       <motion.a href="#" className="brand terminal-prompt" initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1, duration: 0.5 }}>~$ ali.sh</motion.a>
       <div className="nav-links">
         {[
-          { key: 'about', href: '#about' },
-          { key: 'experience', href: '#experience' },
-          { key: 'skills', href: '#skills' },
-          { key: 'study', href: '#study' },
-          { key: 'projects', href: '#projects' },
-          { key: 'stories', href: '#experience-stories' }
+          { key: 'about', href: '#about-anchor' },
+          { key: 'experience', href: '#experience-anchor' },
+          { key: 'skills', href: '#skills-anchor' },
+          { key: 'study', href: '#study-anchor' },
+          { key: 'projects', href: '#projects-anchor' },
+          { key: 'stories', href: '#experience-stories-anchor' }
         ].map((item, i) => (
           <motion.a
             key={item.key}

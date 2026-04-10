@@ -321,6 +321,10 @@ p {
   scroll-margin-top: 104px;
 }
 
+.deferred-anchor {
+  scroll-margin-top: 104px;
+}
+
 .section-deferred-placeholder {
   width: min(1120px, 100%);
   margin: 1.9rem auto 0;

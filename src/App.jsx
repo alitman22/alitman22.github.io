@@ -18,7 +18,7 @@ function SectionPlaceholder({ minHeight }) {
   return <div className="section-deferred-placeholder" style={{ minHeight }} aria-hidden="true" />;
 }
 
-function DeferredSection({ minHeight, children }) {
+function DeferredSection({ minHeight, children, anchorId }) {
   const containerRef = useRef(null);
   const [shouldRender, setShouldRender] = useState(false);
 
@@ -53,7 +53,11 @@ function DeferredSection({ minHeight, children }) {
     return () => observer.disconnect();
   }, [shouldRender]);
 
-  return <div ref={containerRef}>{shouldRender ? children : <SectionPlaceholder minHeight={minHeight} />}</div>;
+  return (
+    <div id={anchorId} className="deferred-anchor" ref={containerRef}>
+      {shouldRender ? children : <SectionPlaceholder minHeight={minHeight} />}
+    </div>
+  );
 }
 
 function App() {
@@ -103,43 +107,43 @@ function App() {
           >
             <HeroSection copy={copy} language={language} isTurkeyRegion={isTurkeyRegion} />
 
-            <DeferredSection minHeight="340px">
+            <DeferredSection minHeight="340px" anchorId="about-anchor">
               <Suspense fallback={<SectionPlaceholder minHeight="340px" />}>
                 <AboutSection copy={copy} />
               </Suspense>
             </DeferredSection>
 
-            <DeferredSection minHeight="460px">
+            <DeferredSection minHeight="460px" anchorId="experience-anchor">
               <Suspense fallback={<SectionPlaceholder minHeight="460px" />}>
                 <ExperienceSection copy={copy} />
               </Suspense>
             </DeferredSection>
 
-            <DeferredSection minHeight="520px">
+            <DeferredSection minHeight="520px" anchorId="skills-anchor">
               <Suspense fallback={<SectionPlaceholder minHeight="520px" />}>
                 <SkillsSection copy={copy} />
               </Suspense>
             </DeferredSection>
 
-            <DeferredSection minHeight="320px">
+            <DeferredSection minHeight="320px" anchorId="study-anchor">
               <Suspense fallback={<SectionPlaceholder minHeight="320px" />}>
                 <StudySection copy={copy} />
               </Suspense>
             </DeferredSection>
 
-            <DeferredSection minHeight="620px">
+            <DeferredSection minHeight="620px" anchorId="projects-anchor">
               <Suspense fallback={<SectionPlaceholder minHeight="620px" />}>
                 <ProjectsSection copy={copy} darkMode={darkMode} />
               </Suspense>
             </DeferredSection>
 
-            <DeferredSection minHeight="540px">
+            <DeferredSection minHeight="540px" anchorId="experience-stories-anchor">
               <Suspense fallback={<SectionPlaceholder minHeight="540px" />}>
                 <ExperienceStories copy={copy} />
               </Suspense>
             </DeferredSection>
 
-            <DeferredSection minHeight="260px">
+            <DeferredSection minHeight="260px" anchorId="contact-anchor">
               <Suspense fallback={<SectionPlaceholder minHeight="260px" />}>
                 <ContactSection copy={copy} isTurkeyRegion={isTurkeyRegion} />
               </Suspense>
