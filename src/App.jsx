@@ -1,30 +1,17 @@
-import { Suspense, lazy, useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import NavBar from './components/NavBar';
 import HeroSection from './components/HeroSection';
+import AboutSection from './components/AboutSection';
+import ExperienceSection from './components/ExperienceSection';
+import SkillsSection from './components/SkillsSection';
+import StudySection from './components/StudySection';
+import ProjectsSection from './components/ProjectsSection';
+import ExperienceStories from './components/ExperienceStories';
+import ContactSection from './components/ContactSection';
 import { useLanguage } from './hooks/useLanguage';
 import { useRegion } from './hooks/useRegion';
 import { useVisitorTracking } from './hooks/useVisitorTracking';
-
-const AboutSection = lazy(() => import('./components/AboutSection'));
-const ExperienceSection = lazy(() => import('./components/ExperienceSection'));
-const SkillsSection = lazy(() => import('./components/SkillsSection'));
-const StudySection = lazy(() => import('./components/StudySection'));
-const ProjectsSection = lazy(() => import('./components/ProjectsSection'));
-const ExperienceStories = lazy(() => import('./components/ExperienceStories'));
-const ContactSection = lazy(() => import('./components/ContactSection'));
-
-function SectionPlaceholder({ minHeight }) {
-  return <div className="section-deferred-placeholder" style={{ minHeight }} aria-hidden="true" />;
-}
-
-function DeferredSection({ minHeight, children, anchorId }) {
-  return (
-    <div id={anchorId} className="deferred-anchor">
-      {children}
-    </div>
-  );
-}
 
 function App() {
   const { region } = useRegion();
@@ -41,38 +28,17 @@ function App() {
     document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
   }, [copy.meta.title, language, region, darkMode]);
 
-  // Handle anchor navigation with proper scroll offset
+  // Always start at top after reload/navigation restore.
   useEffect(() => {
-    const scrollToAnchor = () => {
-      const hash = window.location.hash;
-      if (hash) {
-        const anchorId = hash.slice(1); // Remove '#'
-        const element = document.getElementById(anchorId);
-        if (element) {
-          // Ensure scroll happens after render
-          requestAnimationFrame(() => {
-            const navbarHeight = 80;
-            const elementPos = element.getBoundingClientRect().top + window.scrollY;
-            window.scrollTo({
-              top: elementPos - navbarHeight,
-              behavior: 'smooth'
-            });
-          });
-        }
-      }
-    };
-
-    // Scroll on hash change (when user clicks a menu link)
-    window.addEventListener('hashchange', scrollToAnchor);
-
-    // Try scroll on mount
-    if (window.location.hash) {
-      scrollToAnchor();
+    if (typeof window === 'undefined') {
+      return;
     }
 
-    return () => {
-      window.removeEventListener('hashchange', scrollToAnchor);
-    };
+    window.history.scrollRestoration = 'manual';
+    if (window.location.hash) {
+      window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
+    }
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   }, []);
 
   return (
@@ -107,47 +73,19 @@ function App() {
           >
             <HeroSection copy={copy} language={language} isTurkeyRegion={isTurkeyRegion} />
 
-            <DeferredSection minHeight="340px" anchorId="about-anchor">
-              <Suspense fallback={<SectionPlaceholder minHeight="340px" />}>
-                <AboutSection copy={copy} />
-              </Suspense>
-            </DeferredSection>
+            <AboutSection copy={copy} />
 
-            <DeferredSection minHeight="460px" anchorId="experience-anchor">
-              <Suspense fallback={<SectionPlaceholder minHeight="460px" />}>
-                <ExperienceSection copy={copy} />
-              </Suspense>
-            </DeferredSection>
+            <ExperienceSection copy={copy} />
 
-            <DeferredSection minHeight="520px" anchorId="skills-anchor">
-              <Suspense fallback={<SectionPlaceholder minHeight="520px" />}>
-                <SkillsSection copy={copy} />
-              </Suspense>
-            </DeferredSection>
+            <SkillsSection copy={copy} />
 
-            <DeferredSection minHeight="320px" anchorId="study-anchor">
-              <Suspense fallback={<SectionPlaceholder minHeight="320px" />}>
-                <StudySection copy={copy} />
-              </Suspense>
-            </DeferredSection>
+            <StudySection copy={copy} />
 
-            <DeferredSection minHeight="620px" anchorId="projects-anchor">
-              <Suspense fallback={<SectionPlaceholder minHeight="620px" />}>
-                <ProjectsSection copy={copy} darkMode={darkMode} />
-              </Suspense>
-            </DeferredSection>
+            <ProjectsSection copy={copy} darkMode={darkMode} />
 
-            <DeferredSection minHeight="540px" anchorId="experience-stories-anchor">
-              <Suspense fallback={<SectionPlaceholder minHeight="540px" />}>
-                <ExperienceStories copy={copy} />
-              </Suspense>
-            </DeferredSection>
+            <ExperienceStories copy={copy} />
 
-            <DeferredSection minHeight="260px" anchorId="contact-anchor">
-              <Suspense fallback={<SectionPlaceholder minHeight="260px" />}>
-                <ContactSection copy={copy} isTurkeyRegion={isTurkeyRegion} />
-              </Suspense>
-            </DeferredSection>
+            <ContactSection copy={copy} isTurkeyRegion={isTurkeyRegion} />
 
             <footer className="footer">
               <p>{copy.footer.designed}</p>

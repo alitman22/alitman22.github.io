@@ -1,5 +1,30 @@
 import { motion } from 'framer-motion';
 function NavBar({ copy, language, setLanguage, showLanguageSwitch, darkMode, setDarkMode }) {
+  const navItems = [
+    { key: 'about', href: '#about' },
+    { key: 'experience', href: '#experience' },
+    { key: 'skills', href: '#skills' },
+    { key: 'study', href: '#study' },
+    { key: 'projects', href: '#projects' },
+    { key: 'stories', href: '#experience-stories' }
+  ];
+
+  const handleInternalNav = (event, href) => {
+    event.preventDefault();
+
+    const targetId = href.replace('#', '');
+    const target = document.getElementById(targetId);
+    if (!target) {
+      return;
+    }
+
+    const navbar = document.querySelector('.navbar');
+    const navbarHeight = navbar ? Math.ceil(navbar.getBoundingClientRect().height) : 80;
+    const top = target.getBoundingClientRect().top + window.scrollY - (navbarHeight + 8);
+
+    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+  };
+
   const socialLinks = [
     {
       name: 'GitHub',
@@ -25,18 +50,12 @@ function NavBar({ copy, language, setLanguage, showLanguageSwitch, darkMode, set
     <nav className="navbar">
       <motion.a href="#" className="brand terminal-prompt" initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1, duration: 0.5 }}>~$ ali.sh</motion.a>
       <div className="nav-links">
-        {[
-          { key: 'about', href: '#about-anchor' },
-          { key: 'experience', href: '#experience-anchor' },
-          { key: 'skills', href: '#skills-anchor' },
-          { key: 'study', href: '#study-anchor' },
-          { key: 'projects', href: '#projects-anchor' },
-          { key: 'stories', href: '#experience-stories-anchor' }
-        ].map((item, i) => (
+        {navItems.map((item, i) => (
           <motion.a
             key={item.key}
             href={item.href}
             className="nav-link"
+            onClick={(event) => handleInternalNav(event, item.href)}
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.18 + i * 0.07, duration: 0.45 }}
