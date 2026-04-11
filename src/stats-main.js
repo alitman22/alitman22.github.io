@@ -8,6 +8,7 @@ const state = {
   rangeDays: 30,
   page: 1,
   perPage: 20,
+  compactEventTable: true,
   filters: {
     eventType: 'all',
     country: 'all',
@@ -123,6 +124,68 @@ function formatCountryCity(row) {
   if (region) return `${country} / ${region}`;
   if (city) return `${country} / ${city}`;
   return country;
+}
+
+function parseEventIds(rawValue) {
+  return String(rawValue || '')
+    .split(',')
+    .map((value) => Number.parseInt(value, 10))
+    .filter((value) => Number.isFinite(value));
+}
+
+function compactRecentRecords(records) {
+  const groups = [];
+  const byKey = new Map();
+
+  for (const row of records) {
+    const ts = String(row.created_at || '');
+    const minute = ts.slice(0, 16);
+    const session = String(row.session_id || row.ip_address || 'unknown');
+    const path = String(row.path || '');
+    const key = `${session}|${minute}|${path}`;
+
+    let group = byKey.get(key);
+    if (!group) {
+      group = {
+        created_at: row.created_at,
+        ip_address: row.ip_address,
+        country: row.country,
+        city: row.city,
+        region: row.region,
+        device_type: row.device_type,
+        os_name: row.os_name,
+        referrer: row.referrer,
+        eventIds: [],
+        eventCounts: new Map()
+      };
+      byKey.set(key, group);
+      groups.push(group);
+    }
+
+    const eventId = Number.parseInt(String(row.event_id), 10);
+    if (Number.isFinite(eventId)) {
+      group.eventIds.push(eventId);
+    }
+
+    const eventType = String(row.event_type || 'unknown');
+    group.eventCounts.set(eventType, (group.eventCounts.get(eventType) || 0) + 1);
+  }
+
+  return groups.map((group) => {
+    const entries = Array.from(group.eventCounts.entries()).sort((a, b) => b[1] - a[1]);
+    const total = entries.reduce((sum, [, count]) => sum + count, 0);
+    const summary = entries
+      .slice(0, 3)
+      .map(([eventType, count]) => (count > 1 ? `${eventType} x${count}` : eventType))
+      .join(', ');
+    const extra = entries.length > 3 ? ` +${entries.length - 3} more` : '';
+
+    return {
+      ...group,
+      eventCount: total,
+      eventSummary: `${summary}${extra}`
+    };
+  });
 }
 
 function trendClass(changePct) {
@@ -318,19 +381,25 @@ function renderDashboard(data) {
     dropOff: row.dropOffPct
   }));
 
-  const recentRows = records.map((row) => {
+  const tableRows = state.compactEventTable ? compactRecentRecords(records) : records;
+
+  const recentRows = tableRows.map((row) => {
     const when = new Date(row.created_at).toLocaleString();
     const location = formatCountryCity(row);
-    const isChecked = state.selectedEventIds.has(Number(row.event_id));
+    const eventIds = state.compactEventTable
+      ? row.eventIds
+      : parseEventIds(String(Number.parseInt(String(row.event_id), 10)));
+    const checkboxValue = eventIds.join(',');
+    const allChecked = eventIds.length > 0 && eventIds.every((id) => state.selectedEventIds.has(id));
     return `
       <tr>
-        <td><input type="checkbox" class="event-select" value="${Number(row.event_id) || 0}" ${isChecked ? 'checked' : ''} /></td>
+        <td><input type="checkbox" class="event-select" value="${esc(checkboxValue)}" ${allChecked ? 'checked' : ''} /></td>
         <td>${esc(when)}</td>
         <td>${esc(row.ip_address || '-')}</td>
         <td>${esc(location)}</td>
         <td><span class="metric-icon" title="${esc(row.device_type || '-')}" aria-hidden="true">${deviceIcon(row.device_type)}</span> ${esc(row.device_type || '-')}</td>
         <td><span class="metric-icon" title="${esc(row.os_name || '-')}" aria-hidden="true">${osIcon(row.os_name)}</span> ${esc(row.os_name || '-')}</td>
-        <td>${esc(row.event_type || '-')}</td>
+        <td>${esc(state.compactEventTable ? `${row.eventSummary} (${row.eventCount})` : (row.event_type || '-'))}</td>
         <td>${esc(row.referrer || '-')}</td>
       </tr>
     `;
@@ -460,6 +529,7 @@ function renderDashboard(data) {
               ${countries.map((country) => `<option value="${esc(country)}" ${state.filters.country === country ? 'selected' : ''}>${esc(country)}</option>`).join('')}
             </select>
             <input id="filter-query" type="search" placeholder="Search path / referrer / event" value="${esc(state.filters.query)}" />
+            <label class="event-select-all"><input id="compact-view" type="checkbox" ${state.compactEventTable ? 'checked' : ''} /> Compact</label>
             <button id="delete-selected" type="button" class="danger">Delete Selected</button>
             <button id="apply-filters" type="button">Apply</button>
           </div>
@@ -483,7 +553,7 @@ function renderDashboard(data) {
 
         <div class="pager">
           <button id="prev-page" ${paging.page <= 1 ? 'disabled' : ''}>Prev</button>
-          <span>Page ${paging.page} / ${paging.totalPages} (${fmt(paging.total)} events)</span>
+          <span>Page ${paging.page} / ${paging.totalPages} (${fmt(paging.total)} events${state.compactEventTable ? `, ${fmt(tableRows.length)} compact rows` : ''})</span>
           <button id="next-page" ${paging.page >= paging.totalPages ? 'disabled' : ''}>Next</button>
         </div>
       </section>
@@ -531,14 +601,19 @@ function bindDashboardEvents() {
     loadDashboard();
   });
 
+  document.getElementById('compact-view')?.addEventListener('change', (event) => {
+    state.compactEventTable = Boolean(event.target.checked);
+    renderDashboard(state.data);
+  });
+
   document.querySelectorAll('.event-select').forEach((checkbox) => {
     checkbox.addEventListener('change', (event) => {
-      const id = Number.parseInt(event.target.value, 10);
-      if (!Number.isFinite(id)) return;
+      const ids = parseEventIds(event.target.value);
+      if (ids.length === 0) return;
       if (event.target.checked) {
-        state.selectedEventIds.add(id);
+        ids.forEach((id) => state.selectedEventIds.add(id));
       } else {
-        state.selectedEventIds.delete(id);
+        ids.forEach((id) => state.selectedEventIds.delete(id));
       }
     });
   });
@@ -547,10 +622,10 @@ function bindDashboardEvents() {
     const checked = Boolean(event.target.checked);
     document.querySelectorAll('.event-select').forEach((checkbox) => {
       checkbox.checked = checked;
-      const id = Number.parseInt(checkbox.value, 10);
-      if (!Number.isFinite(id)) return;
-      if (checked) state.selectedEventIds.add(id);
-      else state.selectedEventIds.delete(id);
+      const ids = parseEventIds(checkbox.value);
+      if (ids.length === 0) return;
+      if (checked) ids.forEach((id) => state.selectedEventIds.add(id));
+      else ids.forEach((id) => state.selectedEventIds.delete(id));
     });
   });
 
