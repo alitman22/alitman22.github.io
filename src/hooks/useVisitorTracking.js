@@ -77,6 +77,18 @@ function currentPath() {
   return window.location.pathname || '/';
 }
 
+function currentScrollDepth() {
+  const viewport = window.innerHeight || document.documentElement.clientHeight || 0;
+  const fullHeight = Math.max(
+    document.body?.scrollHeight || 0,
+    document.documentElement?.scrollHeight || 0
+  );
+
+  if (fullHeight <= viewport) return 100;
+  const depth = ((window.scrollY + viewport) / fullHeight) * 100;
+  return Math.max(0, Math.min(100, Math.round(depth)));
+}
+
 export function useVisitorTracking() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -104,7 +116,10 @@ export function useVisitorTracking() {
           referrer: sanitizeReferrer(referrer),
           eventCategory: normalizeCategory(options.eventCategory),
           eventLabel: normalizeLabel(options.eventLabel),
-          targetUrl: sanitizeTargetUrl(options.targetUrl)
+          targetUrl: sanitizeTargetUrl(options.targetUrl),
+          section: normalizeLabel(options.section, 80),
+          scrollDepth: Number.isFinite(options.scrollDepth) ? Math.max(0, Math.min(100, Math.round(options.scrollDepth))) : null,
+          metadata: options.metadata && typeof options.metadata === 'object' ? options.metadata : undefined
         };
 
         const body = JSON.stringify(payload);
@@ -136,7 +151,10 @@ export function useVisitorTracking() {
         const path = currentPath();
         if (path === lastTrackedPath) return;
         lastTrackedPath = path;
-        send('pageview', path, referrer);
+        send('page_view', path, referrer, {
+          eventCategory: 'navigation',
+          scrollDepth: currentScrollDepth()
+        });
       };
 
       trackPageview(document.referrer || null);
@@ -176,7 +194,9 @@ export function useVisitorTracking() {
 
                   send('section_view', currentPath(), null, {
                     eventCategory: 'engagement',
-                    eventLabel: sectionId
+                    eventLabel: sectionId,
+                    section: sectionId,
+                    scrollDepth: currentScrollDepth()
                   });
                 });
               },
@@ -221,21 +241,59 @@ export function useVisitorTracking() {
         const href = anchor.href;
         if (!href) return;
 
-        const configuredEventType = anchor.dataset.analyticsEvent;
-        const eventType = configuredEventType
-          ? normalizeEventType(configuredEventType, 'click')
-          : anchor.hasAttribute('download')
-            ? 'resume_download'
-            : null;
+        const configuredEventType = normalizeEventType(anchor.dataset.analyticsEvent, '');
+
+        const hrefLower = href.toLowerCase();
+        const host = (() => {
+          try {
+            return new URL(href, window.location.origin).hostname.toLowerCase();
+          } catch {
+            return '';
+          }
+        })();
+
+        let eventType = null;
+        if (configuredEventType === 'project_link_click' || configuredEventType === 'project_click') {
+          eventType = 'project_click';
+        } else if (configuredEventType) {
+          eventType = configuredEventType;
+        } else if (anchor.hasAttribute('download') || hrefLower.includes('.pdf')) {
+          eventType = 'resume_download';
+        } else if (hrefLower.startsWith('mailto:') || hrefLower.startsWith('tel:')) {
+          eventType = 'contact_click';
+        } else if (host && host !== window.location.hostname) {
+          eventType = 'outbound_click';
+        }
 
         if (!eventType) return;
 
+        const section = anchor.closest('section[id]')?.id || null;
+
         send(eventType, currentPath(), null, {
-          eventCategory: anchor.dataset.analyticsCategory || 'interaction',
+          eventCategory: anchor.dataset.analyticsCategory || (eventType === 'outbound_click' ? 'acquisition' : 'conversion'),
           eventLabel: anchor.dataset.analyticsLabel || anchor.textContent || null,
           targetUrl: href,
+          section,
+          scrollDepth: currentScrollDepth(),
           preferBeacon: true
         });
+      };
+
+      const emittedScrollDepths = new Set();
+      const scrollMilestones = [10, 25, 50, 75, 90, 100];
+      const onScroll = () => {
+        const depth = currentScrollDepth();
+        for (const milestone of scrollMilestones) {
+          if (depth >= milestone && !emittedScrollDepths.has(milestone)) {
+            emittedScrollDepths.add(milestone);
+            send('scroll', currentPath(), null, {
+              eventCategory: 'engagement',
+              eventLabel: `${milestone}%`,
+              scrollDepth: milestone,
+              metadata: { milestone }
+            });
+          }
+        }
       };
 
       const originalPushState = window.history.pushState;
@@ -252,14 +310,18 @@ export function useVisitorTracking() {
       };
 
       window.addEventListener('popstate', onPopState);
+      window.addEventListener('scroll', onScroll, { passive: true });
       window.addEventListener('pagehide', onPageHide);
       document.addEventListener('visibilitychange', onVisibilityChange);
       document.addEventListener('click', onDocumentClick, true);
+
+      onScroll();
 
       return () => {
         window.history.pushState = originalPushState;
         window.history.replaceState = originalReplaceState;
         window.removeEventListener('popstate', onPopState);
+        window.removeEventListener('scroll', onScroll);
         window.removeEventListener('pagehide', onPageHide);
         document.removeEventListener('visibilitychange', onVisibilityChange);
         document.removeEventListener('click', onDocumentClick, true);

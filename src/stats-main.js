@@ -4,6 +4,19 @@ import logoStats from './assets/logo-stats.png';
 const root = document.getElementById('stats-root');
 const apiOrigin = (import.meta.env.VITE_ANALYTICS_API_ORIGIN || '').replace(/\/$/, '');
 
+const state = {
+  rangeDays: 30,
+  page: 1,
+  perPage: 20,
+  filters: {
+    eventType: 'all',
+    country: 'all',
+    query: ''
+  },
+  data: null,
+  refreshTimer: null
+};
+
 function endpoint(path) {
   return `${apiOrigin}${path}`;
 }
@@ -20,26 +33,11 @@ async function apiRequest(path, options = {}) {
 
   const text = await response.text();
   const payload = text ? JSON.parse(text) : {};
-
-  if (!response.ok) {
-    throw new Error(payload?.message || `Request failed: ${response.status}`);
-  }
-
+  if (!response.ok) throw new Error(payload?.message || `Request failed: ${response.status}`);
   return payload;
 }
 
-function formatDate(value) {
-  if (!value) return '-';
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? value : date.toLocaleString();
-}
-
-function formatPercent(value) {
-  if (!Number.isFinite(value)) return '0%';
-  return `${Math.round(value)}%`;
-}
-
-function escapeHtml(value) {
+function esc(value) {
   return String(value ?? '')
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')
@@ -48,817 +46,477 @@ function escapeHtml(value) {
     .replaceAll("'", '&#39;');
 }
 
-function compactText(value, max = 42) {
-  const text = String(value || '').trim();
-  if (!text) return '-';
-  return text.length > max ? `${text.slice(0, Math.max(0, max - 1))}…` : text;
+function fmt(value, digits = 0) {
+  const num = Number(value) || 0;
+  return num.toLocaleString(undefined, { maximumFractionDigits: digits, minimumFractionDigits: digits });
 }
 
-function formatReferrer(value) {
-  const raw = String(value || '').trim();
-  if (!raw) return { short: '-', full: '-' };
-
-  try {
-    const parsed = new URL(raw);
-    const short = `${parsed.hostname}${parsed.pathname === '/' ? '' : parsed.pathname}`;
-    return { short: compactText(short, 34), full: raw };
-  } catch {
-    return { short: compactText(raw, 34), full: raw };
-  }
+function pct(value, digits = 1) {
+  const num = Number(value) || 0;
+  return `${num.toFixed(digits)}%`;
 }
 
-function formatEventType(value) {
-  const raw = String(value || '').trim();
-  if (!raw) return 'Unknown';
-  return raw
-    .replaceAll('_', ' ')
-    .replaceAll('-', ' ')
-    .replace(/\b\w/g, (ch) => ch.toUpperCase());
+function trendClass(changePct) {
+  if (changePct > 0.01) return 'trend-up';
+  if (changePct < -0.01) return 'trend-down';
+  return 'trend-flat';
 }
 
-function formatTarget(value) {
-  const raw = String(value || '').trim();
-  if (!raw || raw === '-') return { short: '-', full: '-' };
+function sparkline(values) {
+  const data = Array.isArray(values) ? values.map((v) => Number(v) || 0) : [];
+  if (data.length === 0) return '';
 
-  try {
-    const parsed = new URL(raw);
-    const short = `${parsed.hostname}${parsed.pathname === '/' ? '' : parsed.pathname}`;
-    return { short: compactText(short, 38), full: raw };
-  } catch {
-    return { short: compactText(raw, 38), full: raw };
-  }
-}
+  const width = 120;
+  const height = 36;
+  const pad = 4;
+  const min = Math.min(...data);
+  const max = Math.max(...data);
+  const spread = max - min || 1;
+  const step = (width - pad * 2) / Math.max(data.length - 1, 1);
+  const points = data.map((v, i) => {
+    const x = pad + (step * i);
+    const y = height - pad - (((v - min) / spread) * (height - pad * 2));
+    return `${x},${y}`;
+  }).join(' ');
 
-function toIsoDateUTC(date) {
-  return date.toISOString().slice(0, 10);
-}
-
-function buildDailySeries(points, days) {
-  const byDay = new Map((points || []).map((row) => [String(row.day), Number(row.visits || 0)]));
-  const series = [];
-  const now = new Date();
-  const startUtc = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
-
-  for (let i = days - 1; i >= 0; i -= 1) {
-    const d = new Date(startUtc);
-    d.setUTCDate(startUtc.getUTCDate() - i);
-    const key = toIsoDateUTC(d);
-    series.push({ day: key, visits: byDay.get(key) || 0 });
-  }
-
-  return series;
-}
-
-function sumVisits(series) {
-  return (series || []).reduce((acc, row) => acc + Number(row.visits || 0), 0);
-}
-
-function aggregateByWindow(series, windowSize, labelPrefix) {
-  const out = [];
-  let index = 0;
-  for (let i = 0; i < series.length; i += windowSize) {
-    const slice = series.slice(i, i + windowSize);
-    out.push({
-      label: `${labelPrefix}${index + 1}`,
-      visits: sumVisits(slice)
-    });
-    index += 1;
-  }
-  return out;
-}
-
-function aggregateByMonth(series, monthsBack) {
-  const monthMap = new Map();
-  for (const row of series) {
-    const month = String(row.day).slice(0, 7);
-    monthMap.set(month, (monthMap.get(month) || 0) + Number(row.visits || 0));
-  }
-
-  const now = new Date();
-  const rows = [];
-  for (let i = monthsBack - 1; i >= 0; i -= 1) {
-    const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - i, 1));
-    const monthKey = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
-    rows.push({
-      label: monthKey,
-      visits: monthMap.get(monthKey) || 0
-    });
-  }
-  return rows;
-}
-
-function renderMiniBars(series, accentClass = '') {
-  if (!series || series.length === 0) {
-    return '<p>No data</p>';
-  }
-
-  const max = Math.max(1, ...series.map((row) => Number(row.visits || 0)));
   return `
-    <div class="mini-bars">
-      ${series
-        .map((row) => {
-          const visits = Number(row.visits || 0);
-          const height = Math.max(8, Math.round((visits / max) * 100));
-          return `<div class="mini-bar ${accentClass}" style="height:${height}%" title="${row.label}: ${visits}"></div>`;
-        })
-        .join('')}
-    </div>
+    <svg viewBox="0 0 ${width} ${height}" class="sparkline" preserveAspectRatio="none" aria-hidden="true">
+      <polyline points="${points}" class="sparkline-line"></polyline>
+    </svg>
   `;
 }
 
-function formatLocation(row) {
-  const country = row.country || '-';
-  const region = row.region || null;
-  const city = row.city || null;
+function lineChart(series, xKey, yKeys) {
+  if (!Array.isArray(series) || series.length === 0) return '<p class="empty">No data</p>';
 
-  if (!row.country && !region && !city) return '-';
-  if (region) return `${country} / ${region}`;
-  if (city) return `${country} / ${city}`;
-  return country;
-}
+  const width = 760;
+  const height = 220;
+  const padX = 36;
+  const padY = 20;
+  const plotW = width - (padX * 2);
+  const plotH = height - (padY * 2);
 
-function osMeta(osName) {
-  const key = String(osName || '').toLowerCase();
-  if (key.includes('windows')) return { label: 'Windows', className: 'os-win', icon: 'windows' };
-  if (key.includes('linux')) return { label: 'Linux', className: 'os-lnx', icon: 'linux' };
-  if (key.includes('android')) return { label: 'Android', className: 'os-and', icon: 'android' };
-  if (key.includes('ios')) return { label: 'iOS', className: 'os-ios', icon: 'ios' };
-  if (key.includes('mac')) return { label: 'macOS', className: 'os-mac', icon: 'mac' };
-  return { label: 'Other OS', className: 'os-generic', icon: 'generic' };
-}
+  const allValues = series.flatMap((row) => yKeys.map((key) => Number(row[key]) || 0));
+  const maxVal = Math.max(1, ...allValues);
+  const step = plotW / Math.max(series.length - 1, 1);
 
-function renderOsIcon(osName) {
-  const meta = osMeta(osName);
-  let svg = '';
+  const lines = yKeys.map((key, idx) => {
+    const colorClass = idx === 0 ? 'chart-line-a' : idx === 1 ? 'chart-line-b' : 'chart-line-c';
+    const points = series.map((row, i) => {
+      const x = padX + (i * step);
+      const y = height - padY - (((Number(row[key]) || 0) / maxVal) * plotH);
+      return `${x},${y}`;
+    }).join(' ');
+    return `<polyline points="${points}" class="${colorClass}" />`;
+  }).join('');
 
-  if (meta.icon === 'windows') {
-    svg = `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <rect x="3" y="4" width="8" height="7" rx="1"></rect>
-        <rect x="13" y="4" width="8" height="7" rx="1"></rect>
-        <rect x="3" y="13" width="8" height="7" rx="1"></rect>
-        <rect x="13" y="13" width="8" height="7" rx="1"></rect>
-      </svg>`;
-  } else if (meta.icon === 'linux') {
-    svg = `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <circle cx="12" cy="7" r="3"></circle>
-        <path d="M8 11.5c0-1.2 1-2.2 2.2-2.2h3.6c1.2 0 2.2 1 2.2 2.2v4.2c0 2.2-1.8 4-4 4s-4-1.8-4-4z"></path>
-        <path d="M8 19.5l-2 1.5M16 19.5l2 1.5M9 14H6.5M15 14h2.5" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"></path>
-      </svg>`;
-  } else if (meta.icon === 'android') {
-    svg = `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M8 9.5A4 4 0 0 1 12 6a4 4 0 0 1 4 3.5z"></path>
-        <rect x="7" y="10" width="10" height="8" rx="2"></rect>
-        <path d="M9 6L7.5 4.5M15 6l1.5-1.5M9 12.5h0M15 12.5h0M9 18v2M15 18v2M7 11.5v5M17 11.5v5" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"></path>
-      </svg>`;
-  } else if (meta.icon === 'ios') {
-    svg = `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <rect x="7.5" y="3.5" width="9" height="17" rx="2.4"></rect>
-        <circle cx="12" cy="17.5" r="0.9" fill="currentColor"></circle>
-      </svg>`;
-  } else if (meta.icon === 'mac') {
-    svg = `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <rect x="4" y="5.5" width="16" height="10" rx="2"></rect>
-        <path d="M2.8 18h18.4M9 20h6" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"></path>
-      </svg>`;
-  } else {
-    svg = `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <rect x="4" y="5" width="16" height="10" rx="2"></rect>
-        <path d="M9 19h6M12 15v4" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"></path>
-      </svg>`;
-  }
+  const labels = series
+    .filter((_, idx) => idx === 0 || idx === series.length - 1 || idx % Math.ceil(series.length / 4) === 0)
+    .map((row, i) => {
+      const x = padX + (i * (plotW / Math.max(Math.ceil(series.length / 4), 1)));
+      const text = String(row[xKey] || '').slice(5);
+      return `<text x="${x}" y="${height - 4}" class="chart-x-label">${esc(text)}</text>`;
+    })
+    .join('');
 
-  return `<span class="os-badge ${meta.className}" title="${escapeHtml(meta.label)}" aria-label="${escapeHtml(meta.label)}">${svg}</span>`;
-}
-
-function toMonthTitle(dateObj) {
-  return dateObj.toLocaleString(undefined, { month: 'long', year: 'numeric' });
-}
-
-function buildMonthCalendar(dateObj, visitsByDate) {
-  const year = dateObj.getFullYear();
-  const month = dateObj.getMonth();
-  const first = new Date(year, month, 1);
-  const startWeekday = (first.getDay() + 6) % 7; // Monday-first
-  const start = new Date(year, month, 1 - startWeekday);
-  const cells = [];
-
-  for (let i = 0; i < 42; i += 1) {
-    const d = new Date(start);
-    d.setDate(start.getDate() + i);
-    const iso = d.toISOString().slice(0, 10);
-    const visits = Number(visitsByDate.get(iso) || 0);
-    const inMonth = d.getMonth() === month;
-    cells.push({
-      dayNum: d.getDate(),
-      iso,
-      visits,
-      inMonth
-    });
-  }
-
-  return cells;
-}
-
-function periodSeries(yearlySeries, period) {
-  if (period === 'day') {
-    const s = yearlySeries.slice(-14);
-    return s.map((row) => ({ label: row.day.slice(5), visits: row.visits }));
-  }
-  if (period === 'week') {
-    const s = yearlySeries.slice(-7);
-    return s.map((row) => ({ label: row.day.slice(5), visits: row.visits }));
-  }
-  if (period === 'month') {
-    return aggregateByWindow(yearlySeries.slice(-30), 6, 'W');
-  }
-  if (period === 'quarter') {
-    return aggregateByMonth(yearlySeries.slice(-90), 3).map((row) => ({ label: row.label.slice(5), visits: row.visits }));
-  }
-  return aggregateByMonth(yearlySeries, 12).map((row) => ({ label: row.label.slice(5), visits: row.visits }));
-}
-
-function renderTimeseriesChart(series) {
-  if (!series || series.length === 0) return '<p>No data</p>';
-  
-  const data = series.map(row => Number(row.visits || 0));
-  const maxVal = Math.max(1, ...data);
-  const minVal = 0;
-  const w = 640;
-  const h = 140;
-  const padding = 40;
-  const plotW = w - padding * 2;
-  const plotH = h - padding * 2;
-  
-  const xStep = plotW / (series.length - 1 || 1);
-  const yStep = plotH / (maxVal - minVal || 1);
-  
-  const points = data.map((val, i) => ({
-    x: padding + i * xStep,
-    y: padding + plotH - (val - minVal) * yStep,
-    label: series[i].label,
-    visits: val
-  }));
-  
-  const pathD = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
-  const gridLines = [];
-  for (let i = 0; i <= 4; i++) {
-    const y = padding + (plotH / 4) * i;
-    const val = Math.round(maxVal - (maxVal / 4) * i);
-    gridLines.push(`<line x1="${padding}" y1="${y}" x2="${w - padding}" y2="${y}" class="chart-grid-line" />`);
-    gridLines.push(`<text x="${padding - 8}" y="${y + 4}" class="chart-y-label">${val}</text>`);
-  }
-  
-  const xLabels = points.filter((_, i) => i === 0 || i === points.length - 1 || i % Math.ceil(points.length / 4) === 0);
-  const xLabelMarkup = xLabels.map(p => 
-    `<text x="${p.x}" y="${h - 8}" class="chart-x-label" text-anchor="middle">${escapeHtml(p.label)}</text>`
-  ).join('');
-  
-  const dots = points.map(p => 
-    `<circle cx="${p.x}" cy="${p.y}" r="3" class="chart-dot" title="${escapeHtml(p.label)}: ${p.visits}" />`
-  ).join('');
-  
   return `
-    <div class="timeseries-chart-wrap">
-      <svg viewBox="0 0 ${w} ${h}" class="timeseries-chart" preserveAspectRatio="none">
-        <defs>
-          <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" style="stop-color:#0fc7ff;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#2dd98a;stop-opacity:1" />
-          </linearGradient>
-        </defs>
-        ${gridLines.join('\n')}
-        <polyline points="${points.map(p => `${p.x},${p.y}`).join(' ')}" class="chart-line" />
-        ${dots}
-        ${xLabelMarkup}
+    <svg viewBox="0 0 ${width} ${height}" class="chart-svg" preserveAspectRatio="none">
+      <line x1="${padX}" y1="${height - padY}" x2="${width - padX}" y2="${height - padY}" class="chart-axis" />
+      <line x1="${padX}" y1="${padY}" x2="${padX}" y2="${height - padY}" class="chart-axis" />
+      ${lines}
+      ${labels}
+    </svg>
+  `;
+}
+
+function barChart(rows, labelKey, valueKey, danger = false) {
+  const data = Array.isArray(rows) ? rows : [];
+  if (data.length === 0) return '<p class="empty">No data</p>';
+  const max = Math.max(1, ...data.map((row) => Number(row[valueKey]) || 0));
+  return data.map((row) => {
+    const value = Number(row[valueKey]) || 0;
+    const width = Math.max(3, Math.round((value / max) * 100));
+    return `
+      <div class="bar-row">
+        <span>${esc(row[labelKey])}</span>
+        <div class="bar-track"><div class="bar-fill ${danger ? 'bar-danger' : ''}" style="width:${width}%"></div></div>
+        <strong>${fmt(value)}</strong>
+      </div>
+    `;
+  }).join('');
+}
+
+function donutChart(rows, labelKey, valueKey) {
+  const data = Array.isArray(rows) ? rows : [];
+  const total = data.reduce((acc, row) => acc + (Number(row[valueKey]) || 0), 0);
+  if (!total) return '<p class="empty">No data</p>';
+
+  let offset = 0;
+  const colors = ['#2dd98a', '#28b4ff', '#f5b84a', '#9b7cff', '#f56f7f'];
+  const segments = data.map((row, idx) => {
+    const value = Number(row[valueKey]) || 0;
+    const pctVal = (value / total) * 100;
+    const seg = `<circle r="44" cx="60" cy="60" stroke="${colors[idx % colors.length]}" stroke-dasharray="${pctVal} ${100 - pctVal}" stroke-dashoffset="${-offset}" />`;
+    offset += pctVal;
+    return seg;
+  }).join('');
+
+  const legend = data.map((row, idx) => {
+    const value = Number(row[valueKey]) || 0;
+    const share = (value / total) * 100;
+    return `<li><span><i style="background:${colors[idx % colors.length]}"></i>${esc(row[labelKey])}</span><strong>${pct(share, 1)}</strong></li>`;
+  }).join('');
+
+  return `
+    <div class="donut-wrap">
+      <svg viewBox="0 0 120 120" class="donut-svg">
+        <g transform="rotate(-90 60 60)">
+          ${segments}
+        </g>
+        <text x="60" y="58" text-anchor="middle" class="donut-total">${fmt(total)}</text>
+        <text x="60" y="73" text-anchor="middle" class="donut-sub">visitors</text>
       </svg>
+      <ul class="legend-list">${legend}</ul>
     </div>
   `;
 }
 
 function renderLogin(message = '') {
   root.innerHTML = `
-    <main class="stats-container">
-      <section class="stats-card login-card">
-        <div class="login-hero">
-          <img src="${logoStats}" alt="Portfolio Analytics" class="login-hero-image" />
-        </div>
-        <div class="login-brand-copy">
-          <h1>Portfolio Analytics</h1>
-          <p>Secure dashboard access</p>
-        </div>
-        <p class="login-help">Enter your analytics credentials. If 2FA is enabled, provide the current code.</p>
-        <form id="login-form" class="stats-form">
-          <label>
-            Username
-            <input name="username" type="text" autocomplete="username" required />
-          </label>
-          <label>
-            Password
-            <input name="password" type="password" autocomplete="current-password" required minlength="10" />
-          </label>
-          <label>
-            2FA Code (optional)
-            <input name="totpCode" type="text" inputmode="numeric" pattern="[0-9 ]*" maxlength="8" />
-          </label>
+    <main class="analytics-shell auth-shell">
+      <section class="panel auth-panel">
+        <img src="${logoStats}" alt="Portfolio Analytics" class="auth-logo" />
+        <h1>Portfolio Analytics</h1>
+        <p>Sign in to access the insight dashboard.</p>
+        <form id="login-form" class="auth-form">
+          <label>Username<input name="username" type="text" required autocomplete="username" /></label>
+          <label>Password<input name="password" type="password" required autocomplete="current-password" /></label>
+          <label>2FA Code (optional)<input name="totpCode" type="text" inputmode="numeric" pattern="[0-9 ]*" maxlength="8" /></label>
           <button type="submit">Sign in</button>
-          <p class="form-message">${message || ''}</p>
+          <p class="error">${esc(message)}</p>
         </form>
       </section>
     </main>
   `;
 
-  const form = document.getElementById('login-form');
-  form?.addEventListener('submit', async (event) => {
+  document.getElementById('login-form')?.addEventListener('submit', async (event) => {
     event.preventDefault();
-    const formData = new FormData(form);
-    const payload = {
-      username: String(formData.get('username') || ''),
-      password: String(formData.get('password') || ''),
-      totpCode: String(formData.get('totpCode') || '').trim()
-    };
+    const formData = new FormData(event.currentTarget);
 
     try {
       await apiRequest('/api/auth/login', {
         method: 'POST',
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+          username: String(formData.get('username') || ''),
+          password: String(formData.get('password') || ''),
+          totpCode: String(formData.get('totpCode') || '').trim()
+        })
       });
-
       await loadDashboard();
+      scheduleRefresh();
     } catch (error) {
       renderLogin(error.message);
     }
   });
 }
 
-function renderDashboard(summary, daily, recent, yearlyDaily, interactions) {
-  const totalVisits = Number(summary.totals.visits || 0);
-  const totalVisitors = Number(summary.totals.visitors || 0);
-  const totalPageviews = Number(summary.totals.pageviews || 0);
+function kpiCard(label, metric, unit = '') {
+  const change = Number(metric?.changePct) || 0;
+  const value = Number(metric?.value) || 0;
+  return `
+    <article class="kpi-card">
+      <header>
+        <h3>${esc(label)}</h3>
+        <span class="kpi-trend ${trendClass(change)}">${change >= 0 ? '+' : ''}${change.toFixed(1)}%</span>
+      </header>
+      <p class="kpi-value">${fmt(value, unit === '%' ? 1 : 0)}${unit}</p>
+      ${sparkline(metric?.sparkline || [])}
+    </article>
+  `;
+}
 
-  const pagesPerVisit = totalVisits > 0 ? totalPageviews / totalVisits : 0;
-  const returningRate = totalVisits > 0 ? ((totalVisits - totalVisitors) / totalVisits) * 100 : 0;
-  const topCountryTotal = summary.countries?.[0]?.total || 0;
-  const topCountryShare = totalVisits > 0 ? (topCountryTotal / totalVisits) * 100 : 0;
-  const geoCoverage = (summary.countries || []).filter((row) => row.label && row.label !== 'Unknown').length;
+function renderDashboard(data) {
+  const { summary, sources, funnel, conversions, recent } = data;
+  const k = summary.kpis || {};
+  const records = recent.records || [];
+  const paging = recent.paging || { page: 1, totalPages: 1, total: 0, perPage: state.perPage };
 
-  const yearlySeries = buildDailySeries(yearlyDaily.points || [], 365);
-  const visitsByDate = new Map(yearlySeries.map((row) => [row.day, Number(row.visits || 0)]));
-  const selectedSeries = periodSeries(yearlySeries, selectedPeriod);
-  const periodBars = renderTimeseriesChart(selectedSeries);
+  const eventTypes = ['all', 'page_view', 'scroll', 'section_view', 'project_click', 'resume_download', 'contact_click', 'outbound_click'];
+  const countries = ['all', ...new Set([...(summary.segmentation?.byCountry || []).map((row) => row.country)])].slice(0, 30);
 
-  const monthBase = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth(), 1);
-  const calendarCells = buildMonthCalendar(monthBase, visitsByDate)
-    .map((cell) => {
-      const intensity = Math.min(cell.visits, 10) / 10;
-      const light = intensity > 0 ? 0.16 + (intensity * 0.62) : 0;
-      const bg = intensity > 0
-        ? `rgba(45, 217, 138, ${light.toFixed(2)})`
-        : 'rgba(140, 160, 180, 0.18)';
-      const dimClass = cell.inMonth ? '' : ' heat-cell-muted';
-      return `<button class="heat-cell-button${dimClass}" style="background:${bg}" title="${cell.iso}: ${cell.visits} visitors" type="button">${cell.dayNum}<span class="heat-cell-count">${cell.visits > 0 ? cell.visits : ''}</span></button>`;
-    })
-    .join('');
+  const funnelRows = (funnel.funnel || []).map((row) => ({
+    step: row.step,
+    dropOff: row.dropOffPct
+  }));
 
-  const countryRows = summary.countries
-    .map((row) => `<li><span>${escapeHtml(row.label || 'Unknown')}</span><strong>${row.total}</strong></li>`)
-    .join('');
-
-  const mobileCountryRows = (summary.countries || [])
-    .slice(0, 3)
-    .map((row) => `<li><span>${escapeHtml(row.label || 'Unknown')}</span><strong>${row.total}</strong></li>`)
-    .join('');
-
-  const osRows = summary.operatingSystems
-    .map((row) => {
-      return `<li><span class="os-entry">${renderOsIcon(row.label)}<span>${escapeHtml(row.label || 'Unknown')}</span></span><strong>${row.total}</strong></li>`;
-    })
-    .join('');
-
-  const mobileOsRows = (summary.operatingSystems || [])
-    .slice(0, 3)
-    .map((row) => `<li><span>${escapeHtml(row.label || 'Unknown')}</span><strong>${row.total}</strong></li>`)
-    .join('');
-
-  const deviceRows = summary.devices
-    .map((row) => `<li><span>${escapeHtml(row.label || 'Unknown')}</span><strong>${row.total}</strong></li>`)
-    .join('');
-
-  const mobileDeviceRows = (summary.devices || [])
-    .slice(0, 3)
-    .map((row) => `<li><span>${escapeHtml(row.label || 'Unknown')}</span><strong>${row.total}</strong></li>`)
-    .join('');
-
-  const dailyRows = daily.points
-    .map((row) => `<tr><td>${row.day}</td><td>${row.visits}</td></tr>`)
-    .join('');
-
-  const orderedDaily = [...daily.points].reverse();
-  const maxDailyVisits = Math.max(1, ...orderedDaily.map((row) => Number(row.visits || 0)));
-  const dailyBars = orderedDaily
-    .map((row) => {
-      const visits = Number(row.visits || 0);
-      const width = Math.max(4, Math.round((visits / maxDailyVisits) * 100));
-      return `
-        <div class="bar-row">
-          <span class="bar-label">${row.day}</span>
-          <div class="bar-track"><div class="bar-fill" style="width: ${width}%"></div></div>
-          <strong class="bar-value">${visits}</strong>
-        </div>
-      `;
-    })
-    .join('');
-
-  const totalDevices = Math.max(1, (summary.devices || []).reduce((acc, row) => acc + Number(row.total || 0), 0));
-  const deviceBars = (summary.devices || [])
-    .map((row) => {
-      const ratio = (Number(row.total || 0) / totalDevices) * 100;
-      const width = Math.max(4, Math.round(ratio));
-      return `
-        <div class="bar-row">
-          <span class="bar-label">${row.label}</span>
-          <div class="bar-track"><div class="bar-fill bar-fill-accent" style="width: ${width}%"></div></div>
-          <strong class="bar-value">${formatPercent(ratio)}</strong>
-        </div>
-      `;
-    })
-    .join('');
-
-  const interactionTotals = interactions?.totals || {};
-  const interactionTypeRows = (interactions?.byType || [])
-    .map((row) => `<li><span>${escapeHtml(formatEventType(row.eventType))}</span><strong>${row.total}</strong></li>`)
-    .join('');
-
-  const projectClickRows = (interactions?.topProjects || [])
-    .map((row) => {
-      const label = compactText(row.project || 'Unknown Project', 26);
-      return `
-        <li>
-          <span title="${escapeHtml(row.project || 'Unknown Project')}">${escapeHtml(label)}</span>
-          <strong>${row.total}</strong>
-        </li>
-      `;
-    })
-    .join('');
-
-  const resumeVersionRows = (interactions?.resumeVersions || [])
-    .map((row) => {
-      const version = compactText(row.version || 'unknown-resume', 28);
-      return `<li><span title="${escapeHtml(row.version || 'unknown-resume')}">${escapeHtml(version)}</span><strong>${row.total}</strong></li>`;
-    })
-    .join('');
-
-  const topSectionRows = (interactions?.topSections || [])
-    .map((row) => `<li><span>${escapeHtml(row.section || 'unknown')}</span><strong>${row.total}</strong></li>`)
-    .join('');
-
-  const recentRows = recent.records
-    .map((row) => {
-      const deviceType = escapeHtml(row.device_type || '-');
-      const osName = escapeHtml(row.os_name || 'Unknown');
-      const browserName = escapeHtml(row.browser_name || '-');
-      const location = escapeHtml(formatLocation(row));
-      const ipAddress = escapeHtml(row.ip_address || '-');
-      const referrer = formatReferrer(row.referrer);
-
-      return `
-        <tr>
-          <td><input type="checkbox" class="event-check" value="${row.event_id}" /></td>
-          <td><span class="cell-time">${escapeHtml(formatDate(row.created_at))}</span></td>
-          <td><span class="mono-cell">${ipAddress}</span></td>
-          <td><span class="truncate-cell" title="${location}">${location}</span></td>
-          <td>
-            <span class="device-stack">
-              <span class="device-topline">${renderOsIcon(row.os_name)}<span class="truncate-cell" title="${osName}">${osName}</span></span>
-              <span class="device-subline">${deviceType}</span>
-            </span>
-          </td>
-          <td><span class="truncate-cell" title="${browserName}">${browserName}</span></td>
-          <td><span class="truncate-cell" title="${escapeHtml(referrer.full)}">${escapeHtml(referrer.short)}</span></td>
-        </tr>
-      `;
-    })
-    .join('');
-
-  const paging = recent.paging || { page: 1, perPage: recentPerPage, totalPages: 1, total: 0 };
+  const recentRows = records.map((row) => {
+    const when = new Date(row.created_at).toLocaleString();
+    const ipMasked = String(row.ip_address || '-').replace(/(\d+\.\d+\.\d+)\.\d+/, '$1.xxx');
+    return `
+      <tr>
+        <td>${esc(when)}</td>
+        <td>${esc(ipMasked)}</td>
+        <td>${esc(row.country || 'Unknown')}</td>
+        <td>${esc(row.device_type || '-')}</td>
+        <td>${esc(row.event_type || '-')}</td>
+        <td>${esc(row.referrer || '-')}</td>
+      </tr>
+    `;
+  }).join('');
 
   root.innerHTML = `
-    <main class="stats-container">
-      <header class="stats-header">
-        <h1>Portfolio Visitor Analytics</h1>
-        <div class="header-actions">
-          <span class="last-updated" id="last-updated">Updated: ${new Date().toLocaleTimeString()}</span>
-          <button id="refresh-button" class="refresh-button" type="button">Refresh</button>
-          <button id="logout-button" class="logout-button" type="button">Log out</button>
+    <main class="analytics-shell">
+      <header class="topbar">
+        <div>
+          <h1>Portfolio Analytics Intelligence</h1>
+          <p>Decision-driven funnel, behavior, and conversion panel</p>
+        </div>
+        <div class="topbar-actions">
+          <label>
+            Period
+            <select id="range-days">
+              <option value="14" ${state.rangeDays === 14 ? 'selected' : ''}>14d</option>
+              <option value="30" ${state.rangeDays === 30 ? 'selected' : ''}>30d</option>
+              <option value="60" ${state.rangeDays === 60 ? 'selected' : ''}>60d</option>
+              <option value="90" ${state.rangeDays === 90 ? 'selected' : ''}>90d</option>
+            </select>
+          </label>
+          <button id="refresh-btn" type="button">Refresh</button>
+          <button id="logout-btn" type="button" class="danger">Logout</button>
         </div>
       </header>
 
-        <div class="stats-overview">
-      <section class="stats-grid totals-grid">
-        <article class="stats-card">
-          <h2>Total Visits</h2>
-          <p class="big-number">${summary.totals.visits}</p>
-        </article>
-        <article class="stats-card">
-          <h2>Unique Visitors</h2>
-          <p class="big-number">${summary.totals.visitors}</p>
-        </article>
-        <article class="stats-card">
-          <h2>Total Pageviews</h2>
-          <p class="big-number">${summary.totals.pageviews}</p>
-        </article>
+      <section class="kpi-row">
+        ${kpiCard('Unique Visitors', k.uniqueVisitors)}
+        ${kpiCard('Conversion Rate', k.conversionRate, '%')}
+        ${kpiCard('Resume Downloads', k.resumeDownloads)}
+        ${kpiCard('Project Clicks', k.projectClicks)}
+        ${kpiCard('Engagement Score', k.engagementScore)}
+        ${kpiCard('Avg Scroll Depth', k.avgScrollDepth, '%')}
       </section>
 
-      <section class="stats-grid totals-grid">
-        <article class="stats-card">
-          <h2>Resume Downloads (${interactions?.days || 90}d)</h2>
-          <p class="big-number">${interactionTotals.resumeDownloads || 0}</p>
+      <section class="grid two">
+        <article class="panel">
+          <h2>Acquisition Sources</h2>
+          ${donutChart(sources.chart || [], 'source', 'visitors')}
         </article>
-        <article class="stats-card">
-          <h2>Project Link Clicks (${interactions?.days || 90}d)</h2>
-          <p class="big-number">${interactionTotals.projectLinkClicks || 0}</p>
-        </article>
-        <article class="stats-card">
-          <h2>Section Views (${interactions?.days || 90}d)</h2>
-          <p class="big-number">${interactionTotals.sectionViews || 0}</p>
-        </article>
-      </section>
-
-      <section class="stats-grid">
-        <article class="stats-card metrics-merged-card">
-          <h2>Performance Insights</h2>
-          <div class="metrics-merged-grid">
-            <div class="metric-item"><span>Pages / Visit</span><strong>${pagesPerVisit.toFixed(2)}</strong></div>
-            <div class="metric-item"><span>Returning Rate</span><strong>${formatPercent(returningRate)}</strong></div>
-            <div class="metric-item"><span>Top Country Share</span><strong>${formatPercent(topCountryShare)}</strong></div>
-            <div class="metric-item"><span>Geo Coverage</span><strong>${geoCoverage}</strong></div>
-          </div>
-        </article>
-      </section>
-
-      <section class="stats-grid focus-grid compact-focus-grid">
-        <article class="stats-card period-card">
-          <div class="period-header">
-            <h2>Visitors Trend</h2>
-            <select id="period-select" class="per-page-select">
-              <option value="day" ${selectedPeriod === 'day' ? 'selected' : ''}>Day</option>
-              <option value="week" ${selectedPeriod === 'week' ? 'selected' : ''}>Week</option>
-              <option value="month" ${selectedPeriod === 'month' ? 'selected' : ''}>Month</option>
-              <option value="quarter" ${selectedPeriod === 'quarter' ? 'selected' : ''}>Quarter</option>
-              <option value="year" ${selectedPeriod === 'year' ? 'selected' : ''}>Year</option>
-            </select>
-          </div>
-          ${periodBars}
-        </article>
-        <article class="stats-card heatmap-card">
-          <div class="heatmap-header">
-            <button id="calendar-prev" class="refresh-button" type="button">Prev</button>
-            <div class="calendar-title-wrap">
-              <h2>${toMonthTitle(monthBase)}</h2>
-              <span class="heatmap-legend">0 = grey, 10+ = bright green</span>
-            </div>
-            <button id="calendar-next" class="refresh-button" type="button">Next</button>
-          </div>
-          <div class="calendar-weekdays">
-            <span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
-          </div>
-          <div class="calendar-grid">${calendarCells}</div>
-        </article>
-      </section>
-
-      <section class="stats-grid compact-analytics-grid">
-        <article class="stats-card compact-source-card">
-          <h2>Top Countries</h2>
-          <ul class="stats-list">${countryRows || '<li><span>No data</span><strong>0</strong></li>'}</ul>
-        </article>
-        <article class="stats-card compact-source-card">
-          <h2>Device Types</h2>
-          <ul class="stats-list">${deviceRows || '<li><span>No data</span><strong>0</strong></li>'}</ul>
-        </article>
-        <article class="stats-card compact-source-card">
-          <h2>Operating Systems</h2>
-          <ul class="stats-list">${osRows || '<li><span>No data</span><strong>0</strong></li>'}</ul>
-        </article>
-        <article class="stats-card mobile-overview-card">
-          <h2>Traffic Snapshot</h2>
-          <div class="mobile-overview-grid">
-            <section>
-              <h3>Countries</h3>
-              <ul class="stats-list">${mobileCountryRows || '<li><span>No data</span><strong>0</strong></li>'}</ul>
-            </section>
-            <section>
-              <h3>Devices</h3>
-              <ul class="stats-list">${mobileDeviceRows || '<li><span>No data</span><strong>0</strong></li>'}</ul>
-            </section>
-            <section>
-              <h3>OS</h3>
-              <ul class="stats-list">${mobileOsRows || '<li><span>No data</span><strong>0</strong></li>'}</ul>
-            </section>
-          </div>
-        </article>
-        <article class="stats-card">
-          <h2>Visits by Day (${daily.days} days)</h2>
-          <table>
-            <thead><tr><th>Date</th><th>Visits</th></tr></thead>
-            <tbody>${dailyRows || '<tr><td>-</td><td>0</td></tr>'}</tbody>
+        <article class="panel">
+          <h2>Source Quality</h2>
+          <table class="data-table">
+            <thead><tr><th>Source</th><th>Visitors</th><th>Conv%</th><th>Avg Engagement</th></tr></thead>
+            <tbody>
+              ${(sources.table || []).map((row) => `
+                <tr>
+                  <td>${esc(row.source)}</td>
+                  <td>${fmt(row.visitors)}</td>
+                  <td>${pct(row.conversionRate, 1)}</td>
+                  <td>${fmt(row.avgEngagement, 1)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
           </table>
         </article>
-        <article class="stats-card">
-          <h2>Visits Trend</h2>
-          <div class="bar-chart">${dailyBars || '<p>No trend data</p>'}</div>
+      </section>
+
+      <section class="grid three">
+        <article class="panel">
+          <h2>Scroll Funnel</h2>
+          <div class="bar-stack">${barChart(funnelRows, 'step', 'dropOff', true)}</div>
         </article>
-        <article class="stats-card">
-          <h2>Device Distribution</h2>
-          <div class="bar-chart">${deviceBars || '<p>No device data</p>'}</div>
+        <article class="panel">
+          <h2>Section Engagement</h2>
+          <div class="bar-stack">${barChart(funnel.sectionEngagement || [], 'section', 'interactions')}</div>
         </article>
-        <article class="stats-card">
-          <h2>Interaction Types (${interactions?.days || 90}d)</h2>
-          <ul class="stats-list">${interactionTypeRows || '<li><span>No interactions yet</span><strong>0</strong></li>'}</ul>
-        </article>
-        <article class="stats-card">
-          <h2>Top Clicked Projects</h2>
-          <ul class="stats-list">${projectClickRows || '<li><span>No project clicks yet</span><strong>0</strong></li>'}</ul>
-        </article>
-        <article class="stats-card">
-          <h2>Resume Versions Downloaded</h2>
-          <ul class="stats-list">${resumeVersionRows || '<li><span>No resume downloads yet</span><strong>0</strong></li>'}</ul>
-        </article>
-        <article class="stats-card">
-          <h2>Top Viewed Sections</h2>
-          <ul class="stats-list">${topSectionRows || '<li><span>No section views yet</span><strong>0</strong></li>'}</ul>
+        <article class="panel">
+          <h2>Scroll Depth Distribution</h2>
+          ${lineChart((conversions.scrollDistribution || []).map((row) => ({ day: `${row.depth}%`, users: row.users })), 'day', ['users'])}
         </article>
       </section>
-      </div>
 
-      <section class="stats-grid compact-table-grid">
-        <article class="stats-card">
-          <div class="recent-events-header">
-            <h2>Recent Events</h2>
-            <div class="paging-controls">
-              <button id="delete-selected-button" class="refresh-button danger-button" type="button">Delete Selected</button>
-              <label for="per-page-select">Rows</label>
-              <select id="per-page-select" class="per-page-select">
-                ${[10, 20, 50, 100]
-                  .map((value) => `<option value="${value}" ${paging.perPage === value ? 'selected' : ''}>${value}</option>`)
-                  .join('')}
-              </select>
-              <button id="prev-page-button" class="refresh-button" type="button" ${paging.page <= 1 ? 'disabled' : ''}>Prev</button>
-              <span class="paging-meta">Page ${paging.page} / ${paging.totalPages}</span>
-              <button id="next-page-button" class="refresh-button" type="button" ${paging.page >= paging.totalPages ? 'disabled' : ''}>Next</button>
-            </div>
-          </div>
-          <div class="table-wrap">
-            <table class="recent-events-table">
-              <colgroup>
-                <col class="col-select" />
-                <col class="col-time" />
-                <col class="col-ip" />
-                <col class="col-location" />
-                <col class="col-device" />
-                <col class="col-browser" />
-                <col class="col-referrer" />
-              </colgroup>
-              <thead>
-                <tr>
-                  <th>Select</th>
-                  <th>Time</th>
-                  <th>IP</th>
-                  <th>Location</th>
-                  <th>Device</th>
-                  <th>Browser</th>
-                  <th>Referrer</th>
-                </tr>
-              </thead>
-              <tbody>${recentRows || '<tr><td colspan="7">No events yet</td></tr>'}</tbody>
-            </table>
+      <section class="grid two">
+        <article class="panel">
+          <h2>Conversion Trend</h2>
+          ${lineChart(conversions.trend || [], 'day', ['resumeDownloads', 'projectClicks'])}
+          <div class="chart-legend">
+            <span><i class="legend-a"></i> Resume Downloads</span>
+            <span><i class="legend-b"></i> Project Clicks</span>
           </div>
         </article>
+        <article class="panel">
+          <h2>Conversion by Device</h2>
+          <div class="bar-stack">${barChart(conversions.byDevice || [], 'segment', 'conversionRate')}</div>
+          <h3>Conversion by Country</h3>
+          <div class="bar-stack">${barChart((conversions.byCountry || []).slice(0, 8), 'segment', 'conversionRate')}</div>
+        </article>
+      </section>
+
+      <section class="grid two">
+        <article class="panel">
+          <h2>New vs Returning Users</h2>
+          ${donutChart([
+            { label: 'New', value: summary.segmentation?.newVsReturning?.newUsers || 0 },
+            { label: 'Returning', value: summary.segmentation?.newVsReturning?.returningUsers || 0 }
+          ], 'label', 'value')}
+          <p class="hint">Returning user ratio: ${pct(summary.derived?.returningUserRatio || 0, 1)}</p>
+        </article>
+        <article class="panel">
+          <h2>Geo Distribution</h2>
+          <table class="data-table">
+            <thead><tr><th>Country</th><th>Visitors</th><th>Conv%</th></tr></thead>
+            <tbody>
+              ${(conversions.byCountry || []).map((row) => `
+                <tr>
+                  <td>${esc(row.segment)}</td>
+                  <td>${fmt(row.visitors)}</td>
+                  <td>${pct(row.conversionRate, 1)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </article>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Event Log (Developer View)</h2>
+          <div class="filter-row">
+            <select id="filter-event-type">
+              ${eventTypes.map((type) => `<option value="${type}" ${state.filters.eventType === type ? 'selected' : ''}>${type}</option>`).join('')}
+            </select>
+            <select id="filter-country">
+              ${countries.map((country) => `<option value="${esc(country)}" ${state.filters.country === country ? 'selected' : ''}>${esc(country)}</option>`).join('')}
+            </select>
+            <input id="filter-query" type="search" placeholder="Search path / referrer / event" value="${esc(state.filters.query)}" />
+            <button id="apply-filters" type="button">Apply</button>
+          </div>
+        </div>
+
+        <table class="data-table mono">
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>IP (masked)</th>
+              <th>Country</th>
+              <th>Device</th>
+              <th>Event Type</th>
+              <th>Referrer</th>
+            </tr>
+          </thead>
+          <tbody>${recentRows || '<tr><td colspan="6">No events</td></tr>'}</tbody>
+        </table>
+
+        <div class="pager">
+          <button id="prev-page" ${paging.page <= 1 ? 'disabled' : ''}>Prev</button>
+          <span>Page ${paging.page} / ${paging.totalPages} (${fmt(paging.total)} events)</span>
+          <button id="next-page" ${paging.page >= paging.totalPages ? 'disabled' : ''}>Next</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Automated Insights</h2>
+        <ul class="insights">
+          ${(summary.insights || []).map((msg) => `<li>${esc(msg)}</li>`).join('') || '<li>No critical anomalies for this period.</li>'}
+          ${(() => {
+            const steps = funnel.funnel || [];
+            const projects = steps.find((s) => s.step === 'Projects');
+            if (projects && projects.dropOffPct >= 50) {
+              return `<li>High funnel leakage: ${pct(projects.dropOffPct, 1)} drop-off before Projects.</li>`;
+            }
+            return '';
+          })()}
+        </ul>
       </section>
     </main>
   `;
 
-  document.getElementById('logout-button')?.addEventListener('click', async () => {
-    stopAutoRefresh();
+  bindDashboardEvents();
+}
+
+function bindDashboardEvents() {
+  document.getElementById('refresh-btn')?.addEventListener('click', loadDashboard);
+
+  document.getElementById('logout-btn')?.addEventListener('click', async () => {
+    stopRefresh();
     await apiRequest('/api/auth/logout', { method: 'POST' });
     renderLogin();
   });
 
-  document.getElementById('refresh-button')?.addEventListener('click', () => {
+  document.getElementById('range-days')?.addEventListener('change', (event) => {
+    state.rangeDays = Number.parseInt(event.target.value, 10) || 30;
+    state.page = 1;
     loadDashboard();
   });
 
-  document.getElementById('prev-page-button')?.addEventListener('click', () => {
-    if (recentPage > 1) {
-      recentPage -= 1;
+  document.getElementById('apply-filters')?.addEventListener('click', () => {
+    state.filters.eventType = document.getElementById('filter-event-type')?.value || 'all';
+    state.filters.country = document.getElementById('filter-country')?.value || 'all';
+    state.filters.query = document.getElementById('filter-query')?.value || '';
+    state.page = 1;
+    loadDashboard();
+  });
+
+  document.getElementById('prev-page')?.addEventListener('click', () => {
+    if (state.page > 1) {
+      state.page -= 1;
       loadDashboard();
     }
   });
 
-  document.getElementById('next-page-button')?.addEventListener('click', () => {
-    if (recentPage < paging.totalPages) {
-      recentPage += 1;
-      loadDashboard();
-    }
+  document.getElementById('next-page')?.addEventListener('click', () => {
+    state.page += 1;
+    loadDashboard();
   });
-
-  document.getElementById('per-page-select')?.addEventListener('change', (event) => {
-    const value = Number.parseInt(event.target.value, 10);
-    if (Number.isFinite(value)) {
-      recentPerPage = value;
-      recentPage = 1;
-      loadDashboard();
-    }
-  });
-
-  document.getElementById('period-select')?.addEventListener('change', (event) => {
-    selectedPeriod = String(event.target.value || 'week');
-    renderDashboard(summary, daily, recent, yearlyDaily, interactions);
-  });
-
-  document.getElementById('calendar-prev')?.addEventListener('click', () => {
-    calendarMonth = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() - 1, 1);
-    renderDashboard(summary, daily, recent, yearlyDaily, interactions);
-  });
-
-  document.getElementById('calendar-next')?.addEventListener('click', () => {
-    calendarMonth = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1, 1);
-    renderDashboard(summary, daily, recent, yearlyDaily, interactions);
-  });
-
-  document.getElementById('delete-selected-button')?.addEventListener('click', async () => {
-    const selectedIds = Array.from(document.querySelectorAll('.event-check:checked'))
-      .map((input) => Number.parseInt(input.value, 10))
-      .filter((value) => Number.isInteger(value) && value > 0);
-
-    if (selectedIds.length === 0) {
-      return;
-    }
-
-    const confirmed = window.confirm(`Delete ${selectedIds.length} selected visit row(s)?`);
-    if (!confirmed) {
-      return;
-    }
-
-    try {
-      await apiRequest('/api/stats/events', {
-        method: 'DELETE',
-        body: JSON.stringify({ eventIds: selectedIds })
-      });
-
-      await loadDashboard();
-    } catch (error) {
-      window.alert(error.message || 'Failed to delete selected rows.');
-    }
-  });
-}
-
-let _refreshTimer = null;
-let recentPage = 1;
-let recentPerPage = 20;
-let selectedPeriod = 'week';
-let calendarMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-
-function stopAutoRefresh() {
-  if (_refreshTimer) {
-    clearInterval(_refreshTimer);
-    _refreshTimer = null;
-  }
 }
 
 async function loadDashboard() {
   try {
-    const [summary, daily, recent, yearlyDaily, interactions] = await Promise.all([
-      apiRequest('/api/stats/summary'),
-      apiRequest('/api/stats/daily?days=30'),
-      apiRequest(`/api/stats/recent?page=${recentPage}&perPage=${recentPerPage}`),
-      apiRequest('/api/stats/daily?days=365'),
-      apiRequest('/api/stats/interactions?days=90')
+    const query = new URLSearchParams({
+      days: String(state.rangeDays),
+      page: String(state.page),
+      perPage: String(state.perPage),
+      eventType: state.filters.eventType,
+      country: state.filters.country,
+      search: state.filters.query
+    });
+
+    const [summary, sources, funnel, conversions, recent] = await Promise.all([
+      apiRequest(`/api/stats/summary?days=${state.rangeDays}`),
+      apiRequest(`/api/stats/sources?days=${state.rangeDays}`),
+      apiRequest(`/api/stats/funnel?days=${state.rangeDays}`),
+      apiRequest(`/api/stats/conversions?days=${state.rangeDays}`),
+      apiRequest(`/api/stats/recent?${query.toString()}`)
     ]);
 
-    if (recent?.paging?.page) {
-      recentPage = recent.paging.page;
-    }
-
-    renderDashboard(summary, daily, recent, yearlyDaily, interactions);
+    state.data = { summary, sources, funnel, conversions, recent };
+    renderDashboard(state.data);
   } catch (error) {
-    stopAutoRefresh();
+    stopRefresh();
     renderLogin(error.message);
   }
 }
 
-async function boot() {
-  root.innerHTML = '<main class="stats-container"><section class="stats-card"><p>Loading analytics dashboard...</p></section></main>';
+function scheduleRefresh() {
+  stopRefresh();
+  state.refreshTimer = setInterval(() => {
+    loadDashboard().catch(() => {
+      // handled in loadDashboard
+    });
+  }, 60 * 1000);
+}
 
+function stopRefresh() {
+  if (state.refreshTimer) {
+    clearInterval(state.refreshTimer);
+    state.refreshTimer = null;
+  }
+}
+
+async function boot() {
+  root.innerHTML = '<main class="analytics-shell"><section class="panel"><p>Loading analytics dashboard...</p></section></main>';
   try {
     await apiRequest('/api/auth/me');
     await loadDashboard();
-    stopAutoRefresh();
-    _refreshTimer = setInterval(loadDashboard, 60 * 1000);
+    scheduleRefresh();
   } catch {
     renderLogin();
   }

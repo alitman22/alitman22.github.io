@@ -130,7 +130,23 @@ function normalizeEventType(value, fallback = 'pageview') {
   const normalized = normalizeString(value, 40);
   if (!normalized) return fallback;
   if (!/^[a-z0-9_:-]{2,40}$/i.test(normalized)) return fallback;
-  return normalized.toLowerCase();
+  const canonical = normalized.toLowerCase();
+
+  const aliases = {
+    pageview: 'page_view',
+    page_view: 'page_view',
+    section_view: 'section_view',
+    project_link_click: 'project_click',
+    project_click: 'project_click',
+    resume_download: 'resume_download',
+    contact_click: 'contact_click',
+    outbound_click: 'outbound_click',
+    scroll: 'scroll',
+    visibility_hidden: 'visibility_hidden',
+    session_end: 'session_end'
+  };
+
+  return aliases[canonical] || canonical;
 }
 
 function normalizeEventCategory(value) {
@@ -294,6 +310,48 @@ function toNumber(value) {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
+function toRatio(numerator, denominator) {
+  if (!Number.isFinite(denominator) || denominator <= 0) return 0;
+  if (!Number.isFinite(numerator) || numerator <= 0) return 0;
+  return numerator / denominator;
+}
+
+function percentChange(current, previous) {
+  const cur = Number(current) || 0;
+  const prev = Number(previous) || 0;
+  if (prev === 0) {
+    return cur === 0 ? 0 : 100;
+  }
+  return ((cur - prev) / Math.abs(prev)) * 100;
+}
+
+function classifySource(referrer) {
+  const raw = String(referrer || '').trim();
+  if (!raw) return 'Direct';
+
+  let host = raw;
+  try {
+    host = new URL(raw).hostname.toLowerCase();
+  } catch {
+    host = raw.toLowerCase();
+  }
+
+  if (host.includes('linkedin.')) return 'LinkedIn';
+  if (host.includes('github.')) return 'GitHub';
+  if (host.includes('localhost') || host.includes('127.0.0.1')) return 'Direct';
+  return 'Other';
+}
+
+function sectionStep(label) {
+  const normalized = String(label || '').toLowerCase();
+  if (normalized.includes('hero')) return 'Hero';
+  if (normalized.includes('about')) return 'About';
+  if (normalized.includes('skills') || normalized.includes('toolbox')) return 'Skills';
+  if (normalized.includes('project')) return 'Projects';
+  if (normalized.includes('contact')) return 'Contact';
+  return null;
+}
+
 app.get('/api/health', (_req, res) => {
   res.json({ ok: true, status: 'up' });
 });
@@ -301,10 +359,15 @@ app.get('/api/health', (_req, res) => {
 app.post('/api/track', trackLimiter, async (req, res) => {
   try {
     const eventType = normalizeEventType(req.body?.eventType, 'pageview');
-    const eventCategory = normalizeEventCategory(req.body?.eventCategory);
+    const requestedCategory = normalizeEventCategory(req.body?.eventCategory);
     const eventLabel = normalizeString(req.body?.eventLabel, 160);
     const targetUrl = sanitizeTargetUrl(req.body?.targetUrl);
-    const metadataJson = normalizeMetadata(req.body?.metadata);
+    const metadataPayload = {
+      ...(req.body?.metadata && typeof req.body.metadata === 'object' ? req.body.metadata : {}),
+      section: normalizeString(req.body?.section, 80) || undefined,
+      scrollDepth: normalizeInteger(req.body?.scrollDepth, 0, 100) ?? undefined
+    };
+    const metadataJson = normalizeMetadata(metadataPayload);
     const path = normalizeString(req.body?.path, 400) || '/';
     const referrer = sanitizeReferrer(req.body?.referrer);
     const visitorId = normalizeString(req.body?.visitorId, 80);
@@ -338,6 +401,14 @@ app.post('/api/track', trackLimiter, async (req, res) => {
     const timezone = normalizeString(req.body?.timezone, 128);
     const screenWidth = normalizeInteger(req.body?.screenWidth, 100, 9000);
     const screenHeight = normalizeInteger(req.body?.screenHeight, 100, 9000);
+
+    const eventCategory = requestedCategory || (
+      eventType === 'page_view' ? 'navigation' :
+      eventType === 'scroll' || eventType === 'section_view' ? 'engagement' :
+      eventType === 'project_click' || eventType === 'resume_download' || eventType === 'contact_click' ? 'conversion' :
+      eventType === 'outbound_click' ? 'acquisition' :
+      'interaction'
+    );
 
     await db.execute({
       sql: `INSERT INTO sessions (
@@ -611,38 +682,221 @@ Portfolio Analytics
 }
 
 
-app.get('/api/stats/summary', requireAuth, async (_req, res) => {
+app.get('/api/stats/summary', requireAuth, async (req, res) => {
   try {
-    const [totalVisitsResult, totalVisitorsResult, totalPageviewsResult, countryResult, deviceResult, osResult] = await Promise.all([
-      db.execute('SELECT COUNT(*) AS total FROM visits'),
-      db.execute('SELECT COUNT(DISTINCT visitor_id) AS total FROM visits'),
-      db.execute("SELECT COUNT(*) AS total FROM events WHERE event_type = 'pageview'"),
-      db.execute(`SELECT COALESCE(country, 'Unknown') AS label, COUNT(*) AS total
-        FROM visits
-        GROUP BY COALESCE(country, 'Unknown')
-        ORDER BY total DESC
-        LIMIT 10`),
-      db.execute(`SELECT COALESCE(device_type, 'unknown') AS label, COUNT(*) AS total
-        FROM visits
-        GROUP BY COALESCE(device_type, 'unknown')
-        ORDER BY total DESC`),
-      db.execute(`SELECT COALESCE(os_name, 'Unknown') AS label, COUNT(*) AS total
-        FROM visits
-        GROUP BY COALESCE(os_name, 'Unknown')
-        ORDER BY total DESC
-        LIMIT 8`)
+    const days = Math.min(Math.max(Number.parseInt(req.query.days || '30', 10), 7), 180);
+    const currentInterval = `-${days} days`;
+    const fullInterval = `-${days * 2} days`;
+
+    const [visitsDailyResult, eventsDailyResult, totalsResult, returningResult, countryResult, deviceResult] = await Promise.all([
+      db.execute({
+        sql: `SELECT DATE(created_at) AS day, COUNT(DISTINCT visitor_id) AS visitors
+          FROM visits
+          WHERE created_at >= datetime('now', ?)
+          GROUP BY DATE(created_at)
+          ORDER BY day ASC`,
+        args: [fullInterval]
+      }),
+      db.execute({
+        sql: `SELECT
+            DATE(created_at) AS day,
+            SUM(CASE WHEN event_type = 'resume_download' THEN 1 ELSE 0 END) AS resume_downloads,
+            SUM(CASE WHEN event_type = 'project_click' THEN 1 ELSE 0 END) AS project_clicks,
+            SUM(CASE WHEN event_type = 'scroll' THEN 1 ELSE 0 END) AS scroll_events,
+            AVG(CASE WHEN event_type = 'scroll' THEN CAST(json_extract(metadata_json, '$.scrollDepth') AS REAL) END) AS avg_scroll,
+            SUM(CASE WHEN event_type IN ('section_view', 'project_click', 'resume_download', 'contact_click', 'outbound_click') THEN 1 ELSE 0 END) AS interactions
+          FROM events
+          WHERE created_at >= datetime('now', ?)
+          GROUP BY DATE(created_at)
+          ORDER BY day ASC`,
+        args: [fullInterval]
+      }),
+      db.execute({
+        sql: `SELECT
+            COUNT(DISTINCT v.visitor_id) AS unique_visitors,
+            SUM(CASE WHEN e.event_type = 'resume_download' THEN 1 ELSE 0 END) AS resume_downloads,
+            SUM(CASE WHEN e.event_type = 'project_click' THEN 1 ELSE 0 END) AS project_clicks,
+            AVG(CASE WHEN e.event_type = 'scroll' THEN CAST(json_extract(e.metadata_json, '$.scrollDepth') AS REAL) END) AS avg_scroll_depth,
+            SUM(CASE WHEN e.event_type IN ('section_view', 'project_click', 'resume_download', 'contact_click', 'outbound_click') THEN 1 ELSE 0 END) AS interactions
+          FROM visits v
+          LEFT JOIN events e ON e.session_id = v.session_id
+            AND e.created_at >= datetime('now', ?)
+          WHERE v.created_at >= datetime('now', ?)`,
+        args: [currentInterval, currentInterval]
+      }),
+      db.execute({
+        sql: `SELECT COUNT(*) AS returning_users FROM (
+            SELECT visitor_id
+            FROM sessions
+            WHERE first_seen_at >= datetime('now', ?)
+            GROUP BY visitor_id
+            HAVING COUNT(*) > 1
+          )`,
+        args: [currentInterval]
+      }),
+      db.execute({
+        sql: `SELECT COALESCE(country, 'Unknown') AS country, COUNT(DISTINCT visitor_id) AS visitors
+          FROM visits
+          WHERE created_at >= datetime('now', ?)
+          GROUP BY COALESCE(country, 'Unknown')
+          ORDER BY visitors DESC
+          LIMIT 12`,
+        args: [currentInterval]
+      }),
+      db.execute({
+        sql: `SELECT COALESCE(device_type, 'unknown') AS device, COUNT(DISTINCT visitor_id) AS visitors
+          FROM visits
+          WHERE created_at >= datetime('now', ?)
+          GROUP BY COALESCE(device_type, 'unknown')
+          ORDER BY visitors DESC`,
+        args: [currentInterval]
+      })
     ]);
+
+    const now = new Date();
+    const cutoff = new Date(now);
+    cutoff.setUTCDate(cutoff.getUTCDate() - days);
+
+    const byDayVisitors = new Map();
+    for (const row of visitsDailyResult.rows || []) {
+      byDayVisitors.set(String(row.day), toNumber(row.visitors));
+    }
+
+    const byDayEvents = new Map();
+    for (const row of eventsDailyResult.rows || []) {
+      byDayEvents.set(String(row.day), {
+        resumeDownloads: toNumber(row.resume_downloads),
+        projectClicks: toNumber(row.project_clicks),
+        interactions: toNumber(row.interactions),
+        avgScroll: Number(row.avg_scroll) || 0
+      });
+    }
+
+    const buildSpark = (picker) => {
+      const out = [];
+      for (let i = 13; i >= 0; i -= 1) {
+        const d = new Date(now);
+        d.setUTCDate(d.getUTCDate() - i);
+        const key = d.toISOString().slice(0, 10);
+        out.push(Math.round(picker(key)));
+      }
+      return out;
+    };
+
+    const totals = totalsResult.rows[0] || {};
+    const uniqueVisitors = toNumber(totals.unique_visitors);
+    const resumeDownloads = toNumber(totals.resume_downloads);
+    const projectClicks = toNumber(totals.project_clicks);
+    const interactions = toNumber(totals.interactions);
+    const avgScrollDepth = Number(totals.avg_scroll_depth) || 0;
+    const conversionRate = toRatio(resumeDownloads + projectClicks, uniqueVisitors) * 100;
+    const avgInteractionsPerUser = toRatio(interactions, uniqueVisitors);
+    const engagementScore = Math.min(100, (avgScrollDepth * 0.7) + (avgInteractionsPerUser * 30));
+
+    let prevVisitors = 0;
+    let prevResume = 0;
+    let prevProjects = 0;
+    let prevInteractions = 0;
+    let prevScrollWeighted = 0;
+    let prevScrollDays = 0;
+
+    for (const [day, visitors] of byDayVisitors.entries()) {
+      const date = new Date(`${day}T00:00:00Z`);
+      const eventRow = byDayEvents.get(day) || { resumeDownloads: 0, projectClicks: 0, interactions: 0, avgScroll: 0 };
+      if (date < cutoff) {
+        prevVisitors += visitors;
+        prevResume += eventRow.resumeDownloads;
+        prevProjects += eventRow.projectClicks;
+        prevInteractions += eventRow.interactions;
+        if (eventRow.avgScroll > 0) {
+          prevScrollWeighted += eventRow.avgScroll;
+          prevScrollDays += 1;
+        }
+      }
+    }
+
+    const prevAvgScroll = prevScrollDays > 0 ? prevScrollWeighted / prevScrollDays : 0;
+    const prevConversionRate = toRatio(prevResume + prevProjects, prevVisitors) * 100;
+    const prevAvgInteractionsPerUser = toRatio(prevInteractions, prevVisitors);
+    const prevEngagementScore = Math.min(100, (prevAvgScroll * 0.7) + (prevAvgInteractionsPerUser * 30));
+
+    const returningUsers = toNumber(returningResult.rows[0]?.returning_users);
+    const returningUserRatio = toRatio(returningUsers, uniqueVisitors) * 100;
+
+    const kpis = {
+      uniqueVisitors: {
+        value: uniqueVisitors,
+        changePct: percentChange(uniqueVisitors, prevVisitors),
+        sparkline: buildSpark((day) => byDayVisitors.get(day) || 0)
+      },
+      conversionRate: {
+        value: Number(conversionRate.toFixed(2)),
+        changePct: percentChange(conversionRate, prevConversionRate),
+        sparkline: buildSpark((day) => {
+          const e = byDayEvents.get(day) || { resumeDownloads: 0, projectClicks: 0 };
+          const v = byDayVisitors.get(day) || 0;
+          return toRatio(e.resumeDownloads + e.projectClicks, v) * 100;
+        })
+      },
+      resumeDownloads: {
+        value: resumeDownloads,
+        changePct: percentChange(resumeDownloads, prevResume),
+        sparkline: buildSpark((day) => (byDayEvents.get(day)?.resumeDownloads || 0))
+      },
+      projectClicks: {
+        value: projectClicks,
+        changePct: percentChange(projectClicks, prevProjects),
+        sparkline: buildSpark((day) => (byDayEvents.get(day)?.projectClicks || 0))
+      },
+      engagementScore: {
+        value: Number(engagementScore.toFixed(1)),
+        changePct: percentChange(engagementScore, prevEngagementScore),
+        sparkline: buildSpark((day) => {
+          const e = byDayEvents.get(day) || { interactions: 0, avgScroll: 0 };
+          const v = byDayVisitors.get(day) || 0;
+          return Math.min(100, (e.avgScroll * 0.7) + (toRatio(e.interactions, v) * 30));
+        })
+      },
+      avgScrollDepth: {
+        value: Number(avgScrollDepth.toFixed(1)),
+        changePct: percentChange(avgScrollDepth, prevAvgScroll),
+        sparkline: buildSpark((day) => (byDayEvents.get(day)?.avgScroll || 0))
+      }
+    };
+
+    const insights = [];
+    if (kpis.conversionRate.value < 5) {
+      insights.push('Conversion rate is below 5%. Consider emphasizing resume CTA and project links above the fold.');
+    }
+    if (kpis.avgScrollDepth.value < 45) {
+      insights.push('Average scroll depth is low. Consider tightening above-the-fold copy and stronger visual hooks.');
+    }
 
     res.json({
       ok: true,
-      totals: {
-        visits: toNumber(totalVisitsResult.rows[0]?.total),
-        visitors: toNumber(totalVisitorsResult.rows[0]?.total),
-        pageviews: toNumber(totalPageviewsResult.rows[0]?.total)
+      days,
+      kpis,
+      derived: {
+        conversionRate: Number(conversionRate.toFixed(2)),
+        engagementScore: Number(engagementScore.toFixed(1)),
+        avgInteractionsPerUser: Number(avgInteractionsPerUser.toFixed(2)),
+        returningUserRatio: Number(returningUserRatio.toFixed(2))
       },
-      countries: countryResult.rows.map((row) => ({ label: row.label, total: toNumber(row.total) })),
-      devices: deviceResult.rows.map((row) => ({ label: row.label, total: toNumber(row.total) })),
-      operatingSystems: osResult.rows.map((row) => ({ label: row.label, total: toNumber(row.total) }))
+      segmentation: {
+        newVsReturning: {
+          newUsers: Math.max(0, uniqueVisitors - returningUsers),
+          returningUsers
+        },
+        byCountry: countryResult.rows.map((row) => ({
+          country: row.country,
+          visitors: toNumber(row.visitors)
+        })),
+        byDevice: deviceResult.rows.map((row) => ({
+          device: row.device,
+          visitors: toNumber(row.visitors)
+        }))
+      },
+      insights
     });
   } catch (error) {
     console.error('Stats summary error:', error);
@@ -675,13 +929,277 @@ app.get('/api/stats/daily', requireAuth, async (req, res) => {
   }
 });
 
+app.get('/api/stats/sources', requireAuth, async (req, res) => {
+  try {
+    const days = Math.min(Math.max(Number.parseInt(req.query.days || '30', 10), 7), 180);
+    const interval = `-${days} days`;
+
+    const visitsResult = await db.execute({
+      sql: `SELECT session_id, COALESCE(referrer, '') AS referrer
+        FROM visits
+        WHERE created_at >= datetime('now', ?)`,
+      args: [interval]
+    });
+
+    const conversionsResult = await db.execute({
+      sql: `SELECT session_id,
+          SUM(CASE WHEN event_type IN ('resume_download', 'project_click') THEN 1 ELSE 0 END) AS conversions,
+          SUM(CASE WHEN event_type IN ('section_view', 'project_click', 'resume_download', 'contact_click', 'outbound_click') THEN 1 ELSE 0 END) AS interactions,
+          AVG(CASE WHEN event_type = 'scroll' THEN CAST(json_extract(metadata_json, '$.scrollDepth') AS REAL) END) AS avg_scroll
+        FROM events
+        WHERE created_at >= datetime('now', ?)
+        GROUP BY session_id`,
+      args: [interval]
+    });
+
+    const bySession = new Map(conversionsResult.rows.map((row) => [row.session_id, row]));
+    const bySource = new Map();
+
+    for (const row of visitsResult.rows || []) {
+      const source = classifySource(row.referrer);
+      const sessionMetrics = bySession.get(row.session_id) || { conversions: 0, interactions: 0, avg_scroll: 0 };
+
+      const current = bySource.get(source) || {
+        source,
+        visitors: 0,
+        conversions: 0,
+        interactions: 0,
+        scrollTotal: 0,
+        scrollSessions: 0
+      };
+
+      current.visitors += 1;
+      current.conversions += toNumber(sessionMetrics.conversions);
+      current.interactions += toNumber(sessionMetrics.interactions);
+      if (Number(sessionMetrics.avg_scroll) > 0) {
+        current.scrollTotal += Number(sessionMetrics.avg_scroll);
+        current.scrollSessions += 1;
+      }
+
+      bySource.set(source, current);
+    }
+
+    const table = Array.from(bySource.values())
+      .map((row) => ({
+        source: row.source,
+        visitors: row.visitors,
+        conversionRate: Number((toRatio(row.conversions, row.visitors) * 100).toFixed(2)),
+        avgEngagement: Number(((row.scrollSessions ? row.scrollTotal / row.scrollSessions : 0) * 0.6 + (toRatio(row.interactions, row.visitors) * 40)).toFixed(2))
+      }))
+      .sort((a, b) => b.visitors - a.visitors);
+
+    res.json({
+      ok: true,
+      days,
+      chart: table.map((row) => ({ source: row.source, visitors: row.visitors })),
+      table
+    });
+  } catch (error) {
+    console.error('Sources stats error:', error);
+    res.status(500).json({ ok: false, message: 'Failed to load sources stats.' });
+  }
+});
+
+app.get('/api/stats/funnel', requireAuth, async (req, res) => {
+  try {
+    const days = Math.min(Math.max(Number.parseInt(req.query.days || '30', 10), 7), 180);
+    const interval = `-${days} days`;
+
+    const [sessionsResult, sectionResult, engagementResult] = await Promise.all([
+      db.execute({
+        sql: `SELECT DISTINCT session_id FROM visits WHERE created_at >= datetime('now', ?)`,
+        args: [interval]
+      }),
+      db.execute({
+        sql: `SELECT session_id, COALESCE(event_label, json_extract(metadata_json, '$.section'), '') AS section
+          FROM events
+          WHERE created_at >= datetime('now', ?)
+            AND event_type = 'section_view'`,
+        args: [interval]
+      }),
+      db.execute({
+        sql: `SELECT
+            COALESCE(event_label, json_extract(metadata_json, '$.section'), 'unknown') AS section,
+            COUNT(*) AS interactions
+          FROM events
+          WHERE created_at >= datetime('now', ?)
+            AND event_type IN ('section_view', 'project_click', 'resume_download', 'contact_click', 'outbound_click')
+          GROUP BY COALESCE(event_label, json_extract(metadata_json, '$.section'), 'unknown')`,
+        args: [interval]
+      })
+    ]);
+
+    const sessionCount = new Set((sessionsResult.rows || []).map((row) => row.session_id)).size;
+    const steps = ['Hero', 'About', 'Skills', 'Projects', 'Contact'];
+    const perStepSessions = new Map(steps.map((step) => [step, new Set()]));
+
+    for (const row of sectionResult.rows || []) {
+      const step = sectionStep(row.section);
+      if (step && perStepSessions.has(step)) {
+        perStepSessions.get(step).add(row.session_id);
+      }
+    }
+
+    const funnel = steps.map((step, index) => {
+      const visitors = step === 'Hero' ? sessionCount : perStepSessions.get(step).size;
+      const prevVisitors = index === 0
+        ? sessionCount
+        : (steps[index - 1] === 'Hero' ? sessionCount : perStepSessions.get(steps[index - 1]).size);
+      const dropOff = Math.max(0, prevVisitors - visitors);
+      return {
+        step,
+        visitors,
+        dropOffPct: Number((toRatio(dropOff, prevVisitors) * 100).toFixed(2))
+      };
+    });
+
+    const sectionEngagement = (engagementResult.rows || []).map((row) => ({
+      section: sectionStep(row.section) || row.section || 'Unknown',
+      interactions: toNumber(row.interactions)
+    }));
+
+    res.json({
+      ok: true,
+      days,
+      funnel,
+      sectionEngagement
+    });
+  } catch (error) {
+    console.error('Funnel stats error:', error);
+    res.status(500).json({ ok: false, message: 'Failed to load funnel stats.' });
+  }
+});
+
+app.get('/api/stats/conversions', requireAuth, async (req, res) => {
+  try {
+    const days = Math.min(Math.max(Number.parseInt(req.query.days || '30', 10), 7), 180);
+    const interval = `-${days} days`;
+
+    const [trendResult, byDeviceResult, byCountryResult, scrollDepthResult] = await Promise.all([
+      db.execute({
+        sql: `SELECT
+            DATE(created_at) AS day,
+            SUM(CASE WHEN event_type = 'resume_download' THEN 1 ELSE 0 END) AS resume_downloads,
+            SUM(CASE WHEN event_type = 'project_click' THEN 1 ELSE 0 END) AS project_clicks
+          FROM events
+          WHERE created_at >= datetime('now', ?)
+          GROUP BY DATE(created_at)
+          ORDER BY day ASC`,
+        args: [interval]
+      }),
+      db.execute({
+        sql: `SELECT
+            COALESCE(v.device_type, 'unknown') AS segment,
+            COUNT(DISTINCT v.visitor_id) AS visitors,
+            SUM(CASE WHEN e.event_type IN ('resume_download', 'project_click') THEN 1 ELSE 0 END) AS conversions
+          FROM visits v
+          LEFT JOIN events e ON e.session_id = v.session_id AND e.created_at >= datetime('now', ?)
+          WHERE v.created_at >= datetime('now', ?)
+          GROUP BY COALESCE(v.device_type, 'unknown')
+          ORDER BY visitors DESC`,
+        args: [interval, interval]
+      }),
+      db.execute({
+        sql: `SELECT
+            COALESCE(v.country, 'Unknown') AS segment,
+            COUNT(DISTINCT v.visitor_id) AS visitors,
+            SUM(CASE WHEN e.event_type IN ('resume_download', 'project_click') THEN 1 ELSE 0 END) AS conversions
+          FROM visits v
+          LEFT JOIN events e ON e.session_id = v.session_id AND e.created_at >= datetime('now', ?)
+          WHERE v.created_at >= datetime('now', ?)
+          GROUP BY COALESCE(v.country, 'Unknown')
+          ORDER BY visitors DESC
+          LIMIT 10`,
+        args: [interval, interval]
+      }),
+      db.execute({
+        sql: `SELECT CAST(json_extract(metadata_json, '$.scrollDepth') AS INTEGER) AS depth, COUNT(*) AS total
+          FROM events
+          WHERE created_at >= datetime('now', ?)
+            AND event_type = 'scroll'
+            AND metadata_json IS NOT NULL
+          GROUP BY CAST(json_extract(metadata_json, '$.scrollDepth') AS INTEGER)
+          ORDER BY depth ASC`,
+        args: [interval]
+      })
+    ]);
+
+    const normalizeSegment = (rows) => rows.map((row) => {
+      const visitors = toNumber(row.visitors);
+      const conversions = toNumber(row.conversions);
+      return {
+        segment: row.segment,
+        visitors,
+        conversions,
+        conversionRate: Number((toRatio(conversions, visitors) * 100).toFixed(2))
+      };
+    });
+
+    res.json({
+      ok: true,
+      days,
+      trend: (trendResult.rows || []).map((row) => ({
+        day: row.day,
+        resumeDownloads: toNumber(row.resume_downloads),
+        projectClicks: toNumber(row.project_clicks)
+      })),
+      byDevice: normalizeSegment(byDeviceResult.rows || []),
+      byCountry: normalizeSegment(byCountryResult.rows || []),
+      scrollDistribution: (scrollDepthResult.rows || []).map((row) => ({
+        depth: Math.max(0, Math.min(100, toNumber(row.depth))),
+        users: toNumber(row.total)
+      }))
+    });
+  } catch (error) {
+    console.error('Conversions stats error:', error);
+    res.status(500).json({ ok: false, message: 'Failed to load conversion stats.' });
+  }
+});
+
 app.get('/api/stats/recent', requireAuth, async (req, res) => {
   try {
     const perPage = Math.min(Math.max(Number.parseInt(req.query.perPage || '20', 10), 1), 100);
     const page = Math.max(Number.parseInt(req.query.page || '1', 10), 1);
-    const offset = (page - 1) * perPage;
+    const days = Math.min(Math.max(Number.parseInt(req.query.days || '30', 10), 1), 365);
+    const eventType = normalizeEventType(req.query.eventType, 'all');
+    const country = normalizeString(req.query.country, 80);
+    const search = normalizeString(req.query.search, 120);
+    const interval = `-${days} days`;
 
-    const totalResult = await db.execute("SELECT COUNT(*) AS total FROM events WHERE event_type = 'pageview'");
+    const whereClauses = [`e.created_at >= datetime('now', ?)`];
+    const whereArgs = [interval];
+
+    if (eventType !== 'all') {
+      whereClauses.push('e.event_type = ?');
+      whereArgs.push(eventType);
+    }
+
+    if (country && country.toLowerCase() !== 'all') {
+      whereClauses.push(`COALESCE(v.country, 'Unknown') = ?`);
+      whereArgs.push(country);
+    }
+
+    if (search) {
+      whereClauses.push(`(
+        LOWER(COALESCE(e.event_type, '')) LIKE LOWER(?)
+        OR LOWER(COALESCE(e.event_label, '')) LIKE LOWER(?)
+        OR LOWER(COALESCE(e.path, '')) LIKE LOWER(?)
+        OR LOWER(COALESCE(e.referrer, '')) LIKE LOWER(?)
+      )`);
+      const pattern = `%${search}%`;
+      whereArgs.push(pattern, pattern, pattern, pattern);
+    }
+
+    const whereSql = whereClauses.join(' AND ');
+
+    const totalResult = await db.execute({
+      sql: `SELECT COUNT(*) AS total
+        FROM events e
+        LEFT JOIN visits v ON v.session_id = e.session_id
+        WHERE ${whereSql}`,
+      args: whereArgs
+    });
+
     const total = toNumber(totalResult.rows[0]?.total);
     const totalPages = Math.max(Math.ceil(total / perPage), 1);
     const safePage = Math.min(page, totalPages);
@@ -692,8 +1210,12 @@ app.get('/api/stats/recent', requireAuth, async (req, res) => {
         e.id AS event_id,
         e.created_at,
         e.event_type,
+        e.event_category,
+        e.event_label,
+        e.target_url,
         e.path,
         e.referrer,
+        e.metadata_json,
         v.country,
         v.city,
         v.region,
@@ -708,15 +1230,16 @@ app.get('/api/stats/recent', requireAuth, async (req, res) => {
       FROM events e
       LEFT JOIN visits v ON v.session_id = e.session_id
       LEFT JOIN sessions s ON s.session_id = e.session_id
-      WHERE e.event_type = 'pageview'
+      WHERE ${whereSql}
       ORDER BY e.created_at DESC
       LIMIT ?
       OFFSET ?`,
-      args: [perPage, safeOffset]
+      args: [...whereArgs, perPage, safeOffset]
     });
 
     res.json({
       ok: true,
+      days,
       records: result.rows,
       paging: {
         total,
@@ -749,8 +1272,7 @@ app.delete('/api/stats/events', requireAuth, async (req, res) => {
     const affectedSessionsResult = await db.execute({
       sql: `SELECT DISTINCT session_id
         FROM events
-        WHERE event_type = 'pageview'
-          AND id IN (${placeholders})`,
+        WHERE id IN (${placeholders})`,
       args: eventIds
     });
 
@@ -760,8 +1282,7 @@ app.delete('/api/stats/events', requireAuth, async (req, res) => {
 
     const deleteEventsResult = await db.execute({
       sql: `DELETE FROM events
-        WHERE event_type = 'pageview'
-          AND id IN (${placeholders})`,
+        WHERE id IN (${placeholders})`,
       args: eventIds
     });
 
@@ -774,7 +1295,6 @@ app.delete('/api/stats/events', requireAuth, async (req, res) => {
             AND NOT EXISTS (
               SELECT 1 FROM events e
               WHERE e.session_id = visits.session_id
-                AND e.event_type = 'pageview'
             )`,
         args: affectedSessionIds
       });
