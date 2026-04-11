@@ -20,27 +20,34 @@ if (/\/src\/stats-main\.js/i.test(html)) {
   fail('stats.html references /src/stats-main.js (dev entry). Production must use bundled assets.');
 }
 
-if (!/\.\/assets\/stats-latest\.js/i.test(html)) {
-  fail('stats.html must reference ./assets/stats-latest.js');
+if (!/\.\/assets\/stats-[^"'\s]+\.js/i.test(html)) {
+  fail('stats.html must reference a bundled ./assets/stats-*.js file.');
 }
 
-if (!/\.\/assets\/stats-latest\.css/i.test(html)) {
-  fail('stats.html must reference ./assets/stats-latest.css');
+if (!/\.\/assets\/stats-[^"'\s]+\.css/i.test(html)) {
+  fail('stats.html must reference a bundled ./assets/stats-*.css file.');
 }
 
 if (/<script[^>]+src=["'][^"']+\.(css|png|jpe?g|gif|webp)["']/i.test(html)) {
   fail('stats.html has a <script> tag pointing to a non-JS asset (css/image).');
 }
 
-const latestJsPath = path.join(assetsDir, 'stats-latest.js');
-const latestCssPath = path.join(assetsDir, 'stats-latest.css');
+const scriptMatch = html.match(/<script[^>]+src=["'](\.\/assets\/stats-[^"'\s]+\.js)["']/i);
+const styleMatch = html.match(/<link[^>]+href=["'](\.\/assets\/stats-[^"'\s]+\.css)["']/i);
 
-if (!fs.existsSync(latestJsPath)) {
-  fail('assets/stats-latest.js is missing.');
+if (!scriptMatch || !styleMatch) {
+  fail('stats.html is missing expected bundled stats script/style references.');
 }
 
-if (!fs.existsSync(latestCssPath)) {
-  fail('assets/stats-latest.css is missing.');
+const bundledJsPath = path.join(rootDir, scriptMatch[1].replace(/^\.\//, ''));
+const bundledCssPath = path.join(rootDir, styleMatch[1].replace(/^\.\//, ''));
+
+if (!fs.existsSync(bundledJsPath)) {
+  fail(`Bundled stats script not found: ${scriptMatch[1]}`);
+}
+
+if (!fs.existsSync(bundledCssPath)) {
+  fail(`Bundled stats stylesheet not found: ${styleMatch[1]}`);
 }
 
 console.log('[check-stats-bundle] OK: stats.html points to stable bundled assets.');

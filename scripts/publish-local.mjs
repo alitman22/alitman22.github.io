@@ -1,4 +1,4 @@
-import { cp, mkdir, readdir, readFile, stat, writeFile } from 'node:fs/promises';
+import { cp, mkdir, readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -39,9 +39,9 @@ async function publishToRoot() {
 
   await cp(distAssetsDir, rootAssetsDir, { recursive: true, force: true });
 
-  // Compatibility layer for stale cached stats.html:
-  // overwrite all previously published stats-*.js bundles with the latest
-  // compiled stats chunk so old HTML references still execute new logic.
+  // Keep historical stats bundles in place to avoid short-lived stale HTML 404s,
+  // but do not rewrite stats.html to stable alias names. Using hashed assets from
+  // dist/stats.html prevents stale-cache MIME issues on module scripts.
   const distAssets = await readdir(distAssetsDir);
   const latestStatsBundle = distAssets.find((name) => /^stats-.*\.js$/.test(name));
 
@@ -55,29 +55,6 @@ async function publishToRoot() {
         { force: true }
       );
     }
-
-    // Publish a stable alias to avoid stale immutable hash caching issues.
-    await cp(
-      path.join(distAssetsDir, latestStatsBundle),
-      path.join(rootAssetsDir, 'stats-latest.js'),
-      { force: true }
-    );
-
-    const latestStatsCss = distAssets.find((name) => /^stats-.*\.css$/.test(name));
-    if (latestStatsCss) {
-      await cp(
-        path.join(distAssetsDir, latestStatsCss),
-        path.join(rootAssetsDir, 'stats-latest.css'),
-        { force: true }
-      );
-    }
-
-    // Rewrite root stats.html to the stable alias names.
-    const rootStatsHtml = await readFile(rootStatsPath, 'utf8');
-    const rewrittenStatsHtml = rootStatsHtml
-      .replace(/\.\/assets\/stats-[^"\s]+\.js/g, './assets/stats-latest.js')
-      .replace(/\.\/assets\/stats-[^"\s]+\.css/g, './assets/stats-latest.css');
-    await writeFile(rootStatsPath, rewrittenStatsHtml, 'utf8');
   }
 
   console.log('Local publish complete: root index.html, root stats.html, and assets/ synced from dist/.');
