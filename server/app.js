@@ -79,6 +79,19 @@ function isLocalhostIp(ip) {
   return false;
 }
 
+function isLocalhostUrl(value) {
+  const raw = normalizeString(value, 500);
+  if (!raw) return false;
+
+  try {
+    const parsed = new URL(raw);
+    const host = String(parsed.hostname || '').toLowerCase();
+    return host === 'localhost' || host === '127.0.0.1' || host === '0.0.0.0';
+  } catch {
+    return /localhost|127\.0\.0\.1|0\.0\.0\.0/i.test(raw);
+  }
+}
+
 function parseUserAgent(userAgent) {
   const ua = String(userAgent || '').toLowerCase();
   const browser = { name: null, version: null };
@@ -370,6 +383,7 @@ app.post('/api/track', trackLimiter, async (req, res) => {
     const metadataJson = normalizeMetadata(metadataPayload);
     const path = normalizeString(req.body?.path, 400) || '/';
     const referrer = sanitizeReferrer(req.body?.referrer);
+    const originHeader = normalizeString(req.headers.origin || '', 300);
     const visitorId = normalizeString(req.body?.visitorId, 80);
     const sessionId = normalizeString(req.body?.sessionId, 80);
 
@@ -393,6 +407,12 @@ app.post('/api/track', trackLimiter, async (req, res) => {
     // Ignore localhost development traffic
     if (isLocalhostIp(ipAddress)) {
       res.json({ ok: true, ignored: 'localhost' });
+      return;
+    }
+
+    // Also ignore localhost-originated events forwarded to remote API.
+    if (isLocalhostUrl(referrer) || isLocalhostUrl(originHeader)) {
+      res.json({ ok: true, ignored: 'localhost-origin' });
       return;
     }
 

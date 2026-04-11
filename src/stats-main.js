@@ -14,6 +14,7 @@ const state = {
     query: ''
   },
   data: null,
+  selectedEventIds: new Set(),
   refreshTimer: null
 };
 
@@ -220,13 +221,13 @@ function renderLogin(message = '') {
   });
 }
 
-function kpiCard(label, metric, unit = '') {
+function kpiCard(label, metric, unit = '', helpText = '') {
   const change = Number(metric?.changePct) || 0;
   const value = Number(metric?.value) || 0;
   return `
     <article class="kpi-card">
       <header>
-        <h3>${esc(label)}</h3>
+        <h3>${esc(label)}${helpText ? ` <span class="kpi-help" title="${esc(helpText)}">?</span>` : ''}</h3>
         <span class="kpi-trend ${trendClass(change)}">${change >= 0 ? '+' : ''}${change.toFixed(1)}%</span>
       </header>
       <p class="kpi-value">${fmt(value, unit === '%' ? 1 : 0)}${unit}</p>
@@ -251,13 +252,16 @@ function renderDashboard(data) {
 
   const recentRows = records.map((row) => {
     const when = new Date(row.created_at).toLocaleString();
-    const ipMasked = String(row.ip_address || '-').replace(/(\d+\.\d+\.\d+)\.\d+/, '$1.xxx');
+    const location = `${row.country || 'Unknown'}${row.city ? ` / ${row.city}` : ''}`;
+    const isChecked = state.selectedEventIds.has(Number(row.event_id));
     return `
       <tr>
+        <td><input type="checkbox" class="event-select" value="${Number(row.event_id) || 0}" ${isChecked ? 'checked' : ''} /></td>
         <td>${esc(when)}</td>
-        <td>${esc(ipMasked)}</td>
-        <td>${esc(row.country || 'Unknown')}</td>
+        <td>${esc(row.ip_address || '-')}</td>
+        <td>${esc(location)}</td>
         <td>${esc(row.device_type || '-')}</td>
+        <td>${esc(row.os_name || '-')}</td>
         <td>${esc(row.event_type || '-')}</td>
         <td>${esc(row.referrer || '-')}</td>
       </tr>
@@ -287,12 +291,12 @@ function renderDashboard(data) {
       </header>
 
       <section class="kpi-row">
-        ${kpiCard('Unique Visitors', k.uniqueVisitors)}
-        ${kpiCard('Conversion Rate', k.conversionRate, '%')}
-        ${kpiCard('Resume Downloads', k.resumeDownloads)}
-        ${kpiCard('Project Clicks', k.projectClicks)}
-        ${kpiCard('Engagement Score', k.engagementScore)}
-        ${kpiCard('Avg Scroll Depth', k.avgScrollDepth, '%')}
+        ${kpiCard('Unique Visitors', k.uniqueVisitors, '', 'Count of distinct anonymous users in selected period.')}
+        ${kpiCard('Conversion Rate', k.conversionRate, '%', 'Ratio of resume downloads + project clicks to unique visitors.')}
+        ${kpiCard('Resume Downloads', k.resumeDownloads, '', 'How many resume download events happened in selected period.')}
+        ${kpiCard('Project Clicks', k.projectClicks, '', 'How many outbound project link clicks happened in selected period.')}
+        ${kpiCard('Engagement Score', k.engagementScore, '', 'Composite signal from scroll depth and interactions per user.')}
+        ${kpiCard('Avg Scroll Depth', k.avgScrollDepth, '%', 'Average maximum scroll depth reached by users.')}
       </section>
 
       <section class="grid two">
@@ -380,6 +384,7 @@ function renderDashboard(data) {
         <div class="panel-head">
           <h2>Event Log (Developer View)</h2>
           <div class="filter-row">
+            <label class="event-select-all"><input id="select-all-events" type="checkbox" /> Select page</label>
             <select id="filter-event-type">
               ${eventTypes.map((type) => `<option value="${type}" ${state.filters.eventType === type ? 'selected' : ''}>${type}</option>`).join('')}
             </select>
@@ -387,6 +392,7 @@ function renderDashboard(data) {
               ${countries.map((country) => `<option value="${esc(country)}" ${state.filters.country === country ? 'selected' : ''}>${esc(country)}</option>`).join('')}
             </select>
             <input id="filter-query" type="search" placeholder="Search path / referrer / event" value="${esc(state.filters.query)}" />
+            <button id="delete-selected" type="button" class="danger">Delete Selected</button>
             <button id="apply-filters" type="button">Apply</button>
           </div>
         </div>
@@ -394,15 +400,17 @@ function renderDashboard(data) {
         <table class="data-table mono">
           <thead>
             <tr>
+              <th>Select</th>
               <th>Timestamp</th>
-              <th>IP (masked)</th>
-              <th>Country</th>
+              <th>IP</th>
+              <th>Country / City</th>
               <th>Device</th>
+              <th>OS</th>
               <th>Event Type</th>
               <th>Referrer</th>
             </tr>
           </thead>
-          <tbody>${recentRows || '<tr><td colspan="6">No events</td></tr>'}</tbody>
+          <tbody>${recentRows || '<tr><td colspan="8">No events</td></tr>'}</tbody>
         </table>
 
         <div class="pager">
@@ -455,6 +463,48 @@ function bindDashboardEvents() {
     loadDashboard();
   });
 
+  document.querySelectorAll('.event-select').forEach((checkbox) => {
+    checkbox.addEventListener('change', (event) => {
+      const id = Number.parseInt(event.target.value, 10);
+      if (!Number.isFinite(id)) return;
+      if (event.target.checked) {
+        state.selectedEventIds.add(id);
+      } else {
+        state.selectedEventIds.delete(id);
+      }
+    });
+  });
+
+  document.getElementById('select-all-events')?.addEventListener('change', (event) => {
+    const checked = Boolean(event.target.checked);
+    document.querySelectorAll('.event-select').forEach((checkbox) => {
+      checkbox.checked = checked;
+      const id = Number.parseInt(checkbox.value, 10);
+      if (!Number.isFinite(id)) return;
+      if (checked) state.selectedEventIds.add(id);
+      else state.selectedEventIds.delete(id);
+    });
+  });
+
+  document.getElementById('delete-selected')?.addEventListener('click', async () => {
+    const eventIds = Array.from(state.selectedEventIds.values());
+    if (eventIds.length === 0) return;
+
+    const confirmed = window.confirm(`Delete ${eventIds.length} selected record(s)?`);
+    if (!confirmed) return;
+
+    try {
+      await apiRequest('/api/stats/events', {
+        method: 'DELETE',
+        body: JSON.stringify({ eventIds })
+      });
+      state.selectedEventIds.clear();
+      await loadDashboard();
+    } catch (error) {
+      window.alert(error.message || 'Delete failed');
+    }
+  });
+
   document.getElementById('prev-page')?.addEventListener('click', () => {
     if (state.page > 1) {
       state.page -= 1;
@@ -470,6 +520,7 @@ function bindDashboardEvents() {
 
 async function loadDashboard() {
   try {
+    const selectedBefore = new Set(state.selectedEventIds);
     const query = new URLSearchParams({
       days: String(state.rangeDays),
       page: String(state.page),
@@ -488,6 +539,11 @@ async function loadDashboard() {
     ]);
 
     state.data = { summary, sources, funnel, conversions, recent };
+    state.selectedEventIds = new Set(
+      (recent.records || [])
+        .map((row) => Number.parseInt(String(row.event_id), 10))
+        .filter((id) => Number.isFinite(id) && selectedBefore.has(id))
+    );
     renderDashboard(state.data);
   } catch (error) {
     stopRefresh();

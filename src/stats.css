@@ -108,6 +108,20 @@ button.danger {
   color: var(--muted);
 }
 
+.kpi-help {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  margin-left: 0.35rem;
+  border-radius: 50%;
+  border: 1px solid #3d5a88;
+  color: #b9c9e3;
+  font-size: 0.65rem;
+  cursor: help;
+}
+
 .kpi-value {
   margin: 0.55rem 0 0.4rem;
   font-size: 1.65rem;
@@ -334,6 +348,20 @@ button.danger {
   gap: 0.45rem;
   align-items: center;
   flex-wrap: wrap;
+}
+
+.event-select-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.event-select-all input,
+.event-select {
+  width: 14px;
+  height: 14px;
 }
 
 .pager {
