@@ -57,6 +57,74 @@ function pct(value, digits = 1) {
   return `${num.toFixed(digits)}%`;
 }
 
+const COUNTRY_CODE_MAP = {
+  'turkiye': 'TR',
+  'turkey': 'TR',
+  'united states': 'US',
+  'usa': 'US',
+  'germany': 'DE',
+  'netherlands': 'NL',
+  'iran': 'IR',
+  'russia': 'RU',
+  'lithuania': 'LT',
+  'united kingdom': 'GB',
+  'uk': 'GB',
+  'france': 'FR',
+  'spain': 'ES',
+  'italy': 'IT',
+  'canada': 'CA',
+  'unknown': ''
+};
+
+function countryFlag(countryName) {
+  const key = String(countryName || '').trim().toLowerCase();
+  const code = COUNTRY_CODE_MAP[key] || '';
+  if (!code || code.length !== 2) return '';
+  return code
+    .toUpperCase()
+    .split('')
+    .map((ch) => String.fromCodePoint(127397 + ch.charCodeAt(0)))
+    .join('');
+}
+
+function withCountryFlag(countryName) {
+  const name = String(countryName || 'Unknown');
+  const flag = countryFlag(name);
+  return flag ? `${flag} ${name}` : name;
+}
+
+function osIcon(osName) {
+  const os = String(osName || '').toLowerCase();
+  if (os.includes('windows')) return '🪟';
+  if (os.includes('android')) return '🤖';
+  if (os.includes('ios') || os.includes('mac')) return '🍎';
+  if (os.includes('linux')) return '🐧';
+  return '💻';
+}
+
+function deviceIcon(deviceType) {
+  const device = String(deviceType || '').toLowerCase();
+  if (device.includes('mobile')) return '📱';
+  if (device.includes('tablet')) return '📲';
+  if (device.includes('desktop')) return '🖥️';
+  return '🧩';
+}
+
+function formatCountryCity(row) {
+  const country = withCountryFlag(row.country || 'Unknown');
+  const region = String(row.region || '').trim();
+  const city = String(row.city || '').trim();
+
+  // TR geo providers sometimes return district/neighborhood in city.
+  // Prefer region for a cleaner city-level readout and keep city in parentheses.
+  if (region && city && region.toLowerCase() !== city.toLowerCase()) {
+    return `${country} / ${region} (${city})`;
+  }
+  if (region) return `${country} / ${region}`;
+  if (city) return `${country} / ${city}`;
+  return country;
+}
+
 function trendClass(changePct) {
   if (changePct > 0.01) return 'trend-up';
   if (changePct < -0.01) return 'trend-down';
@@ -252,7 +320,7 @@ function renderDashboard(data) {
 
   const recentRows = records.map((row) => {
     const when = new Date(row.created_at).toLocaleString();
-    const location = `${row.country || 'Unknown'}${row.city ? ` / ${row.city}` : ''}`;
+    const location = formatCountryCity(row);
     const isChecked = state.selectedEventIds.has(Number(row.event_id));
     return `
       <tr>
@@ -260,8 +328,8 @@ function renderDashboard(data) {
         <td>${esc(when)}</td>
         <td>${esc(row.ip_address || '-')}</td>
         <td>${esc(location)}</td>
-        <td>${esc(row.device_type || '-')}</td>
-        <td>${esc(row.os_name || '-')}</td>
+        <td><span class="metric-icon" title="${esc(row.device_type || '-')}" aria-hidden="true">${deviceIcon(row.device_type)}</span> ${esc(row.device_type || '-')}</td>
+        <td><span class="metric-icon" title="${esc(row.os_name || '-')}" aria-hidden="true">${osIcon(row.os_name)}</span> ${esc(row.os_name || '-')}</td>
         <td>${esc(row.event_type || '-')}</td>
         <td>${esc(row.referrer || '-')}</td>
       </tr>
@@ -370,7 +438,7 @@ function renderDashboard(data) {
             <tbody>
               ${(conversions.byCountry || []).map((row) => `
                 <tr>
-                  <td>${esc(row.segment)}</td>
+                  <td>${esc(withCountryFlag(row.segment))}</td>
                   <td>${fmt(row.visitors)}</td>
                   <td>${pct(row.conversionRate, 1)}</td>
                 </tr>
