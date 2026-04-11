@@ -60,7 +60,7 @@ function App() {
             copy={copy}
             language={language}
             setLanguage={setLanguage}
-            showLanguageSwitch
+            showLanguageSwitch={isTurkeyRegion}
             darkMode={darkMode}
             setDarkMode={setDarkMode}
           />
