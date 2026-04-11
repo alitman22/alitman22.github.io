@@ -16,7 +16,7 @@ export const tr = {
     name: 'Ali Fattahi',
     role: 'Kıdemli DevOps Mühendisi\nBT Altyapı Mimarı',
     summary:
-      'Otomasyon ve DevOps en iyi uygulamalarını kullanarak dayanıklı ve ölçeklenebilir altyapılar inşa ediyorum. Karmaşık teknik zorlukları, kritik sistemlere güç veren zarif ve yüksek performanslı çözümlere dönüştürüyorum.',
+      'Yüksek erişilebilirlikli altyapılar tasarlıyor ve otomatize ediyor, düşük gecikmeli iş yükleri için Linux ve ağ performansını optimize ediyor, kritik sistemlerin ölçekli biçimde hızlı, güvenli ve dayanıklı kalmasını sağlayan üretim seviyesinde CI/CD ve gözlemlenebilirlik platformları kuruyorum.',
     ctaPrimary: 'İletişime Geç',
     ctaSecondary: 'Projeleri İncele',
     location: 'Antalya, Türkiye',
@@ -57,7 +57,7 @@ export const tr = {
     }
   },
   experience: {
-    title: 'Deneyim',
+    title: 'Profesyonel Yolculuk',
     jobs: [
       {
         role: 'DevOps ve Linux Sistem Yöneticisi',
@@ -123,7 +123,7 @@ export const tr = {
     ]
   },
   skillsSection: {
-    title: 'Yetenekler',
+    title: 'Temel Araç Kutusu',
     technicalTitle: 'Teknik Yetkinlikler',
     categories: [
       {
@@ -188,7 +188,7 @@ export const tr = {
     ]
   },
   study: {
-    title: 'Çalışma',
+    title: 'Odak ve Sertifikasyonlar',
     intro:
       'Altyapı alanında yerinde saymak bir risktir. Süregelen teknik gelişimim; bulut tabanlı orkestrasyon, ileri düzey mimari tasarım ve kurumsal ölçeklenebilirliği taşıyan araçlarda ustalaşmaya odaklanır.',
     certificationsTitle: 'Aktif Sertifikasyon Rotaları',
@@ -220,8 +220,8 @@ export const tr = {
     ]
   },
   projectsSection: {
-    title: 'Projeler',
-    kicker: 'Sahadan Gerçek Hikayeler',
+    title: 'Öne Çıkan Projeler',
+    kicker: 'Mimari ve Otomasyonun Pratikteki Karşılığı',
     problemLabel: 'Problem',
     challengesLabel: 'Zorluklar',
     solutionLabel: 'Çözüm',
@@ -229,7 +229,7 @@ export const tr = {
     openLinkLabel: "GitHub'da Aç",
     continueLinkLabel: "GitHub'da Devam Et",
     intro:
-      "Aşağıda teknik çalışmalarım, otomasyon scriptlerim ve altyapı projelerimden bir seçki bulunuyor. Geçmişte yoğun iş temposu, şirket gizliliği ve depoları düzgün şekilde dokümante etmeye zaman ayıramamak nedeniyle açık portföyüm sessiz kalmıştı. Artık AI'ı teknik yazı asistanı olarak kullanıyorum. Biçimlendirme ve düzeni AI üstlenirken ben çekirdek mühendislik kısmına odaklanıyorum. Dokümantasyon yer yer AI yazımı gibi geliyorsa nedeni budur. Ancak her proje, script ve çözüm %100 insan onaylıdır ve kariyerim boyunca karşılaştığım gerçek senaryolara dayanır.",
+      'Aşağıda altyapı tasarımları, otomasyon araçları ve CI/CD iş akışlarından seçilmiş bir portföy yer alıyor. Bu depolar, kariyerim boyunca tasarladığım ve yönettiğim gerçek dünya ve üretim seviyesi senaryoları yansıtır. Karmaşık operasyonel darboğazları çözme, güvenliği tasarımın parçası haline getirme ve yüksek erişilebilir sistemleri sıfırdan kurma yaklaşımımı gösterir.',
     items: [
       {
         title: 'Networking',
@@ -370,7 +370,7 @@ export const tr = {
     ]
   },
   experienceStories: {
-    title: 'Saha Hikayeleri ve Vaka Çalışmaları',
+    title: 'Savaş Hikayeleri ve Vaka Çalışmaları',
     kicker: 'Sahada Test Edilmiş Deneyim',
     intro:
       'Gerçek altyapı sorunları gerçek çözümler ister. Aşağıda kariyerimden seçilmiş vaka hikayeleri yer alıyor: hata ayıklama süreçleri, mimari kararlar ve sonuçlar. Bu bölümler yalnızca teknik beceriyi değil; dayanıklılığı, metodolojiyi ve üretim sistemlerini şekillendiren dersleri gösterir.',
