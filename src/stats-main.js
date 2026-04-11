@@ -528,6 +528,15 @@ function renderDashboard(data) {
             <select id="filter-country">
               ${countries.map((country) => `<option value="${esc(country)}" ${state.filters.country === country ? 'selected' : ''}>${esc(country)}</option>`).join('')}
             </select>
+            <label>
+              Rows
+              <select id="rows-per-page">
+                <option value="10" ${state.perPage === 10 ? 'selected' : ''}>10</option>
+                <option value="20" ${state.perPage === 20 ? 'selected' : ''}>20</option>
+                <option value="50" ${state.perPage === 50 ? 'selected' : ''}>50</option>
+                <option value="100" ${state.perPage === 100 ? 'selected' : ''}>100</option>
+              </select>
+            </label>
             <input id="filter-query" type="search" placeholder="Search path / referrer / event" value="${esc(state.filters.query)}" />
             <label class="event-select-all"><input id="compact-view" type="checkbox" ${state.compactEventTable ? 'checked' : ''} /> Compact</label>
             <button id="delete-selected" type="button" class="danger">Delete Selected</button>
@@ -597,6 +606,13 @@ function bindDashboardEvents() {
     state.filters.eventType = document.getElementById('filter-event-type')?.value || 'all';
     state.filters.country = document.getElementById('filter-country')?.value || 'all';
     state.filters.query = document.getElementById('filter-query')?.value || '';
+    state.page = 1;
+    loadDashboard();
+  });
+
+  document.getElementById('rows-per-page')?.addEventListener('change', (event) => {
+    const next = Number.parseInt(event.target.value, 10);
+    state.perPage = [10, 20, 50, 100].includes(next) ? next : 20;
     state.page = 1;
     loadDashboard();
   });
