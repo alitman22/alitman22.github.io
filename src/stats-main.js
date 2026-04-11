@@ -443,21 +443,19 @@ function renderDashboard(data) {
         </article>
         <article class="panel">
           <h2>Source Quality</h2>
-          <div class="table-scroll">
-            <table class="data-table">
-              <thead><tr><th>Source</th><th>Visitors</th><th>Conv%</th><th>Avg Engagement</th></tr></thead>
-              <tbody>
-                ${(sources.table || []).map((row) => `
-                  <tr>
-                    <td>${esc(row.source)}</td>
-                    <td>${fmt(row.visitors)}</td>
-                    <td>${pct(row.conversionRate, 1)}</td>
-                    <td>${fmt(row.avgEngagement, 1)}</td>
-                  </tr>
-                `).join('')}
-              </tbody>
-            </table>
-          </div>
+          <table class="data-table">
+            <thead><tr><th>Source</th><th>Visitors</th><th>Conv%</th><th>Avg Engagement</th></tr></thead>
+            <tbody>
+              ${(sources.table || []).map((row) => `
+                <tr>
+                  <td>${esc(row.source)}</td>
+                  <td>${fmt(row.visitors)}</td>
+                  <td>${pct(row.conversionRate, 1)}</td>
+                  <td>${fmt(row.avgEngagement, 1)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
         </article>
       </section>
 
@@ -504,20 +502,18 @@ function renderDashboard(data) {
         </article>
         <article class="panel">
           <h2>Geo Distribution</h2>
-          <div class="table-scroll">
-            <table class="data-table">
-              <thead><tr><th>Country</th><th>Visitors</th><th>Conv%</th></tr></thead>
-              <tbody>
-                ${(conversions.byCountry || []).map((row) => `
-                  <tr>
-                    <td>${esc(withCountryFlag(row.segment))}</td>
-                    <td>${fmt(row.visitors)}</td>
-                    <td>${pct(row.conversionRate, 1)}</td>
-                  </tr>
-                `).join('')}
-              </tbody>
-            </table>
-          </div>
+          <table class="data-table">
+            <thead><tr><th>Country</th><th>Visitors</th><th>Conv%</th></tr></thead>
+            <tbody>
+              ${(conversions.byCountry || []).map((row) => `
+                <tr>
+                  <td>${esc(withCountryFlag(row.segment))}</td>
+                  <td>${fmt(row.visitors)}</td>
+                  <td>${pct(row.conversionRate, 1)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
         </article>
       </section>
 
@@ -548,7 +544,7 @@ function renderDashboard(data) {
           </div>
         </div>
 
-        <div class="table-scroll">
+        <div class="table-scroll table-scroll-events">
           <table class="data-table mono">
             <thead>
               <tr>

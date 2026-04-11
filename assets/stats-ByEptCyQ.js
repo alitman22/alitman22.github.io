@@ -99,21 +99,19 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const H=""+new URL("logo-stats-My1w
         </article>
         <article class="panel">
           <h2>Source Quality</h2>
-          <div class="table-scroll">
-            <table class="data-table">
-              <thead><tr><th>Source</th><th>Visitors</th><th>Conv%</th><th>Avg Engagement</th></tr></thead>
-              <tbody>
-                ${(r.table||[]).map(o=>`
-                  <tr>
-                    <td>${m(o.source)}</td>
-                    <td>${E(o.visitors)}</td>
-                    <td>${C(o.conversionRate,1)}</td>
-                    <td>${E(o.avgEngagement,1)}</td>
-                  </tr>
-                `).join("")}
-              </tbody>
-            </table>
-          </div>
+          <table class="data-table">
+            <thead><tr><th>Source</th><th>Visitors</th><th>Conv%</th><th>Avg Engagement</th></tr></thead>
+            <tbody>
+              ${(r.table||[]).map(o=>`
+                <tr>
+                  <td>${m(o.source)}</td>
+                  <td>${E(o.visitors)}</td>
+                  <td>${C(o.conversionRate,1)}</td>
+                  <td>${E(o.avgEngagement,1)}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
         </article>
       </section>
 
@@ -157,20 +155,18 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const H=""+new URL("logo-stats-My1w
         </article>
         <article class="panel">
           <h2>Geo Distribution</h2>
-          <div class="table-scroll">
-            <table class="data-table">
-              <thead><tr><th>Country</th><th>Visitors</th><th>Conv%</th></tr></thead>
-              <tbody>
-                ${(s.byCountry||[]).map(o=>`
-                  <tr>
-                    <td>${m(M(o.segment))}</td>
-                    <td>${E(o.visitors)}</td>
-                    <td>${C(o.conversionRate,1)}</td>
-                  </tr>
-                `).join("")}
-              </tbody>
-            </table>
-          </div>
+          <table class="data-table">
+            <thead><tr><th>Country</th><th>Visitors</th><th>Conv%</th></tr></thead>
+            <tbody>
+              ${(s.byCountry||[]).map(o=>`
+                <tr>
+                  <td>${m(M(o.segment))}</td>
+                  <td>${E(o.visitors)}</td>
+                  <td>${C(o.conversionRate,1)}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
         </article>
       </section>
 
@@ -201,7 +197,7 @@ import"./modulepreload-polyfill-B5Qt9EMX.js";const H=""+new URL("logo-stats-My1w
           </div>
         </div>
 
-        <div class="table-scroll">
+        <div class="table-scroll table-scroll-events">
           <table class="data-table mono">
             <thead>
               <tr>

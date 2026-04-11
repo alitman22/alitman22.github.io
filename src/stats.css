@@ -23,6 +23,7 @@ body {
   font-family: "Inter", "Segoe UI", sans-serif;
   background: radial-gradient(circle at top right, #132544, var(--bg));
   color: var(--text);
+  overflow-x: hidden;
 }
 
 .analytics-shell {
@@ -323,14 +324,18 @@ button.danger {
 
 .table-scroll {
   width: 100%;
-  overflow-x: auto;
+  overflow-x: visible;
 }
 
 .table-scroll .data-table {
-  min-width: 560px;
+  min-width: 100%;
 }
 
-.table-scroll .data-table.mono {
+.table-scroll-events {
+  overflow-x: auto;
+}
+
+.table-scroll-events .data-table.mono {
   min-width: 980px;
 }
 
@@ -506,6 +511,15 @@ button.danger {
     padding: 0.75rem;
   }
 
+  .data-table {
+    table-layout: fixed;
+  }
+
+  .data-table th,
+  .data-table td {
+    word-break: break-word;
+  }
+
   .pager {
     flex-wrap: wrap;
     gap: 0.45rem;
@@ -520,6 +534,28 @@ button.danger {
 
   .topbar h1 {
     font-size: 1.2rem;
+  }
+
+  .topbar p {
+    font-size: 0.86rem;
+  }
+
+  .topbar-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.45rem;
+  }
+
+  .topbar-actions label {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  .topbar-actions button,
+  .topbar-actions select {
+    width: 100%;
   }
 
   .kpi-card {
@@ -562,17 +598,6 @@ button.danger {
 @media (max-width: 480px) {
   .analytics-shell {
     width: calc(100% - 0.7rem);
-  }
-
-  .topbar-actions {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.45rem;
-  }
-
-  .topbar-actions > * {
-    width: 100%;
   }
 
   .kpi-row {
