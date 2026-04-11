@@ -30,11 +30,9 @@ export const tr = {
   about: {
     title: 'Hakkımda',
     paragraphs: [
-      'Merhaba, ben Ali. On yılı aşkın süredir yalnızca çalışan değil, aynı zamanda üstün performans gösteren BT altyapıları tasarlıyor ve hayata geçiriyorum. Tutkum, tasarımı itibarıyla dayanıklı, verimli ve güvenli sistemler kurmaktır. Her zorluğa net bir yaklaşımla ilerlerim: temel problemi doğru tespit etmek, sağlam bir çözüm tasarlamak ve süreçleri kararlılıkla otomatize etmek.',
-      'Üst düzey bir ulusal veri merkezinde altyapı yönetiminden, yüksek frekanslı işlem sistemlerinin optimizasyonuna kadar uzanan kariyerim; bana Linux sistem yönetimi, DevOps pratikleri ve ağ mühendisliği alanlarında derin uzmanlık kazandırdı. Ağ Mühendisliği lisans eğitimim, sahadaki deneyimimi güçlü bir teorik temelle destekliyor.',
-      "Global ölçekte daha fazla proje üretebilmek ve açık teknoloji ekosistemlerinde derinleşmek için yakın zamanda İran'dan Türkiye'ye taşındım. Bu adım; bölgesel kısıtları aşmamı, uzmanlığımı daha da geliştirmemi ve uluslararası teknoloji ekosistemiyle doğrudan çalışmamı sağladı.",
-      'En iyi altyapının görünmez olduğuna inanıyorum: sadece sorunsuz çalışır. Operasyonel mükemmeliyet odaklı bu yaklaşım, tüm çalışmalarımın merkezindedir ve bu uzmanlığı vizyoner kurumlarda daha büyük sorumluluklara taşımayı hedefliyorum.',
-      'Teknik yetkinliğin ötesinde, ekipler arasında iş birliği ve netlik kültürünü güçlendirmeye önem veriyorum. Karmaşık altyapı konularını uygulanabilir stratejilere dönüştürmekten keyif alıyorum. Güçlü iletişim ve sürekli iyileştirme zihniyetini birleştirerek, inovasyonun hız kazandığı, güvenilirliğin tavizsiz korunduğu ve ekiplerin gerçek değer üretmeye odaklandığı ortamlar kurmayı hedefliyorum.'
+      'On yılı aşkın süredir kurumsal BT ortamlarını tasarlayan, ölçekleyen ve güvence altına alan bir Kıdemli DevOps Mühendisi ve Altyapı Mimarıyım. Uzmanlığım, derin fiziksel altyapı ile modern cloud-native orkestrasyon arasındaki boşluğu kapatır. Her zorluğa katı bir mühendislik felsefesiyle yaklaşırım: temel darboğazı doğru tespit et, yüksek erişilebilirlik için mimariyi kur ve otomasyonu kararlılıkla uygula.',
+      'Kariyerim boyunca, seçkin ulusal veri merkezlerinde petabayt seviyesinde depolama yönetiminden yüksek frekanslı işlem ağlarında mikrosaniye seviyesinde gecikme azaltımına kadar altyapının uç noktalarında çalıştım. Ağ Mühendisliği (Lisans) temelim, paket seviyesinde sorun giderme ve optimizasyon yapmamı sağlarken; DevOps uzmanlığım bu sistemlerin hızlı, güvenilir ve ölçekli biçimde tutarlı şekilde devreye alınmasını mümkün kılar.',
+      'Halen Antalya, Türkiye merkezli olarak global teknoloji ekosistemi içinde aktif şekilde çalışıyorum. Performanstan taviz vermeyen, ileri görüşlü mühendislik ekiplerine; bare-metal dayanıklılığı ile otomatikleşmiş cloud mimarisini birleştiren yaklaşımımı taşımaya odaklanıyorum.'
     ],
     cards: {
       education: {
