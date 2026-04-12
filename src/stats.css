@@ -268,8 +268,9 @@ button.danger {
 }
 
 .donut-svg {
-  width: 170px;
-  height: 170px;
+  width: min(170px, 100%);
+  height: auto;
+  aspect-ratio: 1 / 1;
 }
 
 .donut-svg circle {
@@ -444,65 +445,113 @@ button.danger {
   min-height: 1.2rem;
 }
 
+/* ─── 1280px: large tablet / small desktop ─── */
 @media (max-width: 1280px) {
   .kpi-row {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+
   .grid.three {
     grid-template-columns: 1fr;
   }
 }
 
+/* ─── 920px: tablet ─── */
 @media (max-width: 920px) {
   .analytics-shell {
-    width: calc(100% - 1rem);
+    /* Use padding so content fills the full viewport width cleanly */
+    width: 100%;
+    padding: 0 0.75rem;
     margin: 0.5rem auto 1rem;
-    gap: 0.7rem;
+    gap: 0.75rem;
   }
 
+  /* Topbar stacks vertically; actions row wraps inside */
   .topbar {
     flex-direction: column;
     align-items: stretch;
-    gap: 0.7rem;
+    gap: 0.55rem;
   }
 
   .topbar-actions {
-    justify-content: flex-start;
+    display: flex;
     flex-wrap: wrap;
+    gap: 0.5rem;
+    width: 100%;
   }
 
+  /* Period label inline with its select */
+  .topbar-actions > label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--muted);
+    font-size: 0.82rem;
+    flex: 0 0 auto;
+  }
+
+  /* Refresh / Logout buttons share remaining width */
+  .topbar-actions > button {
+    flex: 1 1 80px;
+    min-width: 0;
+  }
+
+  /* Single-column content grids */
   .grid.two {
     grid-template-columns: 1fr;
   }
 
+  /* KPI: 2 per row */
   .kpi-row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.6rem;
   }
 
+  /* Donut: SVG beside legend when space allows, single col otherwise */
   .donut-wrap {
-    grid-template-columns: 1fr;
+    grid-template-columns: auto 1fr;
   }
 
+  .donut-svg {
+    width: min(150px, 38vw);
+    height: auto;
+    aspect-ratio: 1 / 1;
+  }
+
+  /* Shorter charts */
+  .chart-svg {
+    height: 180px;
+  }
+
+  /* Bar label: flexible min-width */
   .bar-row {
-    grid-template-columns: 90px 1fr auto;
-  }
-
-  .filter-row {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 100px) 1fr auto;
     gap: 0.5rem;
   }
 
-  .filter-row > * {
+  /* Filter controls: natural flex-wrap */
+  .filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
     width: 100%;
   }
 
-  .filter-row label {
-    display: grid;
-    gap: 0.2rem;
+  .filter-row select,
+  .filter-row input[type="search"] {
+    flex: 1 1 130px;
+    min-width: 0;
+  }
+
+  .filter-row > button {
+    flex: 0 0 auto;
+  }
+
+  .filter-row > label {
+    display: inline-flex;
     align-items: center;
+    gap: 0.35rem;
+    flex: 0 0 auto;
     color: var(--muted);
     font-size: 0.78rem;
   }
@@ -511,13 +560,9 @@ button.danger {
     padding: 0.75rem;
   }
 
-  .data-table {
-    table-layout: fixed;
-  }
-
   .data-table th,
   .data-table td {
-    word-break: break-word;
+    padding: 0.45rem 0.35rem;
   }
 
   .pager {
@@ -526,94 +571,182 @@ button.danger {
   }
 }
 
+/* ─── 640px: mobile ─── */
 @media (max-width: 640px) {
   html,
   body {
     font-size: 14px;
   }
 
+  .analytics-shell {
+    padding: 0 0.5rem;
+    gap: 0.6rem;
+  }
+
   .topbar h1 {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 
   .topbar p {
-    font-size: 0.86rem;
+    font-size: 0.8rem;
   }
 
+  /* Topbar actions: Period row full-width, buttons below side-by-side */
   .topbar-actions {
-    width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0.45rem;
+    gap: 0.4rem;
   }
 
-  .topbar-actions label {
+  .topbar-actions > label {
     grid-column: 1 / -1;
-    display: grid;
-    gap: 0.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--muted);
+    font-size: 0.82rem;
   }
 
-  .topbar-actions button,
-  .topbar-actions select {
+  .topbar-actions > label select {
+    flex: 1;
+  }
+
+  .topbar-actions > button {
     width: 100%;
   }
 
-  .kpi-card {
-    padding: 0.68rem;
-    border-radius: 12px;
-  }
-
-  .kpi-value {
-    font-size: 1.22rem;
-  }
-
-  .kpi-card h3 {
-    font-size: 0.76rem;
-  }
-
-  .kpi-trend {
-    font-size: 0.7rem;
-  }
-
-  .panel h2 {
-    font-size: 0.88rem;
-  }
-
-  .chart-legend {
-    flex-direction: column;
-    gap: 0.35rem;
-  }
-
-  .filter-row {
-    grid-template-columns: 1fr;
-  }
-
-  .bar-row {
-    grid-template-columns: 78px 1fr auto;
-    gap: 0.45rem;
-    font-size: 0.76rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .analytics-shell {
-    width: calc(100% - 0.7rem);
-  }
-
+  /* KPI: still 2-per-row */
   .kpi-row {
     grid-template-columns: 1fr 1fr;
     gap: 0.5rem;
   }
 
   .kpi-card {
-    padding: 0.62rem;
+    padding: 0.65rem;
+    border-radius: 12px;
   }
 
   .kpi-value {
-    font-size: 1.15rem;
+    font-size: 1.18rem;
+  }
+
+  .kpi-card h3 {
+    font-size: 0.75rem;
+  }
+
+  .kpi-trend {
+    font-size: 0.68rem;
   }
 
   .sparkline {
     height: 20px;
+  }
+
+  .panel {
+    padding: 0.65rem;
+  }
+
+  .panel h2 {
+    font-size: 0.88rem;
+  }
+
+  /* Charts shorter on small screens */
+  .chart-svg {
+    height: 150px;
+  }
+
+  .chart-legend {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  /* Donut: stacks, centered */
+  .donut-wrap {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .donut-svg {
+    width: min(160px, 52vw);
+    height: auto;
+    aspect-ratio: 1 / 1;
+  }
+
+  .bar-row {
+    grid-template-columns: minmax(0, 70px) 1fr auto;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+  }
+
+  /* Non-event tables: compact, auto layout */
+  .data-table {
+    font-size: 0.77rem;
+  }
+
+  .data-table th {
+    font-size: 0.67rem;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 0.35rem 0.28rem;
+  }
+
+  /* Filter: full-width column stacking */
+  .filter-row {
+    flex-direction: column;
+  }
+
+  .filter-row select,
+  .filter-row input,
+  .filter-row button,
+  .filter-row > label {
+    width: 100% !important;
+    flex: none;
+  }
+
+  /* Pager: centered column */
+  .pager {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    text-align: center;
+  }
+
+  .pager button {
+    min-width: 90px;
+  }
+}
+
+/* ─── 480px: very narrow ─── */
+@media (max-width: 480px) {
+  .analytics-shell {
+    padding: 0 0.35rem;
+  }
+
+  .kpi-row {
+    gap: 0.45rem;
+  }
+
+  .kpi-card {
+    padding: 0.55rem;
+  }
+
+  .kpi-value {
+    font-size: 1.05rem;
+  }
+
+  .sparkline {
+    height: 18px;
+  }
+
+  .chart-svg {
+    height: 130px;
+  }
+
+  .bar-row {
+    grid-template-columns: minmax(0, 58px) 1fr auto;
+    font-size: 0.72rem;
   }
 }
