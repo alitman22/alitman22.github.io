@@ -60,6 +60,18 @@ export const tr = {
     title: 'Profesyonel Yolculuk',
     jobs: [
       {
+        role: 'Cloud Support Engineer',
+        company: 'Alibaba Cloud',
+        period: 'Haz 2026 - Devam Ediyor (İstanbul, Türkiye)',
+        bullets: [
+          'Core Compute Architecture: Alibaba Cloud’un Elastic Compute Service (ECS) ekosistemini kurumsal destek, sanallaştırma teknolojileri ve hesaplama optimizasyonu açısından derinlemesine inceleme.',
+          'Cross-Domain Cloud Integration: VPC, SLB, RDS, PolarDB ve ACK gibi hizmetler üzerinden çok katmanlı dağıtımların desteklenmesi için kapsamı genişletme ve eğitim alma.',
+          'Operational Efficiency: bulut telemetrisi analiz etmek, yüksek performanslı ortamları gidermek ve destek iş akışlarını düzene sokmak için ileri seviye sistem mühendisliği ve Infrastructure as Code metodolojileri uygulama.',
+          'High-Availability Operations: küresel kurumsal müşteriler için sorunsuz ölçekleme, hata toleransı ve düşük gecikmeli performans sağlayan kritik cloud altyapısını yönetme ve sorun giderme hazırlığı.',
+          'Regional Capability Scaling: İstanbul’daki odaklı ve çevik bölgesel ekipte yer alarak yerel teknik destek kapasitesini artırma ve cloud güvenilirliğini güçlendirme.'
+        ]
+      },
+      {
         role: 'DevOps ve Linux Sistem Yöneticisi',
         company: 'Dannie.cc',
         period: 'Kas 2025 - Mar 2026 (Antalya, Türkiye) - Şirket Tasfiyesi',

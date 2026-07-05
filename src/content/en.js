@@ -60,6 +60,18 @@ export const en = {
     title: 'Professional Journey',
     jobs: [
       {
+        role: 'Cloud Support Engineer',
+        company: 'Alibaba Cloud',
+        period: 'Jun 2026 - Present (Istanbul, Türkiye)',
+        bullets: [
+          'Core Compute Architecture: undertaking an intensive architectural deep-dive into Alibaba Cloud’s Elastic Compute Service (ECS) ecosystem, focusing on enterprise-level support, virtualization technologies, and compute optimization.',
+          'Cross-Domain Cloud Integration: expanding operational scope to support complex, multi-tier deployments across Alibaba Cloud’s Networking (VPC, SLB), Managed Databases (RDS, PolarDB), and Kubernetes (ACK) services.',
+          'Operational Efficiency: applying advanced systems engineering and Infrastructure as Code methodologies to analyze cloud telemetry, troubleshoot high-performance environments, and streamline support workflows.',
+          'High-Availability Operations: preparing to manage and troubleshoot critical cloud infrastructure, ensuring seamless scaling, fault tolerance, and low-latency performance for global enterprise clients.',
+          'Regional Capability Scaling: collaborating within a focused, agile regional team in Istanbul to build local technical support capabilities and strengthen cloud reliability.'
+        ]
+      },
+      {
         role: 'DevOps & Linux System Administrator',
         company: 'Dannie.cc',
         period: 'Nov 2025 - Mar 2026 (Antalya, Türkiye) - Company Liquidation',

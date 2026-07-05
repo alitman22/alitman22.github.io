@@ -52,7 +52,31 @@ function ExperienceSection({ copy }) {
     'BICSI',
     'ERP systems',
     'ERP sistemleri',
-    'runbooks'
+    'runbooks',
+    'Core Compute Architecture',
+    'Cross-Domain Cloud Integration',
+    'Operational Efficiency',
+    'High-Availability Operations',
+    'Regional Capability Scaling',
+    'Elastic Compute Service',
+    'ECS',
+    'Networking',
+    'Managed Databases',
+    'Kubernetes',
+    'ACK',
+    'Infrastructure as Code',
+    'cloud telemetry',
+    'high-performance environments',
+    'support workflows',
+    'fault tolerance',
+    'low-latency performance',
+    'cloud reliability',
+    'virtualization technologies',
+    'compute optimization',
+    'multi-tier deployments',
+    'cloud infrastructure',
+    'global enterprise clients',
+    'technical support capabilities'
   ];
 
   return (
