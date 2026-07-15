@@ -19,7 +19,7 @@ export const tr = {
       'Yüksek erişilebilirlikli, bulut tabanlı platformlar tasarlıyor; Linux ve ağ performansını düşük gecikmeli iş yükleri için optimize ediyor; kritik ortamların hızlı, güvenli ve güvenilir kalmasını sağlayan üretim seviyesinde CI/CD ve gözlemlenebilirlik sistemleri kuruyorum.',
     ctaPrimary: 'İletişime Geç',
     ctaSecondary: 'Projeleri İncele',
-    location: 'Antalya, Türkiye',
+    location: 'İstanbul, Türkiye',
     email: 'alit.fattahi@gmail.com',
     phone: '(+90) 501 640 3103',
     availabilityGlobal: 'Bu yetkinlikleri Almanya veya Hollanda\'daki yenilikçi ekiplere sunabileceğim yeni fırsatlar arıyorum.',
@@ -32,7 +32,7 @@ export const tr = {
     paragraphs: [
       'On yılı aşkın süredir kurumsal BT ortamlarını tasarlayan, ölçekleyen ve güvence altına alan bir Kıdemli DevOps Mühendisi ve Altyapı Mimarıyım. Uzmanlığım, derin fiziksel altyapı ile modern cloud-native orkestrasyon arasındaki boşluğu kapatır. Her zorluğa katı bir mühendislik felsefesiyle yaklaşırım: temel darboğazı doğru tespit et, yüksek erişilebilirlik için mimariyi kur ve otomasyonu kararlılıkla uygula.',
       'Kariyerim boyunca, seçkin ulusal veri merkezlerinde petabayt seviyesinde depolama yönetiminden yüksek frekanslı işlem ağlarında mikrosaniye seviyesinde gecikme azaltımına kadar altyapının uç noktalarında çalıştım. Ağ Mühendisliği (Lisans) temelim, paket seviyesinde sorun giderme ve optimizasyon yapmamı sağlarken; DevOps uzmanlığım bu sistemlerin hızlı, güvenilir ve ölçekli biçimde tutarlı şekilde devreye alınmasını mümkün kılar.',
-      'Halen Antalya, Türkiye merkezli olarak global teknoloji ekosistemi içinde aktif şekilde çalışıyorum. Performans, güvenilirlik ve ölçülebilir teslimat değerlerini önceleyen ileri görüşlü ekiplere; bare-metal dayanıklılığı, platform mühendisliği ve otomatikleşmiş cloud mimarisini birleştiren yaklaşımımı taşımaya odaklanıyorum.'
+      'Halen İstanbul, Türkiye merkezli olarak global teknoloji ekosistemi içinde aktif şekilde çalışıyorum. Performans, güvenilirlik ve ölçülebilir teslimat değerlerini önceleyen ileri görüşlü ekiplere; bare-metal dayanıklılığı, platform mühendisliği ve otomatikleşmiş cloud mimarisini birleştiren yaklaşımımı taşımaya odaklanıyorum.'
     ],
     cards: {
       education: {

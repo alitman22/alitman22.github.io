@@ -19,7 +19,7 @@ export const en = {
       'I design resilient, cloud-native platforms and automate high-availability infrastructure, optimize Linux and network performance for low-latency workloads, and build production-grade CI/CD and observability systems that keep mission-critical environments fast, secure, and reliable.',
     ctaPrimary: 'Get In Touch',
     ctaSecondary: 'View Projects',
-    location: 'Antalya, Türkiye',
+    location: 'Istanbul, Türkiye',
     email: 'alit.fattahi@gmail.com',
     phone: '(+90) 501 640 3103',
     availabilityGlobal: 'I am currently seeking new opportunities to bring these skills to innovative teams in Germany or the Netherlands.',
@@ -32,7 +32,7 @@ export const en = {
     paragraphs: [
       'I am a Senior DevOps Engineer and Infrastructure Architect with over a decade of experience designing, scaling, and securing enterprise IT environments. My expertise bridges the gap between deep physical infrastructure and modern cloud-native orchestration. I approach every challenge with a strict engineering philosophy: understand the core bottleneck, architect for high availability, and automate relentlessly.',
       'Throughout my career, I have navigated the extremes of infrastructure demands, from managing petabytes of storage in premier national datacenters to stripping microsecond latency out of high-frequency trading networks. My foundation in Network Engineering (BSc) allows me to troubleshoot and optimize at the packet level, while my DevOps expertise ensures those systems deploy rapidly, reliably, and consistently at scale.',
-      'Currently based in Antalya, Türkiye, I am actively operating within the global tech ecosystem. I am focused on bringing my blend of bare-metal resilience, platform engineering, and automated cloud architecture to forward-thinking teams that value performance, reliability, and measurable delivery.'
+      'Currently based in Istanbul, Türkiye, I am actively operating within the global tech ecosystem. I am focused on bringing my blend of bare-metal resilience, platform engineering, and automated cloud architecture to forward-thinking teams that value performance, reliability, and measurable delivery.'
     ],
     cards: {
       education: {
