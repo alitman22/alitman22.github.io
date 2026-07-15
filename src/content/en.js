@@ -16,7 +16,7 @@ export const en = {
     name: 'Ali Fattahi',
     role: 'Senior DevOps Engineer\nIT Infrastructure Architect',
     summary:
-      'I architect and automate high-availability infrastructure, optimize Linux and network performance for low-latency workloads, and build production-grade CI/CD and observability platforms that keep mission-critical systems fast, secure, and resilient at scale.',
+      'I design resilient, cloud-native platforms and automate high-availability infrastructure, optimize Linux and network performance for low-latency workloads, and build production-grade CI/CD and observability systems that keep mission-critical environments fast, secure, and reliable.',
     ctaPrimary: 'Get In Touch',
     ctaSecondary: 'View Projects',
     location: 'Antalya, Türkiye',
@@ -32,7 +32,7 @@ export const en = {
     paragraphs: [
       'I am a Senior DevOps Engineer and Infrastructure Architect with over a decade of experience designing, scaling, and securing enterprise IT environments. My expertise bridges the gap between deep physical infrastructure and modern cloud-native orchestration. I approach every challenge with a strict engineering philosophy: understand the core bottleneck, architect for high availability, and automate relentlessly.',
       'Throughout my career, I have navigated the extremes of infrastructure demands, from managing petabytes of storage in premier national datacenters to stripping microsecond latency out of high-frequency trading networks. My foundation in Network Engineering (BSc) allows me to troubleshoot and optimize at the packet level, while my DevOps expertise ensures those systems deploy rapidly, reliably, and consistently at scale.',
-      'Currently based in Antalya, Türkiye, I am actively operating within the global tech ecosystem. I am focused on bringing my blend of bare-metal resilience and automated cloud architecture to forward-thinking engineering teams that refuse to compromise on performance.'
+      'Currently based in Antalya, Türkiye, I am actively operating within the global tech ecosystem. I am focused on bringing my blend of bare-metal resilience, platform engineering, and automated cloud architecture to forward-thinking teams that value performance, reliability, and measurable delivery.'
     ],
     cards: {
       education: {
@@ -67,7 +67,7 @@ export const en = {
           'Core Compute Architecture: undertaking an intensive architectural deep-dive into Alibaba Cloud’s Elastic Compute Service (ECS) ecosystem, focusing on enterprise-level support, virtualization technologies, and compute optimization.',
           'Cross-Domain Cloud Integration: expanding operational scope to support complex, multi-tier deployments across Alibaba Cloud’s Networking (VPC, SLB), Managed Databases (RDS, PolarDB), and Kubernetes (ACK) services.',
           'Operational Efficiency: applying advanced systems engineering and Infrastructure as Code methodologies to analyze cloud telemetry, troubleshoot high-performance environments, and streamline support workflows.',
-          'High-Availability Operations: preparing to manage and troubleshoot critical cloud infrastructure, ensuring seamless scaling, fault tolerance, and low-latency performance for global enterprise clients.',
+          'High-Availability Operations: managing and troubleshooting critical cloud infrastructure, ensuring seamless scaling, fault tolerance, and low-latency performance for global enterprise clients.',
           'Regional Capability Scaling: collaborating within a focused, agile regional team in Istanbul to build local technical support capabilities and strengthen cloud reliability.'
         ]
       },
