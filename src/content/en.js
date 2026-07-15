@@ -64,11 +64,10 @@ export const en = {
         company: 'Alibaba Cloud',
         period: 'Jun 2026 - Present (Istanbul, Türkiye)',
         bullets: [
-          'Core Compute Architecture: undertaking an intensive architectural deep-dive into Alibaba Cloud’s Elastic Compute Service (ECS) ecosystem, focusing on enterprise-level support, virtualization technologies, and compute optimization.',
-          'Cross-Domain Cloud Integration: expanding operational scope to support complex, multi-tier deployments across Alibaba Cloud’s Networking (VPC, SLB), Managed Databases (RDS, PolarDB), and Kubernetes (ACK) services.',
-          'Operational Efficiency: applying advanced systems engineering and Infrastructure as Code methodologies to analyze cloud telemetry, troubleshoot high-performance environments, and streamline support workflows.',
-          'High-Availability Operations: managing and troubleshooting critical cloud infrastructure, ensuring seamless scaling, fault tolerance, and low-latency performance for global enterprise clients.',
-          'Regional Capability Scaling: collaborating within a focused, agile regional team in Istanbul to build local technical support capabilities and strengthen cloud reliability.'
+          'Working across Alibaba Cloud compute, networking, databases, and Kubernetes services to support multi-service cloud environments.',
+          'Applying systems engineering and infrastructure automation practices to troubleshoot complex deployments and improve support quality.',
+          'Supporting high-availability cloud operations with a strong focus on reliability, performance, and customer impact.',
+          'Contributing to a regional support capability in Istanbul with an emphasis on practical, scalable delivery.'
         ]
       },
       {
