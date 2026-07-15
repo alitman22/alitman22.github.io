@@ -23,7 +23,7 @@ export const tr = {
     email: 'alit.fattahi@gmail.com',
     phone: '(+90) 501 640 3103',
     availabilityGlobal: 'Bu yetkinlikleri Almanya veya Hollanda\'daki yenilikçi ekiplere sunabileceğim yeni fırsatlar arıyorum.',
-    availabilityTurkey: 'Türkiye çalışma izni sahibiyim; hızlı başlangıç yapabilirim. Remote-first rollerde çalışmaya, ayrıca İstanbul veya Ankara gibi şehirlere taşınarak ofisten çalışmaya hazırım.',
+    availabilityTurkey: 'Türkiye çalışma izni sahibiyim; İstanbul merkezli olarak hızlı başlangıç yapabilirim. Remote-first rollerde çalışmaya ve İstanbul ile Ankara başta olmak üzere ofis içi fırsatlara açıkım.',
     resumeLabel: 'Özgeçmiş:',
     resumeDownload: 'Özgeçmişi İndir'
   },

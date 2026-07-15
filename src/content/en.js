@@ -23,7 +23,7 @@ export const en = {
     email: 'alit.fattahi@gmail.com',
     phone: '(+90) 501 640 3103',
     availabilityGlobal: 'I am currently seeking new opportunities to bring these skills to innovative teams in Germany or the Netherlands.',
-    availabilityTurkey: "I'm a Turkish Work Permit holder available for immediate transfer and ready for remote-first or to move to cities like Istanbul or Ankara for on-site jobs.",
+    availabilityTurkey: "I'm a Turkish Work Permit holder based in Istanbul and available for immediate transfer, with strong interest in remote-first roles or on-site opportunities in Istanbul and Ankara.",
     resumeLabel: 'Resume:',
     resumeDownload: 'Download Resume'
   },
