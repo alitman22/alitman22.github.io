@@ -6,10 +6,10 @@
   "scripts": {
     "dev": "node -e \"const fs=require('fs');fs.copyFileSync('index.dev.html','index.html');fs.copyFileSync('stats.dev.html','stats.html');\" && vite",
     "images:projects": "node scripts/generate-project-thumbnails.mjs",
-    "build": "npm run images:projects && node -e \"const fs=require('fs');fs.copyFileSync('index.dev.html','index.html');fs.copyFileSync('stats.dev.html','stats.html');\" && vite build && npm run prerender",
+    "build": "npm run images:projects && vite build && npm run prerender && node -e \"const fs=require('fs');fs.copyFileSync('dist/index.html','index.html');fs.copyFileSync('dist/stats.html','stats.html');\"",
     "analytics:server": "node server/app.js",
     "analytics:server:dev": "nodemon server/app.js",
-    "build:spa": "npm run images:projects && node -e \"const fs=require('fs');fs.copyFileSync('index.dev.html','index.html');fs.copyFileSync('stats.dev.html','stats.html');\" && vite build",
+    "build:spa": "npm run images:projects && vite build && node -e \"const fs=require('fs');fs.copyFileSync('dist/index.html','index.html');fs.copyFileSync('dist/stats.html','stats.html');\"",
     "prerender": "node scripts/prerender.mjs",
     "preview": "vite preview",
     "publish:local": "npm run build && node scripts/publish-local.mjs && npm run check:stats-bundle",
