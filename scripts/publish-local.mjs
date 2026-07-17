@@ -2,6 +2,16 @@ import { cp, mkdir, readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+async function copyAssetAlias(rootAssetsDir, distAssetsDir, sourcePattern, targetName) {
+  const distAssets = await readdir(distAssetsDir);
+  const sourceAsset = distAssets.find((name) => sourcePattern.test(name));
+  if (!sourceAsset) {
+    return;
+  }
+
+  await cp(path.join(distAssetsDir, sourceAsset), path.join(rootAssetsDir, targetName), { force: true });
+}
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
@@ -39,23 +49,10 @@ async function publishToRoot() {
 
   await cp(distAssetsDir, rootAssetsDir, { recursive: true, force: true });
 
-  // Keep historical stats bundles in place to avoid short-lived stale HTML 404s,
-  // but do not rewrite stats.html to stable alias names. Using hashed assets from
-  // dist/stats.html prevents stale-cache MIME issues on module scripts.
-  const distAssets = await readdir(distAssetsDir);
-  const latestStatsBundle = distAssets.find((name) => /^stats-.*\.js$/.test(name));
-
-  if (latestStatsBundle) {
-    const rootAssets = await readdir(rootAssetsDir);
-    const historicalStatsBundles = rootAssets.filter((name) => /^stats-.*\.js$/.test(name));
-    for (const bundleName of historicalStatsBundles) {
-      await cp(
-        path.join(distAssetsDir, latestStatsBundle),
-        path.join(rootAssetsDir, bundleName),
-        { force: true }
-      );
-    }
-  }
+  await copyAssetAlias(rootAssetsDir, distAssetsDir, /^main-.*\.js$/, 'main.js');
+  await copyAssetAlias(rootAssetsDir, distAssetsDir, /^main-.*\.css$/, 'main.css');
+  await copyAssetAlias(rootAssetsDir, distAssetsDir, /^stats-.*\.js$/, 'stats.js');
+  await copyAssetAlias(rootAssetsDir, distAssetsDir, /^stats-.*\.css$/, 'stats.css');
 
   console.log('Local publish complete: root index.html, root stats.html, and assets/ synced from dist/.');
 }
