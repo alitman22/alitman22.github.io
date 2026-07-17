@@ -1,41 +1,44 @@
 import { useEffect, useMemo, useState } from 'react';
 import { en } from '../content/en';
 import { tr } from '../content/tr';
+import { resolveLanguagePreference } from './languagePreference';
 
 function getInitialLanguage() {
   if (typeof window === 'undefined') {
     return 'en';
   }
 
-  const saved = window.localStorage.getItem('preferredLanguage');
-  if (saved === 'tr' || saved === 'en') {
-    return saved;
-  }
-
-  const browserLanguage = (navigator.language || '').toLowerCase();
-  const timezone = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
-
-  if (browserLanguage.startsWith('tr') || browserLanguage.includes('tur')) {
-    return 'tr';
-  }
-
-  if (timezone.includes('istanbul') || timezone === 'europe/istanbul' || timezone === 'asia/istanbul') {
-    return 'tr';
-  }
-
-  return 'en';
+  return resolveLanguagePreference({
+    currentLanguage: null,
+    storage: window.localStorage,
+    navigatorObj: navigator,
+    intlObj: Intl
+  });
 }
 
 export function useLanguage() {
   const [language, setLanguage] = useState(getInitialLanguage);
 
   useEffect(() => {
-    const saved = window.localStorage.getItem('preferredLanguage');
-    const initialLanguage = saved === 'tr' || saved === 'en' ? saved : getInitialLanguage();
-    setLanguage(initialLanguage);
-  }, []);
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const initialLanguage = resolveLanguagePreference({
+      currentLanguage: language,
+      storage: window.localStorage,
+      navigatorObj: navigator,
+      intlObj: Intl
+    });
+
+    setLanguage((current) => (current === initialLanguage ? current : initialLanguage));
+  }, [language]);
 
   useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     window.localStorage.setItem('preferredLanguage', language);
   }, [language]);
 
