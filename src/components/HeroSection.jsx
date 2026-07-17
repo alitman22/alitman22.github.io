@@ -4,6 +4,7 @@ function HeroSection({ copy, language, isTurkeyRegion }) {
   const selectedResume = isTurkeyRegion ? resumeMap.TR : resumeMap.GLOBAL;
   const resumeRegionText = language === 'tr' ? selectedResume.regionTextTr : selectedResume.regionTextEn;
   const regionAvailabilityText = isTurkeyRegion ? copy.hero.availabilityTurkey : copy.hero.availabilityGlobal;
+  const showResumeSection = import.meta.env.VITE_SHOW_RESUME_SECTION !== 'false';
   const resumeHref = String(selectedResume?.href || '');
   const resumeFileName = decodeURIComponent(
     (resumeHref.split('/').pop() || 'resume-file').split('?')[0].split('#')[0]
@@ -60,22 +61,24 @@ function HeroSection({ copy, language, isTurkeyRegion }) {
       </div>
 
       <div className="hero-bottom">
-        <div className="resume-highlight" aria-live="polite">
-          <a
-            className="resume-link"
-            href={selectedResume.href}
-            download
-            data-analytics-event="resume_download"
-            data-analytics-category="conversion"
-            data-analytics-label={resumeFileName}
-          >
-            <i className="fa-solid fa-download" aria-hidden="true"></i>
-            {copy.hero.resumeDownload}
-          </a>
-          <span className="resume-note">{resumeRegionText}</span>
-          <span className="resume-availability-sep" aria-hidden="true">|</span>
-          <span className="resume-availability">{regionAvailabilityText}</span>
-        </div>
+        {showResumeSection && (
+          <div className="resume-highlight" aria-live="polite">
+            <a
+              className="resume-link"
+              href={selectedResume.href}
+              download
+              data-analytics-event="resume_download"
+              data-analytics-category="conversion"
+              data-analytics-label={resumeFileName}
+            >
+              <i className="fa-solid fa-download" aria-hidden="true"></i>
+              {copy.hero.resumeDownload}
+            </a>
+            <span className="resume-note">{resumeRegionText}</span>
+            <span className="resume-availability-sep" aria-hidden="true">|</span>
+            <span className="resume-availability">{regionAvailabilityText}</span>
+          </div>
+        )}
 
         <div className="hero-meta">
           <span><i className="fa-solid fa-location-dot" aria-hidden="true"></i>{copy.hero.location}</span>
