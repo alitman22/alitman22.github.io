@@ -517,7 +517,8 @@ function renderDashboard(data) {
         </article>
       </section>
 
-      <section class="panel panel-scroll">
+      <section class="panel">
+        <div class="panel-head">
           <h2>Event Log (Developer View)</h2>
           <div class="filter-row">
             <label class="event-select-all"><input id="select-all-events" type="checkbox" /> Select page</label>

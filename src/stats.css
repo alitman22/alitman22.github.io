@@ -23,13 +23,11 @@ body {
   font-family: "Inter", "Segoe UI", sans-serif;
   background: radial-gradient(circle at top right, #132544, var(--bg));
   color: var(--text);
+  overflow-x: hidden;
 }
 
 .analytics-shell {
-  /* Never wider than viewport */
-  width: min(1400px, 100%);
-  max-width: 100%;
-  padding: 0 1rem;
+  width: min(1400px, calc(100% - 2rem));
   margin: 1rem auto 2rem;
   display: grid;
   gap: 1rem;
@@ -163,15 +161,8 @@ button.danger {
   gap: 0.8rem;
 }
 
-/* Prevent any grid child from overflowing its track */
-.grid > *,
-.analytics-shell > * {
-  min-width: 0;
-}
-
 .grid.two {
-  /* minmax(0,1fr) ensures tracks can shrink below content intrinsic size */
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: 1fr 1fr;
 }
 
 .grid.three {
@@ -183,9 +174,6 @@ button.danger {
   border: 1px solid var(--line);
   border-radius: 14px;
   padding: 0.85rem;
-  /* Prevent content (charts, tables) from overflowing the panel */
-  min-width: 0;
-  overflow: hidden;
 }
 
 .panel h2 {
@@ -274,17 +262,15 @@ button.danger {
 
 .donut-wrap {
   display: grid;
-  grid-template-columns: 160px 1fr;
+  grid-template-columns: 180px 1fr;
   align-items: center;
   gap: 1rem;
 }
 
 .donut-svg {
-  /* Explicit fixed size — no auto/percentage in grid auto columns */
-  width: 160px;
-  height: 160px;
-  display: block;
-  flex-shrink: 0;
+  width: min(170px, 100%);
+  height: auto;
+  aspect-ratio: 1 / 1;
 }
 
 .donut-svg circle {
@@ -348,16 +334,6 @@ button.danger {
 
 .table-scroll-events {
   overflow-x: auto;
-  /* Stretches beyond panel padding so scrollbar touches edges */
-  margin-left: -0.85rem;
-  margin-right: -0.85rem;
-  padding-left: 0.85rem;
-  padding-right: 0.85rem;
-}
-
-/* Event log panel allows inner horizontal scroll */
-.panel-scroll {
-  overflow: visible;
 }
 
 .table-scroll-events .data-table.mono {
@@ -483,7 +459,9 @@ button.danger {
 /* ─── 920px: tablet ─── */
 @media (max-width: 920px) {
   .analytics-shell {
-    padding: 0 0.6rem;
+    /* Use padding so content fills the full viewport width cleanly */
+    width: 100%;
+    padding: 0 0.75rem;
     margin: 0.5rem auto 1rem;
     gap: 0.75rem;
   }
@@ -529,14 +507,15 @@ button.danger {
     gap: 0.6rem;
   }
 
-  /* Donut: keep fixed column so auto never resolves to 0 */
+  /* Donut: SVG beside legend when space allows, single col otherwise */
   .donut-wrap {
-    grid-template-columns: 140px 1fr;
+    grid-template-columns: auto 1fr;
   }
 
   .donut-svg {
-    width: 140px;
-    height: 140px;
+    width: min(150px, 38vw);
+    height: auto;
+    aspect-ratio: 1 / 1;
   }
 
   /* Shorter charts */
@@ -600,7 +579,7 @@ button.danger {
   }
 
   .analytics-shell {
-    padding: 0 0.4rem;
+    padding: 0 0.5rem;
     gap: 0.6rem;
   }
 
@@ -681,7 +660,7 @@ button.danger {
     gap: 0.3rem;
   }
 
-  /* Donut: stacks vertically, centered */
+  /* Donut: stacks, centered */
   .donut-wrap {
     grid-template-columns: 1fr;
     justify-items: center;
@@ -689,8 +668,9 @@ button.danger {
   }
 
   .donut-svg {
-    width: 130px;
-    height: 130px;
+    width: min(160px, 52vw);
+    height: auto;
+    aspect-ratio: 1 / 1;
   }
 
   .bar-row {
