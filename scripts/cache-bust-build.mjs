@@ -9,6 +9,7 @@ for (const relativePath of files) {
   let html = readFileSync(absolutePath, 'utf8');
 
   html = html.replace(/((?:\.\/)?assets\/[^?"'\s]+)(?:[?&][^"'\s]+)?/g, (match, assetPath) => `${assetPath}?${buildVersion}`);
+  html = html.replace(/((?:\.\/)?assets\/[^?"'\s]+)(?:[?&][^"'\s]+)?/g, (match, assetPath) => `${assetPath}?${buildVersion}`);
 
   writeFileSync(absolutePath, html);
 }
